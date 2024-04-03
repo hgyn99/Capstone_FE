@@ -1,20 +1,28 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { createGlobalStyle } from "styled-components";
+import { ThemeProvider, createGlobalStyle } from "styled-components";
 import reset from "styled-reset";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import theme from "./theme";
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
 
 const GlobalStyle = createGlobalStyle`
   ${reset}
 `;
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const queryClient = new QueryClient();
+
 root.render(
   <React.StrictMode>
-    <GlobalStyle />
-    <App />
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <App />
+      </ThemeProvider>
+    </QueryClientProvider>
   </React.StrictMode>
 );
 
