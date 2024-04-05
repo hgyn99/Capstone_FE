@@ -17,7 +17,7 @@ const Container = styled.div`
   scrollbar-width: none; /* Firefox */
 `;
 
-const MenuBarLayOut = () => {
+const MenuBarLayout = () => {
   return (
     <Container>
       <Outlet />
@@ -26,4 +26,4 @@ const MenuBarLayOut = () => {
   );
 };
 
-export default MenuBarLayOut;
+export default MenuBarLayout;
