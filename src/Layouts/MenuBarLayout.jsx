@@ -5,8 +5,8 @@ import MenuBar from "../components/MenuBar";
 const Container = styled.div`
   max-width: 390px;
   width: 100vh;
-  height: 100vh;
-  height: 100dvh; /* Mobile */
+  height: calc(100vh - 56px);
+  height: calc(100dvh - 56px); /* Mobile */
   overflow: auto;
   position: relative;
 
@@ -22,8 +22,8 @@ const MenuBarLayOut = () => {
     <>
       <Container>
         <Outlet />
-        <MenuBar />
       </Container>
+      <MenuBar />
     </>
   );
 };
