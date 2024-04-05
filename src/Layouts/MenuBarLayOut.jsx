@@ -1,11 +1,12 @@
 import { Outlet } from "react-router-dom";
-import { styled } from "styled-components";
+import styled from "styled-components";
+import MenuBar from "../components/MenuBar";
 
 const Container = styled.div`
   max-width: 390px;
   width: 100vh;
-  height: calc(100vh);
-  height: calc(100dvh); /* Mobile */
+  height: calc(100vh -57px);
+  height: calc(100dvh -57px); /* Mobile */
   overflow: auto;
   position: relative;
 
@@ -16,12 +17,13 @@ const Container = styled.div`
   scrollbar-width: none; /* Firefox */
 `;
 
-const Layout = () => {
+const MenuBarLayOut = () => {
   return (
     <Container>
       <Outlet />
+      <MenuBar />
     </Container>
   );
 };
 
-export default Layout;
+export default MenuBarLayOut;
