@@ -64,12 +64,6 @@ const GlobalStyle = createGlobalStyle`
     justify-content: center;
     align-items: center;
     cursor: default;
-
-    &::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
-    }
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
   }
   a {
     text-decoration: none;
