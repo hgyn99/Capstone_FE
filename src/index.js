@@ -64,6 +64,8 @@ const GlobalStyle = createGlobalStyle`
     justify-content: center;
     align-items: center;
     cursor: default;
+
+
   }
   a {
     text-decoration: none;

@@ -4,8 +4,8 @@ import styled from "styled-components";
 const { kakao } = window;
 
 const MapDiv = styled.div`
-  width: 400px;
-  height: 800px;
+  width: 100%;
+  height: 100vh;
 `;
 
 const Map = () => {

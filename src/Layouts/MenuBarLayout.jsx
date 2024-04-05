@@ -5,8 +5,8 @@ import MenuBar from "../components/MenuBar";
 const Container = styled.div`
   max-width: 390px;
   width: 100vh;
-  height: 100vh;
-  height: 100dvh; /* Mobile */
+  height: calc(100vh - 56px);
+  height: calc(100dvh - 56px); /* Mobile */
   overflow: auto;
   position: relative;
 
@@ -17,13 +17,15 @@ const Container = styled.div`
   scrollbar-width: none; /* Firefox */
 `;
 
-const MenuBarLayout = () => {
+const MenuBarLayOut = () => {
   return (
-    <Container>
-      <Outlet />
+    <>
+      <Container>
+        <Outlet />
+      </Container>
       <MenuBar />
-    </Container>
+    </>
   );
 };
 
-export default MenuBarLayout;
+export default MenuBarLayOut;
