@@ -5,8 +5,8 @@ import MenuBar from "../components/MenuBar";
 const Container = styled.div`
   max-width: 390px;
   width: 100vh;
-  height: calc(100vh -57px);
-  height: calc(100dvh -57px); /* Mobile */
+  height: calc(100vh - 56px);
+  height: calc(100dvh - 56px); /* Mobile */
   overflow: auto;
   position: relative;
 
