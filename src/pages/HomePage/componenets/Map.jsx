@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const { kakao } = window;
 
-const MapContainer = styled.div`
+const MapDiv = styled.div`
   width: 400px;
   height: 800px;
 `;
@@ -55,7 +55,7 @@ const Map = () => {
 
   return (
     <div className="App">
-      <MapContainer id="map"></MapContainer>
+      <MapDiv id="map"></MapDiv>
     </div>
   );
 };
