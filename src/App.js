@@ -3,7 +3,6 @@ import HomePage from "./pages/HomePage/HomePage";
 import MyPage from "./pages/MyPage/MyPage";
 import MenuBarLayOut from "./Layouts/MenuBarLayOut";
 import Layout from "./Layouts/Layout";
-import Dasdsa from "./pages/Dasdsa";
 
 function App() {
   return (
