@@ -1,6 +1,5 @@
-import { Outlet } from "react-router-dom";
 import styled from "styled-components";
-import MenuBar from "../components/MenuBar";
+import MenuBar from "./MenuBar";
 
 const Container = styled.div`
   max-width: 390px;
@@ -17,12 +16,10 @@ const Container = styled.div`
   scrollbar-width: none; /* Firefox */
 `;
 
-const MenuBarLayOut = () => {
+const MenuBarLayOut = ({ children }) => {
   return (
     <>
-      <Container>
-        <Outlet />
-      </Container>
+      <Container>{children}</Container>
       <MenuBar />
     </>
   );

@@ -1,12 +1,11 @@
-import styled from "styled-components";
-
-const Container = styled.div`
-  width: 100%;
-  height: 100%;
-`;
+import MenuBarLayout from "../../components/MenuBarLayout";
 
 const MyPage = () => {
-  return <Container>dasd</Container>;
+  return (
+    <MenuBarLayout>
+      <div>dasd</div>
+    </MenuBarLayout>
+  );
 };
 
 export default MyPage;
