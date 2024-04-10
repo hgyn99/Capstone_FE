@@ -2,8 +2,8 @@ import { styled } from "styled-components";
 import Map from "./componenets/Map";
 import MenuBarLayout from "../../components/MenuBarLayout";
 import React, { useState } from "react";
-import Modal from "./componenets/Modal";
 import { FaPlus } from "react-icons/fa6";
+import KakaoLoginModal from "./componenets/KakaoLoginModal";
 
 const Container = styled.div`
   position: relative;
@@ -18,7 +18,7 @@ const PlusButton = styled.button`
   width: 40px;
   height: 40px;
   line-height: 0px;
-  background-color: #535CE8;
+  background-color: #535ce8;
   color: white;
   cursor: pointer;
   z-index: 1000;
@@ -28,20 +28,21 @@ const PlusButton = styled.button`
 const HomePage = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const openModal = () => {
-    setIsOpen(true);
+  const handleModal = () => {
+    setIsOpen((prev) => !prev);
   };
 
-  const closeModal = () => {
-    setIsOpen(false);
-  };
   return (
     <MenuBarLayout>
       <Container>
         <Map />
-        <PlusButton onClick={openModal} ><FaPlus /></PlusButton>
-      <Modal isOpen={isOpen} onRequestClose={closeModal}>
-        </Modal>
+        <PlusButton onClick={handleModal}>
+          <FaPlus />
+        </PlusButton>
+        <KakaoLoginModal
+          isOpen={isOpen}
+          onRequestClose={handleModal}
+        ></KakaoLoginModal>
       </Container>
     </MenuBarLayout>
   );
