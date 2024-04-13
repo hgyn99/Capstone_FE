@@ -1,64 +1,46 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
+import { Map, MapMarker } from "react-kakao-maps-sdk";
 
 const { kakao } = window;
 
-const MapDiv = styled.div`
-  width: 100%;
-  height: 100vh;
-`;
-
-const Map = ({ latitude, longitude }) => {
+const KakaoMap = ({ latitude, longitude }) => {
   const [map, setMap] = useState(null);
-  const [marker, setMarker] = useState(null);
-
-  useEffect(() => {
-    if (latitude !== null && longitude !== null) {
-      const locPosition = new kakao.maps.LatLng(latitude, longitude);
-      const container = document.getElementById("map");
-      const options = {
-        center: locPosition,
-        level: 3,
-      };
-
-      // 기존의 지도와 마커 제거
-      if (map) {
-        kakao.maps.event.removeListener(map, "idle");
-        map.relayout();
-        setMap(null);
-      }
-      if (marker) {
-        marker.setMap(null);
-        setMarker(null);
-      }
-
-      const newMap = new kakao.maps.Map(container, options);
-      const newMarker = new kakao.maps.Marker({
-        position: locPosition,
-      });
-
-      newMarker.setMap(newMap);
-      newMap.setMaxLevel(4);
-
-      setMap(newMap);
-      setMarker(newMarker);
-    }
-  }, [latitude, longitude]);
-
-  useEffect(() => {
-    // 위도, 경도가 변경될 때마다 지도의 중심을 변경
-    if (map && latitude !== null && longitude !== null) {
-      const newCenter = new kakao.maps.LatLng(latitude, longitude);
-      map.panTo(newCenter);
-      marker.setPosition(newCenter);
-    }
-  }, [latitude, longitude, map, marker]);
+  // 기본 위치 상태
+  const [state, setState] = useState({
+    center: {
+      lat: latitude,
+      lng: longitude,
+    },
+    errMsg: null,
+    isLoading: true,
+  });
 
   return (
-    <div className="App">
-      <MapDiv id="map"></MapDiv>
-    </div>
+    <Map // 지도를 표시할 Container
+      id="map"
+      center={{
+        // 지도의 중심좌표
+        lat: latitude,
+        lng: longitude,
+      }}
+      style={{
+        // 지도의 크기
+        width: "100%",
+        height: "100vh",
+      }}
+      level={3} // 지도의 확대 레벨
+      minLevel={4}
+      onCreate={setMap}
+    >
+      <MapMarker // 마커를 생성합니다
+        position={{
+          // 마커가 표시될 위치입니다
+          lat: latitude,
+          lng: longitude,
+        }}
+      />
+    </Map>
   );
 };
 
-export default Map;
+export default KakaoMap;

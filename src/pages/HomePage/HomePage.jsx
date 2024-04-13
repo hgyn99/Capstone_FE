@@ -1,10 +1,12 @@
 import { styled } from "styled-components";
-import Map from "./componenets/Map";
 import MenuBarLayout from "../../components/MenuBarLayout";
 import React, { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { MdMyLocation } from "react-icons/md";
 import KakaoLoginModal from "./componenets/KakaoLoginModal";
+import { Map, MapMarker } from "react-kakao-maps-sdk";
+
+const { kakao } = window;
 
 const Container = styled.div`
   position: relative;
@@ -43,38 +45,84 @@ const PanToButton = styled.button`
 
 const HomePage = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [latitude, setLatitude] = useState(null);
-  const [longitude, setLongitude] = useState(null);
+  const [map, setMap] = useState(null);
+  // 기본 위치 상태
+  const [state, setState] = useState({
+    center: {
+      lat: 33.450701,
+      lng: 126.570667,
+    },
+    errMsg: null,
+    isLoading: true,
+  });
 
-  const handleModal = () => {
+  const handleLoginModal = () => {
     setIsOpen((prev) => !prev);
   };
 
   useEffect(() => {
-    const watchID = navigator.geolocation.watchPosition(
-      (position) => {
-        setLatitude(position.coords.latitude);
-        setLongitude(position.coords.longitude);
-      },
-      (error) => {
-        console.error("Error getting geolocation:", error);
-      },
-      { enableHighAccuracy: true, maximumAge: 100, timeout: 27000 }
-    );
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setState((prev) => ({
+            ...prev,
+            center: {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            },
+            isLoading: false,
+          }));
+        },
+        (err) => {
+          setState((prev) => ({
+            ...prev,
+            errMsg: err.message,
+            isLoading: false,
+          }));
+        }
+      );
+    } else {
+      setState((prev) => ({
+        ...prev,
+        errMsg: "geolocation을 사용할수 없어요..",
+        isLoading: false,
+      }));
+    }
   }, []);
+
+  const panTo = () => {
+    const newLatLng = new kakao.maps.LatLng(state.center.lat, state.center.lng);
+    console.log(newLatLng);
+    map.panTo(newLatLng);
+  };
 
   return (
     <MenuBarLayout>
       <Container>
-        <Map latitude={latitude} longitude={longitude} />
-        <PlusButton onClick={handleModal}>
+        <Map // 지도를 표시할 Container
+          id="map"
+          center={state.center}
+          style={{
+            // 지도의 크기
+            width: "100%",
+            height: "100vh",
+          }}
+          level={3} // 지도의 확대 레벨
+          minLevel={4}
+          onCreate={setMap}
+        >
+          <MapMarker // 마커를 생성합니다
+            position={state.center}
+          />
+        </Map>
+        <PlusButton onClick={handleLoginModal}>
           <FaPlus />
         </PlusButton>
-        <PanToButton onClick={() => {}}>
+        <PanToButton onClick={panTo}>
           <MdMyLocation />
         </PanToButton>
       </Container>
-      <KakaoLoginModal isOpen={isOpen} onRequestClose={handleModal} />
+      <KakaoLoginModal isOpen={isOpen} onRequestClose={handleLoginModal} />
     </MenuBarLayout>
   );
 };
