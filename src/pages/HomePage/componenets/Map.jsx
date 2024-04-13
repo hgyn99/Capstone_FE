@@ -23,7 +23,7 @@ const Map = ({ latitude, longitude }) => {
 
       // 기존의 지도와 마커 제거
       if (map) {
-        kakao.maps.event.clearListeners(map, "idle");
+        kakao.maps.event.removeListener(map, "idle");
         map.relayout();
         setMap(null);
       }
