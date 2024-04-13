@@ -8,50 +8,51 @@ const MapDiv = styled.div`
   height: 100vh;
 `;
 
-const Map = () => {
-  const [latitude, setLatitude] = useState(null);
-  const [longitude, setLongitude] = useState(null);
-
-  useEffect(() => {
-    const options = {
-      enableHighAccuracy: true,
-      maximumAge: 30000,
-      timeout: 27000,
-    };
-
-    const watchID = navigator.geolocation.watchPosition(
-      (position) => {
-        setLatitude(position.coords.latitude);
-        setLongitude(position.coords.longitude);
-      },
-      (error) => {
-        console.error("Error getting geolocation:", error);
-      },
-      options
-    );
-  }, []);
-
-  var locPosition = new kakao.maps.LatLng(latitude, longitude);
+const Map = ({ latitude, longitude }) => {
+  const [map, setMap] = useState(null);
+  const [marker, setMarker] = useState(null);
 
   useEffect(() => {
     if (latitude !== null && longitude !== null) {
-      var container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
-      var options = {
-        //지도를 생성할 때 필요한 기본 옵션
-        center: locPosition, //지도의 중심좌표.
-        level: 4, //지도의 레벨(확대, 축소 정도)
+      const locPosition = new kakao.maps.LatLng(latitude, longitude);
+      const container = document.getElementById("map");
+      const options = {
+        center: locPosition,
+        level: 3,
       };
 
-      var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+      // 기존의 지도와 마커 제거
+      if (map) {
+        kakao.maps.event.clearListeners(map, "idle");
+        map.relayout();
+        setMap(null);
+      }
+      if (marker) {
+        marker.setMap(null);
+        setMarker(null);
+      }
 
-      var marker = new kakao.maps.Marker({
-        map: map,
+      const newMap = new kakao.maps.Map(container, options);
+      const newMarker = new kakao.maps.Marker({
         position: locPosition,
       });
 
-      marker.setMap(map);
+      newMarker.setMap(newMap);
+      newMap.setMaxLevel(4);
+
+      setMap(newMap);
+      setMarker(newMarker);
     }
-  }, [locPosition]);
+  }, [latitude, longitude]);
+
+  useEffect(() => {
+    // 위도, 경도가 변경될 때마다 지도의 중심을 변경
+    if (map && latitude !== null && longitude !== null) {
+      const newCenter = new kakao.maps.LatLng(latitude, longitude);
+      map.panTo(newCenter);
+      marker.setPosition(newCenter);
+    }
+  }, [latitude, longitude, map, marker]);
 
   return (
     <div className="App">
