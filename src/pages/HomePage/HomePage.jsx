@@ -5,6 +5,7 @@ import { FaPlus } from "react-icons/fa6";
 import { MdMyLocation } from "react-icons/md";
 import KakaoLoginModal from "./componenets/KakaoLoginModal";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
+import LightDetailInfo from "./componenets/LightDetailInfo";
 
 const { kakao } = window;
 
@@ -14,7 +15,7 @@ const Container = styled.div`
 
 const PlusButton = styled.button`
   position: absolute;
-  bottom: 116px; // 버튼 상하 위치 조절
+  bottom: ${(props) => (props.isDetailInfoOpen ? "360px" : "116px")};
   right: 10px;
   border: none;
   border-radius: 50%;
@@ -26,11 +27,12 @@ const PlusButton = styled.button`
   cursor: pointer;
   z-index: 1000;
   font-size: 20px;
+  transition: bottom 0.5s;
 `;
 
 const PanToButton = styled.button`
   position: absolute;
-  bottom: 66px; // 버튼 상하 위치 조절
+  bottom: ${(props) => (props.isDetailInfoOpen ? "310px" : "66px")};
   right: 10px;
   border: none;
   border-radius: 50%;
@@ -41,11 +43,13 @@ const PanToButton = styled.button`
   cursor: pointer;
   z-index: 1000;
   font-size: 20px;
+  transition: bottom 0.5s;
 `;
 
 const HomePage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [map, setMap] = useState(null);
+  const [isDetailInfoOpen, setIsDetailInfoOpen] = useState(false);
   // 기본 위치 상태
   const [state, setState] = useState({
     center: {
@@ -84,7 +88,7 @@ const HomePage = () => {
     } else {
       setState((prev) => ({
         ...prev,
-        errMsg: "geolocation을 사용할수 없어요..",
+        errMsg: "geolocation을 사용할수 없음",
         isLoading: false,
       }));
     }
@@ -99,28 +103,32 @@ const HomePage = () => {
   return (
     <MenuBarLayout>
       <Container>
-        <Map // 지도를 표시할 Container
+        <Map
           id="map"
           center={state.center}
           style={{
-            // 지도의 크기
             width: "100%",
             height: "100vh",
           }}
-          level={3} // 지도의 확대 레벨
+          level={3}
           minLevel={4}
           onCreate={setMap}
         >
-          <MapMarker // 마커를 생성합니다
-            position={state.center}
-          />
+          <MapMarker position={state.center} />
         </Map>
-        <PlusButton onClick={handleLoginModal}>
+        <PlusButton
+          isDetailInfoOpen={isDetailInfoOpen}
+          onClick={() => {
+            console.log("게시글 작성 버튼");
+            setIsDetailInfoOpen((prev) => !prev);
+          }}
+        >
           <FaPlus />
         </PlusButton>
-        <PanToButton onClick={panTo}>
+        <PanToButton isDetailInfoOpen={isDetailInfoOpen} onClick={panTo}>
           <MdMyLocation />
         </PanToButton>
+        <LightDetailInfo isDetailInfoOpen={isDetailInfoOpen} />
       </Container>
       <KakaoLoginModal isOpen={isOpen} onRequestClose={handleLoginModal} />
     </MenuBarLayout>

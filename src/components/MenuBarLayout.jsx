@@ -6,7 +6,7 @@ const Container = styled.div`
   width: 100vh;
   height: calc(100vh - 56px);
   height: calc(100dvh - 56px); /* Mobile */
-  overflow: auto;
+  overflow: hidden;
   position: relative;
 
   &::-webkit-scrollbar {

@@ -6,6 +6,8 @@ const theme = {
   pink: "#ff3a75",
   yellow: "#FEE500",
   purple: "#535CE8",
+  gray: "#D3D3D3",
+  green: "#0FBD00",
   icon: {
     white: "rgba(255, 255, 255, 0.01)",
     hover: "rgba(255, 255, 255, 0.1)",
