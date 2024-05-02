@@ -6,6 +6,7 @@ import { MdMyLocation } from "react-icons/md";
 import KakaoLoginModal from "./componenets/KakaoLoginModal";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import LightDetailInfo from "./componenets/LightDetailInfo";
+import TopBar from "./componenets/TopBar";
 
 const { kakao } = window;
 
@@ -13,9 +14,13 @@ const Container = styled.div`
   position: relative;
 `;
 
+const StyledeMap = styled(Map)`
+  z-index: -1000;
+`;
+
 const PlusButton = styled.button`
   position: absolute;
-  bottom: ${(props) => (props.isDetailInfoOpen ? "360px" : "116px")};
+  bottom: ${(props) => (props.$isDetailInfoOpen ? "360px" : "116px")};
   right: 10px;
   border: none;
   border-radius: 50%;
@@ -32,7 +37,7 @@ const PlusButton = styled.button`
 
 const PanToButton = styled.button`
   position: absolute;
-  bottom: ${(props) => (props.isDetailInfoOpen ? "310px" : "66px")};
+  bottom: ${(props) => (props.$isDetailInfoOpen ? "310px" : "66px")};
   right: 10px;
   border: none;
   border-radius: 50%;
@@ -44,12 +49,15 @@ const PanToButton = styled.button`
   z-index: 1000;
   font-size: 20px;
   transition: bottom 0.5s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const HomePage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [map, setMap] = useState(null);
-  const [isDetailInfoOpen, setIsDetailInfoOpen] = useState(false);
+  const [$isDetailInfoOpen, set$IsDetailInfoOpen] = useState(false);
   // 기본 위치 상태
   const [state, setState] = useState({
     center: {
@@ -96,14 +104,14 @@ const HomePage = () => {
 
   const panTo = () => {
     const newLatLng = new kakao.maps.LatLng(state.center.lat, state.center.lng);
-    console.log(newLatLng);
     map.panTo(newLatLng);
   };
 
   return (
     <MenuBarLayout>
       <Container>
-        <Map
+        <TopBar />
+        <StyledeMap
           id="map"
           center={state.center}
           style={{
@@ -114,21 +122,25 @@ const HomePage = () => {
           minLevel={4}
           onCreate={setMap}
         >
-          <MapMarker position={state.center} />
-        </Map>
+          <MapMarker
+            position={state.center}
+            // image={{
+            //   src: imageSrc,
+            //   size: { width: 30, height: 30 },
+            // }}
+          />
+        </StyledeMap>
         <PlusButton
-          isDetailInfoOpen={isDetailInfoOpen}
+          $isDetailInfoOpen={$isDetailInfoOpen}
           onClick={() => {
             console.log("게시글 작성 버튼");
-            setIsDetailInfoOpen((prev) => !prev);
+            set$IsDetailInfoOpen((prev) => !prev);
           }}
-        >
-          <FaPlus />
-        </PlusButton>
-        <PanToButton isDetailInfoOpen={isDetailInfoOpen} onClick={panTo}>
+        ></PlusButton>
+        <PanToButton $isDetailInfoOpen={$isDetailInfoOpen} onClick={panTo}>
           <MdMyLocation />
         </PanToButton>
-        <LightDetailInfo isDetailInfoOpen={isDetailInfoOpen} />
+        <LightDetailInfo $isDetailInfoOpen={$isDetailInfoOpen} />
       </Container>
       <KakaoLoginModal isOpen={isOpen} onRequestClose={handleLoginModal} />
     </MenuBarLayout>

@@ -85,12 +85,13 @@ const Circle = styled.div`
   height: 20px;
   border-radius: 50%;
   background-color: ${(props) =>
-    props.isTimeLeft ? props.theme.green : props.theme.red};
+    props.$isTimeLeft ? props.theme.green : props.theme.red};
 `;
 
 const RemainingTimeText = styled.span`
   font-weight: 700;
-  color: ${(props) => (props.isTimeLeft ? props.theme.green : props.theme.red)};
+  color: ${(props) =>
+    props.$isTimeLeft ? props.theme.green : props.theme.red};
 `;
 
 const LightDetailInfo = ({ isDetailInfoOpen, lightInfo }) => {
@@ -105,8 +106,8 @@ const LightDetailInfo = ({ isDetailInfoOpen, lightInfo }) => {
       <DirectionInfoBox>
         <Text $fontWeight={600}>서쪽</Text>
         <RemainingTimeBox>
-          <Circle isTimeLeft={false}></Circle>
-          <RemainingTimeText isTimeLeft={false}>8초</RemainingTimeText>
+          <Circle $isTimeLeft={false}></Circle>
+          <RemainingTimeText $isTimeLeft={false}>8초</RemainingTimeText>
         </RemainingTimeBox>
       </DirectionInfoBox>
     </Container>
