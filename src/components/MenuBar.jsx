@@ -1,10 +1,8 @@
-const MenuBar = () => {
+import MenuBarLayout from './MenuBarLayout.jsx';
+
+const MenuBar = ({ children }) => {
   return (
-    <div>
-      <div>Home</div>
-      <div>Profile</div>
-      <div>Settings</div>
-    </div>
+    <MenuBarLayout>{children}</MenuBarLayout>
   );
 };
 
