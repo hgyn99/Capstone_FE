@@ -7,6 +7,8 @@ import { GoStar } from "react-icons/go"; // 흰색 별
 import { GoStarFill } from "react-icons/go"; // 검정색 별
 import { HiOutlineUserCircle } from "react-icons/hi2"; // 흰색 마이페이지
 import { HiUserCircle } from "react-icons/hi2"; // 검정색 마이페이지
+import { useLocation } from 'react-router-dom';
+
 
 
 
@@ -33,7 +35,7 @@ const NavigationBar = styled.div`
   background-color: white;
   position: fixed;
   bottom: 0;
-  border-top: 2px solid;
+  border-top: 1px solid ${(props) => props.theme.gray};
   text-align: middle;
   max-width: 390px;
   width: 100%;
@@ -43,14 +45,16 @@ const NavigationBar = styled.div`
 `;
 
 const MenuBarLayout = ({ children }) => {
+  const location = useLocation();
+
   return (
     <>
       <Container>{children}</Container>
       <NavigationBar>
-        <Link to = '/'><GoHome size="30"/></Link>
-        <Link to = '/trafficlights'><PiTrafficSignal size="30"/></Link>
-        <Link to = '/favorites'><GoStar size="30"/></Link>
-        <Link to = '/mypage'><HiOutlineUserCircle size="30"/></Link>
+        <Link to = '/'>{location.pathname === '/' ? <GoHomeFill size="30"/> : <GoHome size="30"/>}</Link>
+        <Link to = '/trafficlights'>{location.pathname === '/trafficlights' ? <PiTrafficSignalFill size="30"/> : <PiTrafficSignal size="30"/>}</Link>
+        <Link to = '/favorites'>{location.pathname === '/favorites' ? <GoStarFill size="30"/> : <GoStar size="30"/>}</Link>
+        <Link to = '/mypage'>{location.pathname === '/mypage' ? <HiUserCircle size="30"/> : <HiOutlineUserCircle size="30"/>}</Link>
       </NavigationBar>
     </>
   );
