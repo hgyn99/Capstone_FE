@@ -8,10 +8,7 @@ const Container = styled(motion.div)`
   background-color: white;
   position: absolute;
   z-index: 1000;
-  bottom: 0;
-  transition: bottom 0.5s;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+  border-radius: 10px 10px 0 0;
   box-shadow: 0px -4px 8px 0px rgba(0, 0, 0, 0.2);
 `;
 
@@ -31,7 +28,7 @@ const HandleBar = styled.div`
   right: auto;
   bottom: auto;
   transform: translate(-50%, -50%);
-  background-color: ${(props) => props.theme.gray};
+  background-color: ${({ theme }) => theme.gray};
 `;
 
 const Address = styled.span`
@@ -55,8 +52,8 @@ const PosibilityBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  border-top: 2px solid ${(props) => props.theme.gray};
-  border-bottom: 2px solid ${(props) => props.theme.gray};
+  border-top: 2px solid ${({ theme }) => theme.gray};
+  border-bottom: 2px solid ${({ theme }) => theme.gray};
 `;
 
 const DirectionInfoBox = styled.div`
@@ -66,7 +63,7 @@ const DirectionInfoBox = styled.div`
   justify-content: space-around;
   align-items: center;
   gap: 220px;
-  border-bottom: 2px solid ${(props) => props.theme.gray};
+  border-bottom: 2px solid ${({ theme }) => theme.gray};
 `;
 
 const RemainingTimeBox = styled.div`
@@ -79,42 +76,40 @@ const Circle = styled.div`
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background-color: ${(props) =>
-    props.$isTimeLeft ? props.theme.green : props.theme.red};
+  background-color: ${({ $isTimeLeft, theme }) =>
+    $isTimeLeft ? theme.green : theme.red};
 `;
 
 const RemainingTimeText = styled.span`
   font-weight: 700;
-  color: ${(props) =>
-    props.$isTimeLeft ? props.theme.green : props.theme.red};
+  color: ${({ $isTimeLeft, theme }) => ($isTimeLeft ? theme.green : theme.red)};
 `;
 
 const LightDetailInfo = ({
-  $isDetailInfoOpen,
-  setIsDetailInfoOpen,
+  $DetailInfoOpenState,
+  setDetailInfoOpenState,
   lightInfo,
 }) => {
   const dragControls = useDragControls();
 
-  const animateState = $isDetailInfoOpen ? "opened" : "closed";
-
   return (
     <Container
+      $DetailInfoOpenState={$DetailInfoOpenState}
       drag="y"
       dragConstraints={{ top: 0, bottom: 0 }}
-      animate={animateState}
+      animate={$DetailInfoOpenState}
       variants={{
-        opened: { top: `calc(100dvh - 700px)` },
-        closed: { top: `calc(100dvh - 300px)` },
+        top: { top: `10dvh` },
+        mid: { top: `50dvh` },
+        closed: { top: `100dvh` },
       }}
+      transition={{ duration: 0.3 }}
       dragControls={dragControls}
       dragListener={false}
       dragElastic={0.2}
       onDragEnd={(event, info) => {
-        // y가 음수이면 위로, 양수이면 아래로
-
         const offsetThreshold = 150;
-        const deltaThreshold = 5;
+        const deltaThreshold = 2;
 
         const isOverOffsetThreshold = Math.abs(info.offset.y) > offsetThreshold;
         const isOverDeltaThreshold = Math.abs(info.delta.y) > deltaThreshold;
@@ -123,9 +118,15 @@ const LightDetailInfo = ({
 
         if (!isOverThreshold) return;
 
-        const newIsOpened = info.offset.y < 0;
+        const isGoDown = info.offset.y > 0;
 
-        setIsDetailInfoOpen(newIsOpened);
+        if (isGoDown && $DetailInfoOpenState === "top") {
+          setDetailInfoOpenState("mid");
+        } else if (isGoDown && $DetailInfoOpenState === "mid") {
+          setDetailInfoOpenState("closed");
+        } else if (!isGoDown && $DetailInfoOpenState === "mid") {
+          setDetailInfoOpenState("top");
+        }
       }}
     >
       <TopBox onPointerDown={(e) => dragControls.start(e)}>
