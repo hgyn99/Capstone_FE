@@ -53,7 +53,7 @@ const PanToButton = styled.button`
 const HomePage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [map, setMap] = useState(null);
-  const [$isDetailInfoOpen, set$IsDetailInfoOpen] = useState(false);
+  const [$isDetailInfoOpen, setIsDetailInfoOpen] = useState(false);
   // 기본 위치 상태
   const [state, setState] = useState({
     center: {
@@ -125,7 +125,7 @@ const HomePage = () => {
           $isDetailInfoOpen={$isDetailInfoOpen}
           onClick={() => {
             console.log("게시글 작성 버튼");
-            set$IsDetailInfoOpen((prev) => !prev);
+            setIsDetailInfoOpen((prev) => !prev);
           }}
         >
           <FaPlus />
@@ -133,7 +133,10 @@ const HomePage = () => {
         <PanToButton $isDetailInfoOpen={$isDetailInfoOpen} onClick={panTo}>
           <TbCurrentLocation />
         </PanToButton>
-        <LightDetailInfo $isDetailInfoOpen={$isDetailInfoOpen} />
+        <LightDetailInfo
+          $isDetailInfoOpen={$isDetailInfoOpen}
+          setIsDetailInfoOpen={setIsDetailInfoOpen}
+        />
       </Container>
       <KakaoLoginModal isOpen={isOpen} onRequestClose={handleLoginModal} />
     </MenuBarLayout>

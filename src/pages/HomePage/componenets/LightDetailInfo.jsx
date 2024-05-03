@@ -1,13 +1,14 @@
 import styled from "styled-components";
+import { motion, useDragControls } from "framer-motion";
 import Text from "./Text";
 
-const Container = styled.div`
+const Container = styled(motion.div)`
   width: 100%;
-  height: 300px;
+  height: 100dvh;
   background-color: white;
   position: absolute;
   z-index: 1000;
-  bottom: ${(props) => (props.$isDetailInfoOpen ? "0" : "-320px")};
+  bottom: 0;
   transition: bottom 0.5s;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
@@ -46,12 +47,6 @@ const DetailAddress = styled.span`
   position: absolute;
   top: 70%;
   left: 3%;
-`;
-
-const Hr = styled.hr`
-  size: 2px;
-  color: ${(props) => props.theme.gray};
-  margin: 0;
 `;
 
 const PosibilityBox = styled.div`
@@ -94,10 +89,46 @@ const RemainingTimeText = styled.span`
     props.$isTimeLeft ? props.theme.green : props.theme.red};
 `;
 
-const LightDetailInfo = ({ $isDetailInfoOpen, lightInfo }) => {
+const LightDetailInfo = ({
+  $isDetailInfoOpen,
+  setIsDetailInfoOpen,
+  lightInfo,
+}) => {
+  const dragControls = useDragControls();
+
+  const animateState = $isDetailInfoOpen ? "opened" : "closed";
+
   return (
-    <Container $isDetailInfoOpen={$isDetailInfoOpen}>
-      <TopBox>
+    <Container
+      drag="y"
+      dragConstraints={{ top: 0, bottom: 0 }}
+      animate={animateState}
+      variants={{
+        opened: { top: `calc(100dvh - 700px)` },
+        closed: { top: `calc(100dvh - 300px)` },
+      }}
+      dragControls={dragControls}
+      dragListener={false}
+      dragElastic={0.2}
+      onDragEnd={(event, info) => {
+        // y가 음수이면 위로, 양수이면 아래로
+
+        const offsetThreshold = 150;
+        const deltaThreshold = 5;
+
+        const isOverOffsetThreshold = Math.abs(info.offset.y) > offsetThreshold;
+        const isOverDeltaThreshold = Math.abs(info.delta.y) > deltaThreshold;
+
+        const isOverThreshold = isOverOffsetThreshold || isOverDeltaThreshold;
+
+        if (!isOverThreshold) return;
+
+        const newIsOpened = info.offset.y < 0;
+
+        setIsDetailInfoOpen(newIsOpened);
+      }}
+    >
+      <TopBox onPointerDown={(e) => dragControls.start(e)}>
         <HandleBar />
         <Address>전남대공과대학</Address>
         <DetailAddress>176-48 (전남대공과대학 방면)</DetailAddress>

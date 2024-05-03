@@ -7,8 +7,10 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />}></Route>
-        <Route path="/trafficlights" element={<HomePage />}></Route> {/** 추후 element 수정*/}
-        <Route path="/favorites" element={<HomePage />}></Route> {/** 추후 element 수정*/}
+        <Route path="/trafficlights" element={<HomePage />}></Route>{" "}
+        {/** 추후 element 수정*/}
+        <Route path="/favorites" element={<HomePage />}></Route>{" "}
+        {/** 추후 element 수정*/}
         <Route path="/mypage" element={<MyPage />}></Route>
       </Routes>
     </BrowserRouter>
