@@ -2,7 +2,7 @@ import { styled } from "styled-components";
 import MenuBarLayout from "../../components/MenuBarLayout";
 import React, { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
-import { MdMyLocation } from "react-icons/md";
+import { TbCurrentLocation } from "react-icons/tb";
 import KakaoLoginModal from "./componenets/KakaoLoginModal";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import LightDetailInfo from "./componenets/LightDetailInfo";
@@ -14,13 +14,9 @@ const Container = styled.div`
   position: relative;
 `;
 
-const StyledeMap = styled(Map)`
-  z-index: -1000;
-`;
-
 const PlusButton = styled.button`
   position: absolute;
-  bottom: ${(props) => (props.$isDetailInfoOpen ? "360px" : "116px")};
+  bottom: ${(props) => (props.$isDetailInfoOpen ? "360px" : "66px")};
   right: 10px;
   border: none;
   border-radius: 50%;
@@ -37,14 +33,14 @@ const PlusButton = styled.button`
 
 const PanToButton = styled.button`
   position: absolute;
-  bottom: ${(props) => (props.$isDetailInfoOpen ? "310px" : "66px")};
+  bottom: ${(props) => (props.$isDetailInfoOpen ? "310px" : "16px")};
   right: 10px;
   border: none;
   border-radius: 50%;
   width: 40px;
   height: 40px;
-  line-height: 0px;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.3);
   cursor: pointer;
   z-index: 1000;
   font-size: 20px;
@@ -111,34 +107,31 @@ const HomePage = () => {
     <MenuBarLayout>
       <Container>
         <TopBar />
-        <StyledeMap
+        <Map
           id="map"
           center={state.center}
           style={{
             width: "100%",
-            height: "100vh",
+            height: "calc(100vh - 56px)",
           }}
+          padding={64}
           level={3}
           minLevel={4}
           onCreate={setMap}
         >
-          <MapMarker
-            position={state.center}
-            // image={{
-            //   src: imageSrc,
-            //   size: { width: 30, height: 30 },
-            // }}
-          />
-        </StyledeMap>
+          <MapMarker position={state.center} />
+        </Map>
         <PlusButton
           $isDetailInfoOpen={$isDetailInfoOpen}
           onClick={() => {
             console.log("게시글 작성 버튼");
             set$IsDetailInfoOpen((prev) => !prev);
           }}
-        ></PlusButton>
+        >
+          <FaPlus />
+        </PlusButton>
         <PanToButton $isDetailInfoOpen={$isDetailInfoOpen} onClick={panTo}>
-          <MdMyLocation />
+          <TbCurrentLocation />
         </PanToButton>
         <LightDetailInfo $isDetailInfoOpen={$isDetailInfoOpen} />
       </Container>

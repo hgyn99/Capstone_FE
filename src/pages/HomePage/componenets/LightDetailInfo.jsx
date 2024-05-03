@@ -7,7 +7,7 @@ const Container = styled.div`
   background-color: white;
   position: absolute;
   z-index: 1000;
-  bottom: ${(props) => (props.isDetailInfoOpen ? "0" : "-300px")};
+  bottom: ${(props) => (props.$isDetailInfoOpen ? "0" : "-320px")};
   transition: bottom 0.5s;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
@@ -94,9 +94,9 @@ const RemainingTimeText = styled.span`
     props.$isTimeLeft ? props.theme.green : props.theme.red};
 `;
 
-const LightDetailInfo = ({ isDetailInfoOpen, lightInfo }) => {
+const LightDetailInfo = ({ $isDetailInfoOpen, lightInfo }) => {
   return (
-    <Container isDetailInfoOpen={isDetailInfoOpen}>
+    <Container $isDetailInfoOpen={$isDetailInfoOpen}>
       <TopBox>
         <HandleBar />
         <Address>전남대공과대학</Address>

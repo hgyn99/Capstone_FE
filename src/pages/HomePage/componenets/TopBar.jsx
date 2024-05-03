@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { ReactComponent as Arrow } from "../../../assets/icon/arrow.svg";
 
 const Container = styled.div`
+  z-index: 1000;
   display: flex;
   justify-content: center;
   align-items: center;
