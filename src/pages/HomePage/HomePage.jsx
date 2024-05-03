@@ -1,7 +1,6 @@
 import { styled } from "styled-components";
 import MenuBarLayout from "../../components/MenuBarLayout";
 import React, { useEffect, useState } from "react";
-import { FaPlus } from "react-icons/fa6";
 import { TbCurrentLocation } from "react-icons/tb";
 import KakaoLoginModal from "./componenets/KakaoLoginModal";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
@@ -14,26 +13,10 @@ const Container = styled.div`
   position: relative;
 `;
 
-const PlusButton = styled.button`
-  position: absolute;
-  bottom: ${(props) => (props.$isDetailInfoOpen ? "360px" : "66px")};
-  right: 10px;
-  border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  line-height: 0px;
-  background-color: #535ce8;
-  color: white;
-  cursor: pointer;
-  z-index: 1000;
-  font-size: 20px;
-  transition: bottom 0.5s;
-`;
-
 const PanToButton = styled.button`
   position: absolute;
-  bottom: ${(props) => (props.$isDetailInfoOpen ? "310px" : "16px")};
+  bottom: ${(props) =>
+    props.$DetailInfoOpenState === "closed" ? "16px" : "356px"};
   right: 10px;
   border: none;
   border-radius: 50%;
@@ -53,8 +36,8 @@ const PanToButton = styled.button`
 const HomePage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [map, setMap] = useState(null);
-  const [$isDetailInfoOpen, set$IsDetailInfoOpen] = useState(false);
-  // 기본 위치 상태
+  const [$DetailInfoOpenState, setDetailInfoOpenState] = useState("mid");
+
   const [state, setState] = useState({
     center: {
       lat: 33.450701,
@@ -121,19 +104,16 @@ const HomePage = () => {
         >
           <MapMarker position={state.center} />
         </Map>
-        <PlusButton
-          $isDetailInfoOpen={$isDetailInfoOpen}
-          onClick={() => {
-            console.log("게시글 작성 버튼");
-            set$IsDetailInfoOpen((prev) => !prev);
-          }}
+        <PanToButton
+          $DetailInfoOpenState={$DetailInfoOpenState}
+          onClick={panTo}
         >
-          <FaPlus />
-        </PlusButton>
-        <PanToButton $isDetailInfoOpen={$isDetailInfoOpen} onClick={panTo}>
           <TbCurrentLocation />
         </PanToButton>
-        <LightDetailInfo $isDetailInfoOpen={$isDetailInfoOpen} />
+        <LightDetailInfo
+          $DetailInfoOpenState={$DetailInfoOpenState}
+          setDetailInfoOpenState={setDetailInfoOpenState}
+        />
       </Container>
       <KakaoLoginModal isOpen={isOpen} onRequestClose={handleLoginModal} />
     </MenuBarLayout>

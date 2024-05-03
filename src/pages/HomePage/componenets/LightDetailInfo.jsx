@@ -1,16 +1,14 @@
 import styled from "styled-components";
+import { motion, useDragControls } from "framer-motion";
 import Text from "./Text";
 
-const Container = styled.div`
+const Container = styled(motion.div)`
   width: 100%;
-  height: 300px;
+  height: 100dvh;
   background-color: white;
   position: absolute;
   z-index: 1000;
-  bottom: ${(props) => (props.$isDetailInfoOpen ? "0" : "-320px")};
-  transition: bottom 0.5s;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+  border-radius: 10px 10px 0 0;
   box-shadow: 0px -4px 8px 0px rgba(0, 0, 0, 0.2);
 `;
 
@@ -30,7 +28,7 @@ const HandleBar = styled.div`
   right: auto;
   bottom: auto;
   transform: translate(-50%, -50%);
-  background-color: ${(props) => props.theme.gray};
+  background-color: ${({ theme }) => theme.gray};
 `;
 
 const Address = styled.span`
@@ -48,20 +46,14 @@ const DetailAddress = styled.span`
   left: 3%;
 `;
 
-const Hr = styled.hr`
-  size: 2px;
-  color: ${(props) => props.theme.gray};
-  margin: 0;
-`;
-
 const PosibilityBox = styled.div`
   width: 100%;
   height: 36px;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-top: 2px solid ${(props) => props.theme.gray};
-  border-bottom: 2px solid ${(props) => props.theme.gray};
+  border-top: 2px solid ${({ theme }) => theme.gray};
+  border-bottom: 2px solid ${({ theme }) => theme.gray};
 `;
 
 const DirectionInfoBox = styled.div`
@@ -71,7 +63,7 @@ const DirectionInfoBox = styled.div`
   justify-content: space-around;
   align-items: center;
   gap: 220px;
-  border-bottom: 2px solid ${(props) => props.theme.gray};
+  border-bottom: 2px solid ${({ theme }) => theme.gray};
 `;
 
 const RemainingTimeBox = styled.div`
@@ -84,20 +76,60 @@ const Circle = styled.div`
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background-color: ${(props) =>
-    props.$isTimeLeft ? props.theme.green : props.theme.red};
+  background-color: ${({ $isTimeLeft, theme }) =>
+    $isTimeLeft ? theme.green : theme.red};
 `;
 
 const RemainingTimeText = styled.span`
   font-weight: 700;
-  color: ${(props) =>
-    props.$isTimeLeft ? props.theme.green : props.theme.red};
+  color: ${({ $isTimeLeft, theme }) => ($isTimeLeft ? theme.green : theme.red)};
 `;
 
-const LightDetailInfo = ({ $isDetailInfoOpen, lightInfo }) => {
+const LightDetailInfo = ({
+  $DetailInfoOpenState,
+  setDetailInfoOpenState,
+  lightInfo,
+}) => {
+  const dragControls = useDragControls();
+
   return (
-    <Container $isDetailInfoOpen={$isDetailInfoOpen}>
-      <TopBox>
+    <Container
+      $DetailInfoOpenState={$DetailInfoOpenState}
+      drag="y"
+      dragConstraints={{ top: 0, bottom: 0 }}
+      animate={$DetailInfoOpenState}
+      variants={{
+        top: { top: `10dvh` },
+        mid: { top: `50dvh` },
+        closed: { top: `100dvh` },
+      }}
+      transition={{ duration: 0.3 }}
+      dragControls={dragControls}
+      dragListener={false}
+      dragElastic={0.2}
+      onDragEnd={(event, info) => {
+        const offsetThreshold = 150;
+        const deltaThreshold = 2;
+
+        const isOverOffsetThreshold = Math.abs(info.offset.y) > offsetThreshold;
+        const isOverDeltaThreshold = Math.abs(info.delta.y) > deltaThreshold;
+
+        const isOverThreshold = isOverOffsetThreshold || isOverDeltaThreshold;
+
+        if (!isOverThreshold) return;
+
+        const isGoDown = info.offset.y > 0;
+
+        if (isGoDown && $DetailInfoOpenState === "top") {
+          setDetailInfoOpenState("mid");
+        } else if (isGoDown && $DetailInfoOpenState === "mid") {
+          setDetailInfoOpenState("closed");
+        } else if (!isGoDown && $DetailInfoOpenState === "mid") {
+          setDetailInfoOpenState("top");
+        }
+      }}
+    >
+      <TopBox onPointerDown={(e) => dragControls.start(e)}>
         <HandleBar />
         <Address>전남대공과대학</Address>
         <DetailAddress>176-48 (전남대공과대학 방면)</DetailAddress>
