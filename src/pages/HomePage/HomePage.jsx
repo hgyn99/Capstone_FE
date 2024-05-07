@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import MenuBarLayout from "../../components/MenuBarLayout";
+import NavigationBarLayout from "../../components/NavigationBarLayout";
 import React, { useEffect, useState } from "react";
 import { TbCurrentLocation } from "react-icons/tb";
 import KakaoLoginModal from "./componenets/KakaoLoginModal";
@@ -87,7 +87,7 @@ const HomePage = () => {
   };
 
   return (
-    <MenuBarLayout>
+    <NavigationBarLayout>
       <Container>
         <TopBar />
         <Map
@@ -116,7 +116,7 @@ const HomePage = () => {
         />
       </Container>
       <KakaoLoginModal isOpen={isOpen} onRequestClose={handleLoginModal} />
-    </MenuBarLayout>
+    </NavigationBarLayout>
   );
 };
 

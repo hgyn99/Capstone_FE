@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import MenuBar from "./MenuBar";
+import MenuBar from "./NavigationBar";
 
 const Container = styled.div`
   max-width: 390px;

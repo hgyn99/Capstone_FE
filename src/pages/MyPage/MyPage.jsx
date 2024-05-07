@@ -1,10 +1,10 @@
-import MenuBarLayout from "../../components/MenuBarLayout";
+import NavigationBarLayout from "../../components/NavigationBarLayout";
 
 const MyPage = () => {
   return (
-    <MenuBarLayout>
+    <NavigationBarLayout>
       <div>dasd</div>
-    </MenuBarLayout>
+    </NavigationBarLayout>
   );
 };
 

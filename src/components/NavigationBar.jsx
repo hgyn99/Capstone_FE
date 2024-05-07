@@ -4,9 +4,9 @@ import { PiTrafficSignal, PiTrafficSignalFill } from "react-icons/pi";
 import { GoStar, GoStarFill } from "react-icons/go";
 import { HiOutlineUserCircle, HiUserCircle } from "react-icons/hi2";
 import { useRecoilState } from "recoil";
-import { menuState } from "./../recoil/menuState/atom";
+import { menuState } from "../recoil/menuState/atom";
 
-const NavigationBar = styled.div`
+const NavigationBarContainer = styled.div`
   display: flex;
   justify-content: space-around;
   background-color: white;
@@ -30,11 +30,11 @@ const Button = styled.button`
   margin: 0;
 `;
 
-const MenuBar = ({ children }) => {
+const NavigationBar = ({ children }) => {
   const [currentMenuState, setCurrentMenuState] = useRecoilState(menuState); // menuState 변수명 변경
 
   return (
-    <NavigationBar>
+    <NavigationBarContainer>
       <Button>
         <GoHome size="30" />
       </Button>
@@ -47,8 +47,8 @@ const MenuBar = ({ children }) => {
       <Button>
         <HiOutlineUserCircle size="30" />
       </Button>
-    </NavigationBar>
+    </NavigationBarContainer>
   );
 };
 
-export default MenuBar;
+export default NavigationBar;
