@@ -20,11 +20,11 @@ const HeaderBox = styled.div`
 `;
 
 const HandleBar = styled.div`
-  width: 50px;
+  width: 20%;
   height: 2px;
   position: absolute;
   left: 50%;
-  top: 10%;
+  top: 15%;
   right: auto;
   bottom: auto;
   transform: translate(-50%, -50%);

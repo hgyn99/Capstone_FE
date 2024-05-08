@@ -89,6 +89,7 @@ const Card = () => {
       <DetailAddressText>176-48 (전남대공과대학 방면)</DetailAddressText>
       <IsFavoriteButton
         onClick={() => {
+          // 저장
           setIsFavorite((prev) => !prev);
         }}
       >
