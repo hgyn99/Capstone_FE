@@ -9,6 +9,8 @@ import TopBar from "./componenets/TopBar";
 import SurroundingLightInfo from "./componenets/SurroundingLightInfo";
 import { useRecoilValue } from "recoil";
 import { navigationState } from "../../recoil/navigationState/atom";
+import { fetchTraffic } from "../../apis/api/traffic";
+import { useQuery } from "@tanstack/react-query";
 
 const { kakao } = window;
 
@@ -37,14 +39,12 @@ const PanToButton = styled.button`
 `;
 
 const HomePage = () => {
+  const navigationBarState = useRecoilValue(navigationState);
   const [isOpen, setIsOpen] = useState(false);
   const [map, setMap] = useState(null);
   const [$DetailInfoOpenState, setDetailInfoOpenState] = useState("mid");
   const [surroundingLightInfoOpenState, setSurroundingLightInfoOpenState] =
     useState("mid");
-
-  const navigationBarState = useRecoilValue(navigationState);
-
   const [state, setState] = useState({
     center: {
       lat: 33.450701,
@@ -52,6 +52,18 @@ const HomePage = () => {
     },
     errMsg: null,
     isLoading: true,
+  });
+
+  const {
+    isLoading,
+    data: trafficData,
+    refetch,
+  } = useQuery({
+    queryKey: ["traffic"],
+    queryFn: fetchTraffic,
+    onError: (e) => {
+      console.log(e);
+    },
   });
 
   const handleLoginModal = () => {
