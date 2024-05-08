@@ -52,8 +52,8 @@ const NavigationBar = ({ children }) => {
         )}
         <Text>신호등</Text>
       </Button>
-      <Button onClick={() => setCurrentNavigationState("Favorite")}>
-        {currentNavigationState === "Favorite" ? (
+      <Button onClick={() => setCurrentNavigationState("Favorites")}>
+        {currentNavigationState === "Favorites" ? (
           <GoStarFill size="30" />
         ) : (
           <GoStar size="30" />

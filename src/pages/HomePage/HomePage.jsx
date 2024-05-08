@@ -2,7 +2,6 @@ import { styled } from "styled-components";
 import NavigationBarLayout from "../../components/NavigationBarLayout";
 import React, { useEffect, useState } from "react";
 import { TbCurrentLocation } from "react-icons/tb";
-import KakaoLoginModal from "./componenets/KakaoLoginModal";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import LightDetailInfo from "./componenets/LightDetailInfo";
 import TopBar from "./componenets/TopBar";
@@ -11,6 +10,7 @@ import { useRecoilValue } from "recoil";
 import { navigationState } from "../../recoil/navigationState/atom";
 import { fetchTraffic } from "../../apis/api/traffic";
 import { useQuery } from "@tanstack/react-query";
+import FavoritesInfo from "./componenets/FavoritesInfo";
 
 const { kakao } = window;
 
@@ -40,11 +40,11 @@ const PanToButton = styled.button`
 
 const HomePage = () => {
   const navigationBarState = useRecoilValue(navigationState);
-  const [isOpen, setIsOpen] = useState(false);
   const [map, setMap] = useState(null);
   const [$DetailInfoOpenState, setDetailInfoOpenState] = useState("mid");
   const [surroundingLightInfoOpenState, setSurroundingLightInfoOpenState] =
     useState("mid");
+  const [favoritesInfoOpenState, setFavoritesInfoOpenState] = useState("mid");
   const [state, setState] = useState({
     center: {
       lat: 33.450701,
@@ -65,10 +65,6 @@ const HomePage = () => {
       console.log(e);
     },
   });
-
-  const handleLoginModal = () => {
-    setIsOpen((prev) => !prev);
-  };
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -141,8 +137,13 @@ const HomePage = () => {
             setSurroundingLightInfoOpenState={setSurroundingLightInfoOpenState}
           />
         ) : null}
+        {navigationBarState === "Favorites" ? (
+          <FavoritesInfo
+            $favoritesInfoOpenState={favoritesInfoOpenState}
+            setFavoritesInfoOpenState={setFavoritesInfoOpenState}
+          />
+        ) : null}
       </Container>
-      <KakaoLoginModal isOpen={isOpen} onRequestClose={handleLoginModal} />
     </NavigationBarLayout>
   );
 };
