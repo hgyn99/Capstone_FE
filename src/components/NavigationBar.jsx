@@ -15,7 +15,7 @@ const NavigationBarContainer = styled.div`
   border-top: 1px solid ${(props) => props.theme.gray};
   max-width: 390px;
   width: 100%;
-  height: 68px;
+  height: 80px;
   position: absolute;
 `;
 
@@ -27,7 +27,7 @@ const Button = styled.button`
   background-color: white;
   border: none;
   padding: 0;
-  margin: 0;
+  margin-bottom: 12px;
 `;
 
 const NavigationBar = ({ children }) => {
@@ -36,33 +36,37 @@ const NavigationBar = ({ children }) => {
 
   return (
     <NavigationBarContainer>
-      <Button>
+      <Button onClick={() => setCurrentNavigationState("Home")}>
         {currentNavigationState === "Home" ? (
           <GoHomeFill size="30" />
         ) : (
           <GoHome size="30" />
         )}
+        <Text>홈</Text>
       </Button>
-      <Button>
+      <Button onClick={() => setCurrentNavigationState("TrafficSignal")}>
         {currentNavigationState === "TrafficSignal" ? (
           <PiTrafficSignalFill size="30" />
         ) : (
           <PiTrafficSignal size="30" />
         )}
+        <Text>신호등</Text>
       </Button>
-      <Button>
+      <Button onClick={() => setCurrentNavigationState("Favorite")}>
         {currentNavigationState === "Favorite" ? (
           <GoStarFill size="30" />
         ) : (
           <GoStar size="30" />
         )}
+        <Text>즐겨찾기</Text>
       </Button>
-      <Button>
+      <Button onClick={() => setCurrentNavigationState("MyPage")}>
         {currentNavigationState === "MyPage" ? (
           <HiUserCircle size="30" />
         ) : (
           <HiOutlineUserCircle size="30" />
         )}
+        <Text>My</Text>
       </Button>
     </NavigationBarContainer>
   );

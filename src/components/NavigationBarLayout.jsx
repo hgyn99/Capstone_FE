@@ -4,8 +4,8 @@ import MenuBar from "./NavigationBar";
 const Container = styled.div`
   max-width: 390px;
   width: 100vh;
-  height: calc(100vh - 68px);
-  height: calc(100dvh - 68px); /* Mobile */
+  height: calc(100vh - 80px);
+  height: calc(100dvh - 80px); /* Mobile */
   overflow: hidden;
   position: relative;
 

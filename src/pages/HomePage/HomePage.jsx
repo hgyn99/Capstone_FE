@@ -6,6 +6,9 @@ import KakaoLoginModal from "./componenets/KakaoLoginModal";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import LightDetailInfo from "./componenets/LightDetailInfo";
 import TopBar from "./componenets/TopBar";
+import SurroundingLightInfo from "./componenets/SurroundingLightInfo";
+import { useRecoilValue } from "recoil";
+import { navigationState } from "../../recoil/navigationState/atom";
 
 const { kakao } = window;
 
@@ -37,6 +40,10 @@ const HomePage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [map, setMap] = useState(null);
   const [$DetailInfoOpenState, setDetailInfoOpenState] = useState("mid");
+  const [surroundingLightInfoOpenState, setSurroundingLightInfoOpenState] =
+    useState("mid");
+
+  const navigationBarState = useRecoilValue(navigationState);
 
   const [state, setState] = useState({
     center: {
@@ -95,7 +102,7 @@ const HomePage = () => {
           center={state.center}
           style={{
             width: "100%",
-            height: "calc(100vh - 68px)",
+            height: "calc(100vh - 80px)",
           }}
           padding={64}
           level={3}
@@ -110,10 +117,18 @@ const HomePage = () => {
         >
           <TbCurrentLocation />
         </PanToButton>
-        <LightDetailInfo
-          $DetailInfoOpenState={$DetailInfoOpenState}
-          setDetailInfoOpenState={setDetailInfoOpenState}
-        />
+        {navigationBarState === "Home" ? (
+          <LightDetailInfo
+            $DetailInfoOpenState={$DetailInfoOpenState}
+            setDetailInfoOpenState={setDetailInfoOpenState}
+          />
+        ) : null}
+        {navigationBarState === "TrafficSignal" ? (
+          <SurroundingLightInfo
+            $surroundingLightInfoOpenState={surroundingLightInfoOpenState}
+            setSurroundingLightInfoOpenState={setSurroundingLightInfoOpenState}
+          />
+        ) : null}
       </Container>
       <KakaoLoginModal isOpen={isOpen} onRequestClose={handleLoginModal} />
     </NavigationBarLayout>
