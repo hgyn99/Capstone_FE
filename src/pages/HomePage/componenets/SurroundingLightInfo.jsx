@@ -1,5 +1,6 @@
 import { motion, useDragControls } from "framer-motion";
 import styled from "styled-components";
+import Card from "./Card";
 
 const Container = styled(motion.div)`
   width: 100%;
@@ -12,10 +13,10 @@ const Container = styled(motion.div)`
 `;
 
 const HeaderBox = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px;
+  width: 100%;
+  height: 68px;
+  position: relative;
+  margin-bottom: 8px;
 `;
 
 const HandleBar = styled.div`
@@ -30,9 +31,18 @@ const HandleBar = styled.div`
   background-color: ${({ theme }) => theme.gray};
 `;
 
+const TitleText = styled.span`
+  font-size: 18px;
+  font-weight: 700;
+  position: absolute;
+  top: 40%;
+  left: 5%;
+`;
+
 const SurroundingLightInfo = ({
   $surroundingLightInfoOpenState,
   setSurroundingLightInfoOpenState,
+  surroundingLightInfo,
 }) => {
   const dragControls = useDragControls();
 
@@ -75,7 +85,9 @@ const SurroundingLightInfo = ({
     >
       <HeaderBox onPointerDown={(e) => dragControls.start(e)}>
         <HandleBar />
+        <TitleText>주변 신호등</TitleText>
       </HeaderBox>
+      <Card />
     </Container>
   );
 };

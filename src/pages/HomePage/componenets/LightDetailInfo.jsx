@@ -31,19 +31,19 @@ const HandleBar = styled.div`
   background-color: ${({ theme }) => theme.gray};
 `;
 
-const Address = styled.span`
+const AddressText = styled.span`
   font-size: 18px;
   font-weight: 700;
   position: absolute;
   top: 40%;
-  left: 3%;
+  left: 5%;
 `;
 
-const DetailAddress = styled.span`
+const DetailAddressText = styled.span`
   font-size: 12px;
   position: absolute;
   top: 70%;
-  left: 3%;
+  left: 5%;
 `;
 
 const PosibilityBox = styled.div`
@@ -131,8 +131,8 @@ const LightDetailInfo = ({
     >
       <TopBox onPointerDown={(e) => dragControls.start(e)}>
         <HandleBar />
-        <Address>전남대공과대학</Address>
-        <DetailAddress>176-48 (전남대공과대학 방면)</DetailAddress>
+        <AddressText>전남대공과대학</AddressText>
+        <DetailAddressText>176-48 (전남대공과대학 방면)</DetailAddressText>
       </TopBox>
       <PosibilityBox></PosibilityBox>
       <DirectionInfoBox>

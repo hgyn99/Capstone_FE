@@ -24,7 +24,7 @@ const Text = styled.div`
 `;
 
 const Button = styled.button`
-  background-color: white;
+  background: none;
   border: none;
   padding: 0;
   margin-bottom: 12px;

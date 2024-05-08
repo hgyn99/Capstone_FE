@@ -19,7 +19,7 @@ const Container = styled.div`
 const PanToButton = styled.button`
   position: absolute;
   bottom: ${(props) =>
-    props.$DetailInfoOpenState === "closed" ? "16px" : "356px"};
+    props.$DetailInfoOpenState === "closed" ? "2dvh" : "42dvh"};
   right: 10px;
   border: none;
   border-radius: 50%;
