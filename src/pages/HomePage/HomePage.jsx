@@ -1,11 +1,16 @@
 import { styled } from "styled-components";
-import MenuBarLayout from "../../components/MenuBarLayout";
+import NavigationBarLayout from "../../components/NavigationBarLayout";
 import React, { useEffect, useState } from "react";
 import { TbCurrentLocation } from "react-icons/tb";
-import KakaoLoginModal from "./componenets/KakaoLoginModal";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import LightDetailInfo from "./componenets/LightDetailInfo";
 import TopBar from "./componenets/TopBar";
+import SurroundingLightInfo from "./componenets/SurroundingLightInfo";
+import { useRecoilValue } from "recoil";
+import { navigationState } from "../../recoil/navigationState/atom";
+import { fetchTraffic } from "../../apis/api/traffic";
+import { useQuery } from "@tanstack/react-query";
+import FavoritesInfo from "./componenets/FavoritesInfo";
 
 const { kakao } = window;
 
@@ -16,7 +21,7 @@ const Container = styled.div`
 const PanToButton = styled.button`
   position: absolute;
   bottom: ${(props) =>
-    props.$DetailInfoOpenState === "closed" ? "16px" : "356px"};
+    props.$DetailInfoOpenState === "closed" ? "2dvh" : "42dvh"};
   right: 10px;
   border: none;
   border-radius: 50%;
@@ -34,10 +39,12 @@ const PanToButton = styled.button`
 `;
 
 const HomePage = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const navigationBarState = useRecoilValue(navigationState);
   const [map, setMap] = useState(null);
   const [$DetailInfoOpenState, setDetailInfoOpenState] = useState("mid");
-
+  const [surroundingLightInfoOpenState, setSurroundingLightInfoOpenState] =
+    useState("mid");
+  const [favoritesInfoOpenState, setFavoritesInfoOpenState] = useState("mid");
   const [state, setState] = useState({
     center: {
       lat: 33.450701,
@@ -47,9 +54,17 @@ const HomePage = () => {
     isLoading: true,
   });
 
-  const handleLoginModal = () => {
-    setIsOpen((prev) => !prev);
-  };
+  const {
+    isLoading,
+    data: trafficData,
+    refetch,
+  } = useQuery({
+    queryKey: ["traffic"],
+    queryFn: fetchTraffic,
+    onError: (e) => {
+      console.log(e);
+    },
+  });
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -87,7 +102,7 @@ const HomePage = () => {
   };
 
   return (
-    <MenuBarLayout>
+    <NavigationBarLayout>
       <Container>
         <TopBar />
         <Map
@@ -95,7 +110,7 @@ const HomePage = () => {
           center={state.center}
           style={{
             width: "100%",
-            height: "calc(100vh - 56px)",
+            height: "calc(100vh - 80px)",
           }}
           padding={64}
           level={3}
@@ -110,13 +125,26 @@ const HomePage = () => {
         >
           <TbCurrentLocation />
         </PanToButton>
-        <LightDetailInfo
-          $DetailInfoOpenState={$DetailInfoOpenState}
-          setDetailInfoOpenState={setDetailInfoOpenState}
-        />
+        {navigationBarState === "Home" ? (
+          <LightDetailInfo
+            $DetailInfoOpenState={$DetailInfoOpenState}
+            setDetailInfoOpenState={setDetailInfoOpenState}
+          />
+        ) : null}
+        {navigationBarState === "TrafficSignal" ? (
+          <SurroundingLightInfo
+            $surroundingLightInfoOpenState={surroundingLightInfoOpenState}
+            setSurroundingLightInfoOpenState={setSurroundingLightInfoOpenState}
+          />
+        ) : null}
+        {navigationBarState === "Favorites" ? (
+          <FavoritesInfo
+            $favoritesInfoOpenState={favoritesInfoOpenState}
+            setFavoritesInfoOpenState={setFavoritesInfoOpenState}
+          />
+        ) : null}
       </Container>
-      <KakaoLoginModal isOpen={isOpen} onRequestClose={handleLoginModal} />
-    </MenuBarLayout>
+    </NavigationBarLayout>
   );
 };
 
