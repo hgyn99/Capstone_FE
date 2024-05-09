@@ -39,12 +39,20 @@ const TitleText = styled.span`
   left: 5%;
 `;
 
+const ContentsBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
 const SurroundingLightInfo = ({
   $surroundingLightInfoOpenState,
   setSurroundingLightInfoOpenState,
-  surroundingLightInfo,
+  surroundingLightInfoData,
 }) => {
   const dragControls = useDragControls();
+
+  // console.log(surroundingLightInfoData);
 
   return (
     <Container
@@ -87,7 +95,11 @@ const SurroundingLightInfo = ({
         <HandleBar />
         <TitleText>주변 신호등</TitleText>
       </HeaderBox>
-      <Card />
+      <ContentsBox>
+        {surroundingLightInfoData.map((data, index) => {
+          return <Card key={index} surroundingLightInfoData={data} />;
+        })}
+      </ContentsBox>
     </Container>
   );
 };

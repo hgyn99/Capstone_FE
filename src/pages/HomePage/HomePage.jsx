@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
 import NavigationBarLayout from "../../components/NavigationBarLayout";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { TbCurrentLocation } from "react-icons/tb";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import LightDetailInfo from "./componenets/LightDetailInfo";
@@ -11,6 +11,7 @@ import { navigationState } from "../../recoil/navigationState/atom";
 import { fetchTraffic } from "../../apis/api/traffic";
 import { useQuery } from "@tanstack/react-query";
 import FavoritesInfo from "./componenets/FavoritesInfo";
+import CustomOverLay from "./componenets/CustomOverLay";
 
 const { kakao } = window;
 
@@ -40,6 +41,8 @@ const PanToButton = styled.button`
 
 const HomePage = () => {
   const navigationBarState = useRecoilValue(navigationState);
+  const mapRef = useRef(kakao.maps.Map);
+  // console.log(mapRef);
   const [map, setMap] = useState(null);
   const [$DetailInfoOpenState, setDetailInfoOpenState] = useState("mid");
   const [surroundingLightInfoOpenState, setSurroundingLightInfoOpenState] =
@@ -56,7 +59,7 @@ const HomePage = () => {
 
   const {
     isLoading,
-    data: trafficData,
+    data: surroundingLightInfoData,
     refetch,
   } = useQuery({
     queryKey: ["traffic"],
@@ -65,6 +68,11 @@ const HomePage = () => {
       console.log(e);
     },
   });
+
+  const kakaomap = mapRef.current;
+  // console.log(kakaomap);
+  // const bounds = kakaomap.getBounds();
+  // console.log(bounds);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -117,6 +125,43 @@ const HomePage = () => {
           minLevel={4}
           onCreate={setMap}
         >
+          {navigationBarState === "Home" ? (
+            <>
+              <LightDetailInfo
+                $DetailInfoOpenState={$DetailInfoOpenState}
+                setDetailInfoOpenState={setDetailInfoOpenState}
+              />
+            </>
+          ) : null}
+          {navigationBarState === "TrafficSignal" ? (
+            <>
+              {surroundingLightInfoData.data.data.traffics.map(
+                (data, index) => {
+                  return (
+                    <CustomOverLay
+                      key={index}
+                      surroundingLightInfoData={data}
+                    />
+                  );
+                }
+              )}
+              <SurroundingLightInfo
+                $surroundingLightInfoOpenState={surroundingLightInfoOpenState}
+                setSurroundingLightInfoOpenState={
+                  setSurroundingLightInfoOpenState
+                }
+                surroundingLightInfoData={
+                  surroundingLightInfoData.data.data.traffics
+                }
+              />
+            </>
+          ) : null}
+          {navigationBarState === "Favorites" ? (
+            <FavoritesInfo
+              $favoritesInfoOpenState={favoritesInfoOpenState}
+              setFavoritesInfoOpenState={setFavoritesInfoOpenState}
+            />
+          ) : null}
           <MapMarker position={state.center} />
         </Map>
         <PanToButton
@@ -125,24 +170,6 @@ const HomePage = () => {
         >
           <TbCurrentLocation />
         </PanToButton>
-        {navigationBarState === "Home" ? (
-          <LightDetailInfo
-            $DetailInfoOpenState={$DetailInfoOpenState}
-            setDetailInfoOpenState={setDetailInfoOpenState}
-          />
-        ) : null}
-        {navigationBarState === "TrafficSignal" ? (
-          <SurroundingLightInfo
-            $surroundingLightInfoOpenState={surroundingLightInfoOpenState}
-            setSurroundingLightInfoOpenState={setSurroundingLightInfoOpenState}
-          />
-        ) : null}
-        {navigationBarState === "Favorites" ? (
-          <FavoritesInfo
-            $favoritesInfoOpenState={favoritesInfoOpenState}
-            setFavoritesInfoOpenState={setFavoritesInfoOpenState}
-          />
-        ) : null}
       </Container>
     </NavigationBarLayout>
   );
