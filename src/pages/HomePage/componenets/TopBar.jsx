@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { ReactComponent as Arrow } from "../../../assets/icon/arrow.svg";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   z-index: 1000;
@@ -45,6 +46,8 @@ const DirectionSearchText = styled.p`
 `;
 
 const TopBar = () => {
+  const navigate = useNavigate();
+
   return (
     <Container>
       <InputButton>

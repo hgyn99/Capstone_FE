@@ -36,7 +36,7 @@ const FavoritesInfo = ({
   $favoritesInfoOpenState,
   setFavoritesInfoOpenState,
 }) => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   const dragControls = useDragControls();
 
