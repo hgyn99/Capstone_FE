@@ -31,7 +31,7 @@ const HandleBar = styled.div`
 
 const TopBox = styled.div`
   width: 90%;
-  margin-top: 8px;
+  margin-top: 12px;
   display: flex;
   justify-content: space-between;
 `;
