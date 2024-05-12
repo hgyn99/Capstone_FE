@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import MenuBar from "./NavigationBar";
+import NavigationBar from "./NavigationBar";
 
 const Container = styled.div`
   max-width: 390px;
@@ -20,7 +20,7 @@ const MenuBarLayout = ({ children }) => {
   return (
     <>
       <Container>{children}</Container>
-      <MenuBar />
+      <NavigationBar />
     </>
   );
 };

@@ -108,7 +108,7 @@ const LightDetailInfo = ({
       variants={{
         top: { top: `10dvh` },
         mid: { top: `50dvh` },
-        closed: { top: `100dvh` },
+        closed: { top: `calc(100dvh - 100px)` },
       }}
       transition={{ duration: 0.3 }}
       dragControls={dragControls}
@@ -133,6 +133,8 @@ const LightDetailInfo = ({
           setDetailInfoOpenState("closed");
         } else if (!isGoDown && $DetailInfoOpenState === "mid") {
           setDetailInfoOpenState("top");
+        } else if (!isGoDown && $DetailInfoOpenState === "closed") {
+          setDetailInfoOpenState("mid");
         }
       }}
     >

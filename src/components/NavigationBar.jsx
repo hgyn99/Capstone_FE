@@ -30,7 +30,7 @@ const Button = styled.button`
   margin-bottom: 12px;
 `;
 
-const NavigationBar = ({ children }) => {
+const NavigationBar = () => {
   const [currentNavigationState, setCurrentNavigationState] =
     useRecoilState(navigationState);
 

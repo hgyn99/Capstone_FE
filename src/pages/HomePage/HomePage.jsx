@@ -31,7 +31,7 @@ const PanToButton = styled.button`
   background-color: rgba(255, 255, 255, 0.8);
   box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.3);
   cursor: pointer;
-  z-index: 1000;
+  z-index: 500;
   font-size: 20px;
   transition: bottom 0.5s;
   display: flex;
@@ -104,6 +104,14 @@ const HomePage = () => {
       }));
     }
   }, []);
+
+  useEffect(() => {
+    if (navigationBarState === "TrafficSignal") {
+      setSurroundingLightInfoOpenState("mid");
+    } else if (navigationBarState === "Favorites") {
+      setFavoritesInfoOpenState("mid");
+    }
+  }, [navigationBarState]);
 
   const panTo = () => {
     const newLatLng = new kakao.maps.LatLng(state.center.lat, state.center.lng);

@@ -117,8 +117,6 @@ const FavoritesInfo = ({
     },
   });
 
-  console.table(favoritesTraffic?.data.data.traffics);
-
   const handleLoginModal = () => {
     setIsOpen((prev) => !prev);
   };
@@ -135,7 +133,7 @@ const FavoritesInfo = ({
         variants={{
           top: { top: `10dvh` },
           mid: { top: `50dvh` },
-          closed: { top: `100dvh` },
+          closed: { top: `calc(100dvh - 100px)` },
         }}
         transition={{ duration: 0.3 }}
         dragControls={dragControls}
@@ -161,6 +159,8 @@ const FavoritesInfo = ({
             setFavoritesInfoOpenState("closed");
           } else if (!isGoDown && $favoritesInfoOpenState === "mid") {
             setFavoritesInfoOpenState("top");
+          } else if (!isGoDown && $favoritesInfoOpenState === "closed") {
+            setFavoritesInfoOpenState("mid");
           }
         }}
       >
