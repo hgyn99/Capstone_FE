@@ -14,35 +14,35 @@ const Container = styled(motion.div)`
 
 const HeaderBox = styled.div`
   width: 100%;
-  height: 68px;
-  position: relative;
   margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const HandleBar = styled.div`
-  width: 20%;
+  width: 78px;
   height: 2px;
-  position: absolute;
-  left: 50%;
-  top: 15%;
-  right: auto;
-  bottom: auto;
-  transform: translate(-50%, -50%);
+  margin-top: 8px;
   background-color: ${({ theme }) => theme.gray};
+`;
+
+const TopBox = styled.div`
+  width: 90%;
+  margin: 12px;
+  display: flex;
+  justify-content: space-between;
 `;
 
 const TitleText = styled.span`
   font-size: 18px;
   font-weight: 700;
-  position: absolute;
-  top: 40%;
-  left: 5%;
 `;
 
 const ContentsBox = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 `;
 
 const SurroundingLightInfo = ({
@@ -93,7 +93,9 @@ const SurroundingLightInfo = ({
     >
       <HeaderBox onPointerDown={(e) => dragControls.start(e)}>
         <HandleBar />
-        <TitleText>주변 신호등</TitleText>
+        <TopBox>
+          <TitleText>주변 신호등</TitleText>
+        </TopBox>
       </HeaderBox>
       <ContentsBox>
         {surroundingLightInfoData.map((data, index) => {
