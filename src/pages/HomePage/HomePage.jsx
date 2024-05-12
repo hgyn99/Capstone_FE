@@ -10,7 +10,7 @@ import { useRecoilValue } from "recoil";
 import { navigationState } from "../../recoil/navigationState/atom";
 import { fetchTraffic } from "../../apis/api/traffic";
 import { useQuery } from "@tanstack/react-query";
-import FavoritesInfo from "./componenets/FavoritesInfo";
+import FavoriteInfo from "./componenets/FavoriteInfo";
 import CustomOverLay from "./componenets/CustomOverLay";
 
 const { kakao } = window;
@@ -68,6 +68,7 @@ const HomePage = () => {
       console.log(e);
     },
   });
+  // console.log(surroundingLightInfoData.data.data.traffics);
 
   const kakaomap = mapRef.current;
   // console.log(kakaomap);
@@ -157,7 +158,7 @@ const HomePage = () => {
             </>
           ) : null}
           {navigationBarState === "Favorites" ? (
-            <FavoritesInfo
+            <FavoriteInfo
               $favoritesInfoOpenState={favoritesInfoOpenState}
               setFavoritesInfoOpenState={setFavoritesInfoOpenState}
             />

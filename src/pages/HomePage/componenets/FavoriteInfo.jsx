@@ -16,20 +16,53 @@ const Container = styled(motion.div)`
 const HeaderBox = styled.div`
   width: 100%;
   height: 68px;
-  position: relative;
   margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const HandleBar = styled.div`
-  width: 20%;
+  width: 78px;
   height: 2px;
-  position: absolute;
-  left: 50%;
-  top: 15%;
-  right: auto;
-  bottom: auto;
-  transform: translate(-50%, -50%);
+  margin-top: 8px;
   background-color: ${({ theme }) => theme.gray};
+`;
+
+const ListStateBox = styled.div`
+  display: flex;
+  justify-content: center;
+  background-color: ${({ theme }) => theme.gray};
+  border-radius: 36px;
+  width: 256px;
+  height: 36px;
+  margin-top: 20px;
+`;
+
+const BaseBox = styled.div`
+  width: 128px;
+  height: 36px;
+  text-align: center;
+  line-height: 36px;
+  border-radius: 36px;
+  border: 1px solid transparent;
+  font-weight: 600;
+  /* transition: 0.3s; */
+`;
+
+const Place = styled(BaseBox)`
+  border: 1px solid
+    ${(props) => (props.$listState === "place" ? "black" : "transparent")};
+  background-color: ${(props) =>
+    props.$listState === "place" ? "white" : "transparent"};
+`;
+
+const TrafficLight = styled(BaseBox)`
+  border: 1px solid
+    ${(props) =>
+      props.$listState === "trafficLight" ? "black" : "transparent"};
+  background-color: ${(props) =>
+    props.$listState === "trafficLight" ? "white" : "transparent"};
 `;
 
 const FavoritesInfo = ({
@@ -37,6 +70,7 @@ const FavoritesInfo = ({
   setFavoritesInfoOpenState,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [listState, setListState] = useState("place");
 
   const dragControls = useDragControls();
 
@@ -84,6 +118,22 @@ const FavoritesInfo = ({
       >
         <HeaderBox onPointerDown={(e) => dragControls.start(e)}>
           <HandleBar />
+          <ListStateBox>
+            <button
+              onClick={() => {
+                setListState("place");
+              }}
+            >
+              <Place $listState={listState}>장소</Place>
+            </button>
+            <button
+              onClick={() => {
+                setListState("trafficLight");
+              }}
+            >
+              <TrafficLight $listState={listState}>신호등</TrafficLight>
+            </button>
+          </ListStateBox>
         </HeaderBox>
       </Container>
       <KakaoLoginModal isOpen={isOpen} onRequestClose={handleLoginModal} />

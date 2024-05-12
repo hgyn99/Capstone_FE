@@ -69,18 +69,17 @@ const Circle = styled.div`
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background-color: ${({ lightColor, theme }) =>
-    lightColor === "green" ? theme.green : theme.red};
+  background-color: ${({ $lightColor, theme }) =>
+    $lightColor === "green" ? theme.green : theme.red};
 `;
 
 const RemainingTimeText = styled.span`
   font-weight: 700;
-  color: ${({ lightColor, theme }) =>
-    lightColor === "green" ? theme.green : theme.red};
+  color: ${({ $lightColor, theme }) =>
+    $lightColor === "green" ? theme.green : theme.red};
 `;
 
 const Card = ({ surroundingLightInfoData }) => {
-  console.log(surroundingLightInfoData);
   const {
     color,
     detail,
@@ -121,8 +120,10 @@ const Card = ({ surroundingLightInfoData }) => {
         {/* map 함수로 나열하기 */}
         <Light>
           <Text>서쪽</Text>
-          <RemainingTimeText lightColor={color}>{timeLeft}초</RemainingTimeText>
-          <Circle lightColor={color} />
+          <RemainingTimeText $lightColor={color}>
+            {timeLeft}초
+          </RemainingTimeText>
+          <Circle $lightColor={color} />
         </Light>
       </Lights>
     </Contianer>

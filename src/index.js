@@ -87,6 +87,10 @@ const GlobalStyle = createGlobalStyle`
     "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
     font-size: 14px;
     font-weight: 400;
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
   }
   input {
     font-family: "Pretendard Variable", Pretendard, -apple-system,
