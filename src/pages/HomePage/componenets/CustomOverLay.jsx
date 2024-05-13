@@ -2,14 +2,11 @@ import { CustomOverlayMap } from "react-kakao-maps-sdk";
 
 const CustomOverLay = ({ surroundingLightInfoData }) => {
   return (
-    <CustomOverlayMap // 커스텀 오버레이를 표시할 Container
-      // 커스텀 오버레이가 표시될 위치입니다
-      position={surroundingLightInfoData.point}
-    >
+    <CustomOverlayMap position={surroundingLightInfoData.point} yAnchor={1.0}>
       <button>
         <svg
-          width="24"
-          height="28"
+          width="30"
+          height="38"
           viewBox="0 0 111 175"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"

@@ -13,6 +13,7 @@ import { useQuery } from "@tanstack/react-query";
 import FavoriteInfo from "./componenets/FavoriteInfo";
 import CustomOverLay from "./componenets/CustomOverLay";
 import { bottomSheetOpenState } from "../../recoil/bottomSheetOpenState/atom";
+import locationIcon from "../..//assets/icon/location.png";
 
 const { kakao } = window;
 
@@ -114,9 +115,7 @@ const HomePage = () => {
 
   const panTo = () => {
     const newLatLng = new kakao.maps.LatLng(state.center.lat, state.center.lng);
-    // const newLatLng = new kakao.maps.LatLng(35.175841, 126.912491);
     map.panTo(newLatLng);
-    console.log(openState.detailInfoOpenState);
   };
 
   return (
@@ -138,6 +137,16 @@ const HomePage = () => {
           {navigationBarState === "Home" ? (
             <>
               <LightDetailInfo />
+              {surroundingLightInfoData?.data.data.traffics.map(
+                (data, index) => {
+                  return (
+                    <CustomOverLay
+                      key={data.id}
+                      surroundingLightInfoData={data}
+                    />
+                  );
+                }
+              )}
             </>
           ) : null}
           {navigationBarState === "TrafficSignal" ? (
@@ -160,7 +169,10 @@ const HomePage = () => {
             </>
           ) : null}
           {navigationBarState === "Favorites" ? <FavoriteInfo /> : null}
-          <MapMarker position={state.center} />
+          <MapMarker
+            position={state.center}
+            image={{ src: locationIcon, size: { width: 30, height: 30 } }}
+          />
         </Map>
         <PanToButton
           onClick={panTo}
