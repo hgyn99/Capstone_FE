@@ -69,28 +69,37 @@ const Circle = styled.div`
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background-color: ${({ $isTimeLeft, theme }) =>
-    $isTimeLeft ? theme.green : theme.red};
+  background-color: ${({ $lightColor, theme }) =>
+    $lightColor === "green" ? theme.green : theme.red};
 `;
 
 const RemainingTimeText = styled.span`
   font-weight: 700;
-  color: ${({ $isTimeLeft, theme }) => ($isTimeLeft ? theme.green : theme.red)};
+  color: ${({ $lightColor, theme }) =>
+    $lightColor === "green" ? theme.green : theme.red};
 `;
 
-const Card = () => {
-  const [isFavorite, setIsFavorite] = useState(false);
+const Card = ({ surroundingLightInfoData }) => {
+  const {
+    color,
+    detail,
+    id,
+    isFavorite,
+    greenCycle,
+    redCycle,
+    timeLeft,
+    viewName,
+  } = surroundingLightInfoData;
 
   return (
     <Contianer>
       <Image src={trafficLightImage}></Image>
-      <AddressText>전남대공과대학</AddressText>
+      <AddressText>{viewName}</AddressText>
       <DistanceText>26m</DistanceText>
       <DetailAddressText>176-48 (전남대공과대학 방면)</DetailAddressText>
       <IsFavoriteButton
         onClick={() => {
           // 저장
-          setIsFavorite((prev) => !prev);
         }}
       >
         <svg
@@ -111,8 +120,10 @@ const Card = () => {
         {/* map 함수로 나열하기 */}
         <Light>
           <Text>서쪽</Text>
-          <RemainingTimeText $isTimeLeft={false}>8초</RemainingTimeText>
-          <Circle $isTimeLeft={false} />
+          <RemainingTimeText $lightColor={color}>
+            {timeLeft}초
+          </RemainingTimeText>
+          <Circle $lightColor={color} />
         </Light>
       </Lights>
     </Contianer>

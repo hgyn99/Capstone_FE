@@ -1,25 +1,25 @@
 import { trafficInstance } from "..";
 
 export const fetchTraffic = () => {
-  return trafficInstance.get("/traffics");
+  return trafficInstance.get();
 };
 
 export const fetchFavoriteTraffic = () => {
-  return trafficInstance.get("/traffics/favorite");
+  return trafficInstance.get("/favorite");
 };
 
 export const addFavoriteTraffic = () => {
-  return trafficInstance.post("/traffics/favorite");
+  return trafficInstance.post("/favorite");
 };
 
 export const fetchTrafficById = ({ trafficId }) => {
-  return trafficInstance.get(`/traffics/${trafficId}`);
+  return trafficInstance.get(`/${trafficId}`);
 };
 
 export const deleteFavoriteTraffic = ({ trafficId }) => {
-  return trafficInstance.delete(`/traffics/favorite/${trafficId}`);
+  return trafficInstance.delete(`/favorite/${trafficId}`);
 };
 
 export const updateFavoriteTraffic = ({ trafficId }) => {
-  return trafficInstance.put(`/traffics/favorite/${trafficId}`);
+  return trafficInstance.put(`/favorite/${trafficId}`);
 };

@@ -1,16 +1,18 @@
 import { styled } from "styled-components";
 import NavigationBarLayout from "../../components/NavigationBarLayout";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { TbCurrentLocation } from "react-icons/tb";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import LightDetailInfo from "./componenets/LightDetailInfo";
 import TopBar from "./componenets/TopBar";
 import SurroundingLightInfo from "./componenets/SurroundingLightInfo";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { navigationState } from "../../recoil/navigationState/atom";
 import { fetchTraffic } from "../../apis/api/traffic";
 import { useQuery } from "@tanstack/react-query";
-import FavoritesInfo from "./componenets/FavoritesInfo";
+import FavoriteInfo from "./componenets/FavoriteInfo";
+import CustomOverLay from "./componenets/CustomOverLay";
+import { bottomSheetOpenState } from "../../recoil/bottomSheetOpenState/atom";
 
 const { kakao } = window;
 
@@ -20,8 +22,13 @@ const Container = styled.div`
 
 const PanToButton = styled.button`
   position: absolute;
-  bottom: ${(props) =>
-    props.$DetailInfoOpenState === "closed" ? "2dvh" : "42dvh"};
+  bottom: ${({ $openState, navigationBarState }) =>
+    ($openState.detailInfoOpenState === "closed" &&
+      navigationBarState === "Home") ||
+    $openState.surroundingLightInfoOpenState === "closed" ||
+    $openState.favoritesInfoOpenState === "closed"
+      ? "4dvh"
+      : "42dvh"};
   right: 10px;
   border: none;
   border-radius: 50%;
@@ -30,7 +37,7 @@ const PanToButton = styled.button`
   background-color: rgba(255, 255, 255, 0.8);
   box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.3);
   cursor: pointer;
-  z-index: 1000;
+  z-index: 500;
   font-size: 20px;
   transition: bottom 0.5s;
   display: flex;
@@ -40,11 +47,10 @@ const PanToButton = styled.button`
 
 const HomePage = () => {
   const navigationBarState = useRecoilValue(navigationState);
+  const [openState, setOpenState] = useRecoilState(bottomSheetOpenState);
+  const mapRef = useRef(kakao.maps.Map);
+  // console.log(mapRef);
   const [map, setMap] = useState(null);
-  const [$DetailInfoOpenState, setDetailInfoOpenState] = useState("mid");
-  const [surroundingLightInfoOpenState, setSurroundingLightInfoOpenState] =
-    useState("mid");
-  const [favoritesInfoOpenState, setFavoritesInfoOpenState] = useState("mid");
   const [state, setState] = useState({
     center: {
       lat: 33.450701,
@@ -54,17 +60,18 @@ const HomePage = () => {
     isLoading: true,
   });
 
-  const {
-    isLoading,
-    data: trafficData,
-    refetch,
-  } = useQuery({
+  const { isLoading, data: surroundingLightInfoData } = useQuery({
     queryKey: ["traffic"],
     queryFn: fetchTraffic,
     onError: (e) => {
       console.log(e);
     },
   });
+
+  const kakaomap = mapRef.current;
+  // console.log(kakaomap);
+  // const bounds = kakaomap.getBounds();
+  // console.log(bounds);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -96,9 +103,20 @@ const HomePage = () => {
     }
   }, []);
 
+  useEffect(() => {
+    setOpenState({ detailInfoOpenState: "closed" });
+    if (navigationBarState === "TrafficSignal") {
+      setOpenState({ surroundingLightInfoOpenState: "mid" });
+    } else if (navigationBarState === "Favorites") {
+      setOpenState({ favoritesInfoOpenState: "mid" });
+    }
+  }, [navigationBarState]);
+
   const panTo = () => {
     const newLatLng = new kakao.maps.LatLng(state.center.lat, state.center.lng);
+    // const newLatLng = new kakao.maps.LatLng(35.175841, 126.912491);
     map.panTo(newLatLng);
+    console.log(openState.detailInfoOpenState);
   };
 
   return (
@@ -117,32 +135,40 @@ const HomePage = () => {
           minLevel={4}
           onCreate={setMap}
         >
+          {navigationBarState === "Home" ? (
+            <>
+              <LightDetailInfo />
+            </>
+          ) : null}
+          {navigationBarState === "TrafficSignal" ? (
+            <>
+              {surroundingLightInfoData.data.data.traffics.map(
+                (data, index) => {
+                  return (
+                    <CustomOverLay
+                      key={data.id}
+                      surroundingLightInfoData={data}
+                    />
+                  );
+                }
+              )}
+              <SurroundingLightInfo
+                surroundingLightInfoData={
+                  surroundingLightInfoData.data.data.traffics
+                }
+              />
+            </>
+          ) : null}
+          {navigationBarState === "Favorites" ? <FavoriteInfo /> : null}
           <MapMarker position={state.center} />
         </Map>
         <PanToButton
-          $DetailInfoOpenState={$DetailInfoOpenState}
           onClick={panTo}
+          $openState={openState}
+          navigationBarState={navigationBarState}
         >
           <TbCurrentLocation />
         </PanToButton>
-        {navigationBarState === "Home" ? (
-          <LightDetailInfo
-            $DetailInfoOpenState={$DetailInfoOpenState}
-            setDetailInfoOpenState={setDetailInfoOpenState}
-          />
-        ) : null}
-        {navigationBarState === "TrafficSignal" ? (
-          <SurroundingLightInfo
-            $surroundingLightInfoOpenState={surroundingLightInfoOpenState}
-            setSurroundingLightInfoOpenState={setSurroundingLightInfoOpenState}
-          />
-        ) : null}
-        {navigationBarState === "Favorites" ? (
-          <FavoritesInfo
-            $favoritesInfoOpenState={favoritesInfoOpenState}
-            setFavoritesInfoOpenState={setFavoritesInfoOpenState}
-          />
-        ) : null}
       </Container>
     </NavigationBarLayout>
   );
