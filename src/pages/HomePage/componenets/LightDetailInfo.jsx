@@ -2,6 +2,8 @@ import styled from "styled-components";
 import { motion, useDragControls } from "framer-motion";
 import Text from "./Text";
 import { useState } from "react";
+import { useRecoilState } from "recoil";
+import { bottomSheetOpenState } from "../../../recoil/bottomSheetOpenState/atom";
 
 const Container = styled(motion.div)`
   width: 100%;
@@ -90,25 +92,22 @@ const RemainingTimeText = styled.span`
   color: ${({ $isTimeLeft, theme }) => ($isTimeLeft ? theme.green : theme.red)};
 `;
 
-const LightDetailInfo = ({
-  $DetailInfoOpenState,
-  setDetailInfoOpenState,
-  lightInfo,
-}) => {
+const LightDetailInfo = ({ lightInfo }) => {
   const [isFavorite, setIsFavorite] = useState(false);
+  const [openState, setOpenState] = useRecoilState(bottomSheetOpenState);
 
   const dragControls = useDragControls();
 
   return (
     <Container
-      $DetailInfoOpenState={$DetailInfoOpenState}
+      $DetailInfoOpenState={openState.detailInfoOpenState}
       drag="y"
       dragConstraints={{ top: 0, bottom: 0 }}
-      animate={$DetailInfoOpenState}
+      animate={openState.detailInfoOpenState}
       variants={{
         top: { top: `10dvh` },
         mid: { top: `50dvh` },
-        closed: { top: `calc(100dvh - 100px)` },
+        closed: { top: `100dvh` },
       }}
       transition={{ duration: 0.3 }}
       dragControls={dragControls}
@@ -127,14 +126,14 @@ const LightDetailInfo = ({
 
         const isGoDown = info.offset.y > 0;
 
-        if (isGoDown && $DetailInfoOpenState === "top") {
-          setDetailInfoOpenState("mid");
-        } else if (isGoDown && $DetailInfoOpenState === "mid") {
-          setDetailInfoOpenState("closed");
-        } else if (!isGoDown && $DetailInfoOpenState === "mid") {
-          setDetailInfoOpenState("top");
-        } else if (!isGoDown && $DetailInfoOpenState === "closed") {
-          setDetailInfoOpenState("mid");
+        if (isGoDown && openState.detailInfoOpenState === "top") {
+          setOpenState({ detailInfoOpenState: "mid" });
+        } else if (isGoDown && openState.detailInfoOpenState === "mid") {
+          setOpenState({ detailInfoOpenState: "closed" });
+        } else if (!isGoDown && openState.detailInfoOpenState === "mid") {
+          setOpenState({ detailInfoOpenState: "top" });
+        } else if (!isGoDown && openState.detailInfoOpenState === "closed") {
+          setOpenState({ detailInfoOpenState: "top" });
         }
       }}
     >

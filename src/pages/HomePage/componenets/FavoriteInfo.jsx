@@ -5,6 +5,8 @@ import KakaoLoginModal from "./KakaoLoginModal";
 import Text from "./Text";
 import { fetchFavoriteTraffic } from "../../../apis/api/traffic";
 import { useQuery } from "@tanstack/react-query";
+import { useRecoilState } from "recoil";
+import { bottomSheetOpenState } from "../../../recoil/bottomSheetOpenState/atom";
 
 const Container = styled(motion.div)`
   width: 100%;
@@ -100,12 +102,11 @@ const List = styled.div`
   margin-left: 16px;
 `;
 
-const FavoritesInfo = ({
-  $favoritesInfoOpenState,
-  setFavoritesInfoOpenState,
-}) => {
+const FavoritesInfo = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [listState, setListState] = useState("place");
+
+  const [openState, setOpenState] = useRecoilState(bottomSheetOpenState);
 
   const dragControls = useDragControls();
 
@@ -126,10 +127,10 @@ const FavoritesInfo = ({
   return (
     <>
       <Container
-        $favoritesInfoOpenState={$favoritesInfoOpenState}
+        $favoritesInfoOpenState={openState.favoritesInfoOpenState}
         drag="y"
         dragConstraints={{ top: 0, bottom: 0 }}
-        animate={$favoritesInfoOpenState}
+        animate={openState.favoritesInfoOpenState}
         variants={{
           top: { top: `10dvh` },
           mid: { top: `50dvh` },
@@ -153,14 +154,17 @@ const FavoritesInfo = ({
 
           const isGoDown = info.offset.y > 0;
 
-          if (isGoDown && $favoritesInfoOpenState === "top") {
-            setFavoritesInfoOpenState("mid");
-          } else if (isGoDown && $favoritesInfoOpenState === "mid") {
-            setFavoritesInfoOpenState("closed");
-          } else if (!isGoDown && $favoritesInfoOpenState === "mid") {
-            setFavoritesInfoOpenState("top");
-          } else if (!isGoDown && $favoritesInfoOpenState === "closed") {
-            setFavoritesInfoOpenState("mid");
+          if (isGoDown && openState.favoritesInfoOpenState === "top") {
+            setOpenState({ favoritesInfoOpenState: "mid" });
+          } else if (isGoDown && openState.favoritesInfoOpenState === "mid") {
+            setOpenState({ favoritesInfoOpenState: "closed" });
+          } else if (!isGoDown && openState.favoritesInfoOpenState === "mid") {
+            setOpenState({ favoritesInfoOpenState: "top" });
+          } else if (
+            !isGoDown &&
+            openState.favoritesInfoOpenState === "closed"
+          ) {
+            setOpenState({ favoritesInfoOpenState: "mid" });
           }
         }}
       >

@@ -1,6 +1,8 @@
 import { motion, useDragControls } from "framer-motion";
 import styled from "styled-components";
 import Card from "./Card";
+import { bottomSheetOpenState } from "../../../recoil/bottomSheetOpenState/atom";
+import { useRecoilState } from "recoil";
 
 const Container = styled(motion.div)`
   width: 100%;
@@ -45,21 +47,17 @@ const ContentsBox = styled.div`
   gap: 12px;
 `;
 
-const SurroundingLightInfo = ({
-  $surroundingLightInfoOpenState,
-  setSurroundingLightInfoOpenState,
-  surroundingLightInfoData,
-}) => {
-  const dragControls = useDragControls();
+const SurroundingLightInfo = ({ surroundingLightInfoData }) => {
+  const [openState, setOpenState] = useRecoilState(bottomSheetOpenState);
 
-  // console.log(surroundingLightInfoData);
+  const dragControls = useDragControls();
 
   return (
     <Container
-      $surroundingLightInfoOpenState={$surroundingLightInfoOpenState}
+      $surroundingLightInfoOpenState={openState.surroundingLightInfoOpenState}
       drag="y"
       dragConstraints={{ top: 0, bottom: 0 }}
-      animate={$surroundingLightInfoOpenState}
+      animate={openState.surroundingLightInfoOpenState}
       variants={{
         top: { top: `10dvh` },
         mid: { top: `50dvh` },
@@ -82,14 +80,23 @@ const SurroundingLightInfo = ({
 
         const isGoDown = info.offset.y > 0;
 
-        if (isGoDown && $surroundingLightInfoOpenState === "top") {
-          setSurroundingLightInfoOpenState("mid");
-        } else if (isGoDown && $surroundingLightInfoOpenState === "mid") {
-          setSurroundingLightInfoOpenState("closed");
-        } else if (!isGoDown && $surroundingLightInfoOpenState === "mid") {
-          setSurroundingLightInfoOpenState("top");
-        } else if (!isGoDown && $surroundingLightInfoOpenState === "closed") {
-          setSurroundingLightInfoOpenState("mid");
+        if (isGoDown && openState.surroundingLightInfoOpenState === "top") {
+          setOpenState({ surroundingLightInfoOpenState: "mid" });
+        } else if (
+          isGoDown &&
+          openState.surroundingLightInfoOpenState === "mid"
+        ) {
+          setOpenState({ surroundingLightInfoOpenState: "closed" });
+        } else if (
+          !isGoDown &&
+          openState.surroundingLightInfoOpenState === "mid"
+        ) {
+          setOpenState({ surroundingLightInfoOpenState: "top" });
+        } else if (
+          !isGoDown &&
+          openState.surroundingLightInfoOpenState === "closed"
+        ) {
+          setOpenState({ surroundingLightInfoOpenState: "mid" });
         }
       }}
     >
