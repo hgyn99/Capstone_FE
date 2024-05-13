@@ -68,7 +68,7 @@ const SurroundingLightInfo = ({ surroundingLightInfoData }) => {
       dragListener={false}
       dragElastic={0.2}
       onDragEnd={(event, info) => {
-        const offsetThreshold = 150;
+        const offsetThreshold = 100;
         const deltaThreshold = 2;
 
         const isOverOffsetThreshold = Math.abs(info.offset.y) > offsetThreshold;

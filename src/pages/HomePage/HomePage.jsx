@@ -116,7 +116,6 @@ const HomePage = () => {
     const newLatLng = new kakao.maps.LatLng(state.center.lat, state.center.lng);
     // const newLatLng = new kakao.maps.LatLng(35.175841, 126.912491);
     map.panTo(newLatLng);
-    setOpenState({ detailInfoOpenState: "mid" });
     console.log(openState.detailInfoOpenState);
   };
 
