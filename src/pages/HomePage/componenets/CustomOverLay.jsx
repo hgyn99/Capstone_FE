@@ -3,7 +3,11 @@ import { CustomOverlayMap } from "react-kakao-maps-sdk";
 const CustomOverLay = ({ surroundingLightInfoData }) => {
   return (
     <CustomOverlayMap position={surroundingLightInfoData.point} yAnchor={1.0}>
-      <button>
+      <button
+        onClick={() => {
+          console.log(surroundingLightInfoData.point);
+        }}
+      >
         <svg
           width="30"
           height="38"
