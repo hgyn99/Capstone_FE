@@ -23,9 +23,9 @@ const Container = styled.div`
 
 const PanToButton = styled.button`
   position: absolute;
-  bottom: ${({ $openState, navigationBarState }) =>
+  bottom: ${({ $openState, $navigationBarState }) =>
     ($openState.detailInfoOpenState === "closed" &&
-      navigationBarState === "Home") ||
+      $navigationBarState === "Home") ||
     $openState.surroundingLightInfoOpenState === "closed" ||
     $openState.favoritesInfoOpenState === "closed"
       ? "4dvh"
@@ -184,7 +184,7 @@ const HomePage = () => {
         <PanToButton
           onClick={panTo}
           $openState={openState}
-          navigationBarState={navigationBarState}
+          $navigationBarState={navigationBarState}
         >
           <TbCurrentLocation />
         </PanToButton>
