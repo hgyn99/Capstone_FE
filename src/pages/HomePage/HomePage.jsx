@@ -26,8 +26,10 @@ const PanToButton = styled.button`
   bottom: ${({ $openState, $navigationBarState }) =>
     ($openState.detailInfoOpenState === "closed" &&
       $navigationBarState === "Home") ||
-    $openState.surroundingLightInfoOpenState === "closed" ||
-    $openState.favoritesInfoOpenState === "closed"
+    ($openState.surroundingLightInfoOpenState === "closed" &&
+      $navigationBarState === "TrafficSignal") ||
+    ($openState.favoritesInfoOpenState === "closed" &&
+      $navigationBarState === "Favorites")
       ? "4dvh"
       : "42dvh"};
   right: 10px;
@@ -49,8 +51,7 @@ const PanToButton = styled.button`
 const HomePage = () => {
   const navigationBarState = useRecoilValue(navigationState);
   const [openState, setOpenState] = useRecoilState(bottomSheetOpenState);
-  const mapRef = useRef(kakao.maps.Map);
-  // console.log(mapRef);
+
   const [map, setMap] = useState(null);
   const [state, setState] = useState({
     center: {
@@ -68,11 +69,6 @@ const HomePage = () => {
       console.log(e);
     },
   });
-
-  const kakaomap = mapRef.current;
-  // console.log(kakaomap);
-  // const bounds = kakaomap.getBounds();
-  // console.log(bounds);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -138,6 +134,9 @@ const HomePage = () => {
           level={3}
           minLevel={4}
           onCreate={setMap}
+          onDragEnd={() => {
+            // console.log(map.getBounds());
+          }}
         >
           {navigationBarState === "Home" ? (
             <>
@@ -182,7 +181,10 @@ const HomePage = () => {
           />
         </Map>
         <PanToButton
-          onClick={panTo}
+          onClick={() => {
+            panTo();
+            // console.log(map.getBounds());
+          }}
           $openState={openState}
           $navigationBarState={navigationBarState}
         >
