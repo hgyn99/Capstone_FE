@@ -35,6 +35,7 @@ const TextBox = styled.div`
 
 const CustomOverLay = ({ surroundingLightInfoData, isOpen, onToggle }) => {
   const { isFavorite, point, viewName } = surroundingLightInfoData;
+  // console.log(surroundingLightInfoData);
 
   return (
     <>
