@@ -62,6 +62,12 @@ const HomePage = () => {
     isLoading: true,
   });
 
+  const [openIndex, setOpenIndex] = useState(null);
+
+  const handleToggle = (index) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
   const { isLoading, data: surroundingLightInfoData } = useQuery({
     queryKey: ["traffic"],
     queryFn: fetchTraffic,
@@ -138,33 +144,23 @@ const HomePage = () => {
             // console.log(map.getBounds());
           }}
         >
+          {surroundingLightInfoData?.data.data.traffics.map((data, index) => {
+            return (
+              <CustomOverLay
+                key={data.id}
+                surroundingLightInfoData={data}
+                isOpen={openIndex === index}
+                onToggle={() => handleToggle(index)}
+              />
+            );
+          })}
           {navigationBarState === "Home" ? (
             <>
               <LightDetailInfo />
-              {surroundingLightInfoData?.data.data.traffics.map(
-                (data, index) => {
-                  return (
-                    <CustomOverLay
-                      key={data.id}
-                      surroundingLightInfoData={data}
-                    />
-                  );
-                }
-              )}
             </>
           ) : null}
           {navigationBarState === "TrafficSignal" ? (
             <>
-              {surroundingLightInfoData.data.data.traffics.map(
-                (data, index) => {
-                  return (
-                    <CustomOverLay
-                      key={data.id}
-                      surroundingLightInfoData={data}
-                    />
-                  );
-                }
-              )}
               <SurroundingLightInfo
                 surroundingLightInfoData={
                   surroundingLightInfoData.data.data.traffics
