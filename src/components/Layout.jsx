@@ -1,4 +1,3 @@
-import { Outlet } from "react-router-dom";
 import { styled } from "styled-components";
 
 const Container = styled.div`
@@ -16,12 +15,8 @@ const Container = styled.div`
   scrollbar-width: none; /* Firefox */
 `;
 
-const Layout = () => {
-  return (
-    <Container>
-      <Outlet />
-    </Container>
-  );
+const Layout = ({ children }) => {
+  return <Container>{children}</Container>;
 };
 
 export default Layout;
