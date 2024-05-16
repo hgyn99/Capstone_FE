@@ -3,6 +3,8 @@ import { CustomOverlayMap } from "react-kakao-maps-sdk";
 import styled from "styled-components";
 import { ReactComponent as Traffic } from "../../../assets/icon/traffic.svg";
 import Text from "./Text";
+import { useSetRecoilState } from "recoil";
+import { detailInfoByIdState } from "../../../recoil/detailInfoByIdState/atom";
 
 const Container = styled.div`
   position: relative;
@@ -34,8 +36,10 @@ const TextBox = styled.div`
 `;
 
 const CustomOverLay = ({ surroundingLightInfoData, isOpen, onToggle }) => {
-  const { isFavorite, point, viewName } = surroundingLightInfoData;
+  const { id, isFavorite, point, viewName } = surroundingLightInfoData;
   // console.log(surroundingLightInfoData);
+
+  const setTrafficIdState = useSetRecoilState(detailInfoByIdState);
 
   return (
     <>
@@ -45,6 +49,7 @@ const CustomOverLay = ({ surroundingLightInfoData, isOpen, onToggle }) => {
             <button
               onClick={() => {
                 console.log(" 상세 정보 오픈");
+                setTrafficIdState(id);
               }}
             >
               <svg

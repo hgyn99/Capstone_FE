@@ -1,19 +1,20 @@
+import React, { useEffect, useState } from "react";
+import { Map, MapMarker } from "react-kakao-maps-sdk";
+import { useQuery } from "@tanstack/react-query";
 import { styled } from "styled-components";
 import NavigationBarLayout from "../../components/NavigationBarLayout";
-import React, { useEffect, useRef, useState } from "react";
-import { TbCurrentLocation } from "react-icons/tb";
-import { Map, MapMarker } from "react-kakao-maps-sdk";
-import LightDetailInfo from "./componenets/LightDetailInfo";
-import TopBar from "./componenets/TopBar";
 import SurroundingLightInfo from "./componenets/SurroundingLightInfo";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { navigationState } from "../../recoil/navigationState/atom";
-import { fetchTraffic } from "../../apis/api/traffic";
-import { useQuery } from "@tanstack/react-query";
+import LightDetailInfo from "./componenets/LightDetailInfo";
 import FavoriteInfo from "./componenets/FavoriteInfo";
 import CustomOverLay from "./componenets/CustomOverLay";
+import TopBar from "./componenets/TopBar";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { bottomSheetOpenState } from "../../recoil/bottomSheetOpenState/atom";
+import { navigationState } from "../../recoil/navigationState/atom";
+import { fetchTraffic, fetchTrafficById } from "../../apis/api/traffic";
+import { TbCurrentLocation } from "react-icons/tb";
 import locationIcon from "../..//assets/icon/location.png";
+import { detailInfoByIdState } from "../../recoil/detailInfoByIdState/atom";
 
 const { kakao } = window;
 
@@ -50,6 +51,8 @@ const PanToButton = styled.button`
 
 const HomePage = () => {
   const navigationBarState = useRecoilValue(navigationState);
+  const trafficId = useRecoilValue(detailInfoByIdState);
+  // console.log(trafficId);
   const [openState, setOpenState] = useRecoilState(bottomSheetOpenState);
 
   const [map, setMap] = useState(null);
@@ -75,6 +78,17 @@ const HomePage = () => {
       console.log(e);
     },
   });
+
+  const { isLoading: trafficByIdLoading, data: trafficByIdData } = useQuery({
+    queryKey: ["trafficById", trafficId],
+    queryFn: () => fetchTrafficById(trafficId),
+    enabled: !!trafficId,
+    onError: (e) => {
+      console.log(e);
+    },
+  });
+
+  // console.log("id로 ", trafficByIdData);
 
   useEffect(() => {
     if (navigator.geolocation) {
