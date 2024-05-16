@@ -12,14 +12,14 @@ export const addFavoriteTraffic = () => {
   return trafficInstance.post("/favorite");
 };
 
-export const fetchTrafficById = ({ trafficId }) => {
+export const fetchTrafficById = (trafficId) => {
   return trafficInstance.get(`/${trafficId}`);
 };
 
-export const deleteFavoriteTraffic = ({ trafficId }) => {
+export const deleteFavoriteTraffic = (trafficId) => {
   return trafficInstance.delete(`/favorite/${trafficId}`);
 };
 
-export const updateFavoriteTraffic = ({ trafficId }) => {
+export const updateFavoriteTraffic = (trafficId) => {
   return trafficInstance.put(`/favorite/${trafficId}`);
 };

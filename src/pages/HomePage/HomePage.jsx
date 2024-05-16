@@ -1,18 +1,20 @@
+import React, { useEffect, useState } from "react";
+import { Map, MapMarker } from "react-kakao-maps-sdk";
+import { useQuery } from "@tanstack/react-query";
 import { styled } from "styled-components";
 import NavigationBarLayout from "../../components/NavigationBarLayout";
-import React, { useEffect, useRef, useState } from "react";
-import { TbCurrentLocation } from "react-icons/tb";
-import { Map, MapMarker } from "react-kakao-maps-sdk";
-import LightDetailInfo from "./componenets/LightDetailInfo";
-import TopBar from "./componenets/TopBar";
 import SurroundingLightInfo from "./componenets/SurroundingLightInfo";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { navigationState } from "../../recoil/navigationState/atom";
-import { fetchTraffic } from "../../apis/api/traffic";
-import { useQuery } from "@tanstack/react-query";
+import LightDetailInfo from "./componenets/LightDetailInfo";
 import FavoriteInfo from "./componenets/FavoriteInfo";
 import CustomOverLay from "./componenets/CustomOverLay";
+import TopBar from "./componenets/TopBar";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { bottomSheetOpenState } from "../../recoil/bottomSheetOpenState/atom";
+import { navigationState } from "../../recoil/navigationState/atom";
+import { fetchTraffic, fetchTrafficById } from "../../apis/api/traffic";
+import { TbCurrentLocation } from "react-icons/tb";
+import locationIcon from "../..//assets/icon/location.png";
+import { detailInfoByIdState } from "../../recoil/detailInfoByIdState/atom";
 
 const { kakao } = window;
 
@@ -22,11 +24,13 @@ const Container = styled.div`
 
 const PanToButton = styled.button`
   position: absolute;
-  bottom: ${({ $openState, navigationBarState }) =>
+  bottom: ${({ $openState, $navigationBarState }) =>
     ($openState.detailInfoOpenState === "closed" &&
-      navigationBarState === "Home") ||
-    $openState.surroundingLightInfoOpenState === "closed" ||
-    $openState.favoritesInfoOpenState === "closed"
+      $navigationBarState === "Home") ||
+    ($openState.surroundingLightInfoOpenState === "closed" &&
+      $navigationBarState === "TrafficSignal") ||
+    ($openState.favoritesInfoOpenState === "closed" &&
+      $navigationBarState === "Favorites")
       ? "4dvh"
       : "42dvh"};
   right: 10px;
@@ -47,9 +51,10 @@ const PanToButton = styled.button`
 
 const HomePage = () => {
   const navigationBarState = useRecoilValue(navigationState);
+  const trafficId = useRecoilValue(detailInfoByIdState);
+  // console.log(trafficId);
   const [openState, setOpenState] = useRecoilState(bottomSheetOpenState);
-  const mapRef = useRef(kakao.maps.Map);
-  // console.log(mapRef);
+
   const [map, setMap] = useState(null);
   const [state, setState] = useState({
     center: {
@@ -60,6 +65,12 @@ const HomePage = () => {
     isLoading: true,
   });
 
+  const [openIndex, setOpenIndex] = useState(null);
+
+  const handleToggle = (index) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
   const { isLoading, data: surroundingLightInfoData } = useQuery({
     queryKey: ["traffic"],
     queryFn: fetchTraffic,
@@ -68,10 +79,16 @@ const HomePage = () => {
     },
   });
 
-  const kakaomap = mapRef.current;
-  // console.log(kakaomap);
-  // const bounds = kakaomap.getBounds();
-  // console.log(bounds);
+  const { isLoading: trafficByIdLoading, data: trafficByIdData } = useQuery({
+    queryKey: ["trafficById", trafficId],
+    queryFn: () => fetchTrafficById(trafficId),
+    enabled: !!trafficId,
+    onError: (e) => {
+      console.log(e);
+    },
+  });
+
+  // console.log("id로 ", trafficByIdData);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -114,9 +131,12 @@ const HomePage = () => {
 
   const panTo = () => {
     const newLatLng = new kakao.maps.LatLng(state.center.lat, state.center.lng);
-    // const newLatLng = new kakao.maps.LatLng(35.175841, 126.912491);
     map.panTo(newLatLng);
-    console.log(openState.detailInfoOpenState);
+  };
+
+  const panToFavorite = (point) => {
+    const newLatLng = new kakao.maps.LatLng(point.lat, point.lng);
+    map.panTo(newLatLng);
   };
 
   return (
@@ -134,7 +154,20 @@ const HomePage = () => {
           level={3}
           minLevel={4}
           onCreate={setMap}
+          onDragEnd={() => {
+            // console.log(map.getBounds());
+          }}
         >
+          {surroundingLightInfoData?.data.data.traffics.map((data, index) => {
+            return (
+              <CustomOverLay
+                key={data.id}
+                surroundingLightInfoData={data}
+                isOpen={openIndex === index}
+                onToggle={() => handleToggle(index)}
+              />
+            );
+          })}
           {navigationBarState === "Home" ? (
             <>
               <LightDetailInfo />
@@ -142,16 +175,6 @@ const HomePage = () => {
           ) : null}
           {navigationBarState === "TrafficSignal" ? (
             <>
-              {surroundingLightInfoData.data.data.traffics.map(
-                (data, index) => {
-                  return (
-                    <CustomOverLay
-                      key={data.id}
-                      surroundingLightInfoData={data}
-                    />
-                  );
-                }
-              )}
               <SurroundingLightInfo
                 surroundingLightInfoData={
                   surroundingLightInfoData.data.data.traffics
@@ -159,13 +182,21 @@ const HomePage = () => {
               />
             </>
           ) : null}
-          {navigationBarState === "Favorites" ? <FavoriteInfo /> : null}
-          <MapMarker position={state.center} />
+          {navigationBarState === "Favorites" ? (
+            <FavoriteInfo panToFavorite={panToFavorite} />
+          ) : null}
+          <MapMarker
+            position={state.center}
+            image={{ src: locationIcon, size: { width: 30, height: 30 } }}
+          />
         </Map>
         <PanToButton
-          onClick={panTo}
+          onClick={() => {
+            panTo();
+            // console.log(map.getBounds());
+          }}
           $openState={openState}
-          navigationBarState={navigationBarState}
+          $navigationBarState={navigationBarState}
         >
           <TbCurrentLocation />
         </PanToButton>
