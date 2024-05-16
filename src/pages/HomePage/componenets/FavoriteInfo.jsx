@@ -102,10 +102,9 @@ const List = styled.div`
   margin-left: 16px;
 `;
 
-const FavoritesInfo = () => {
+const FavoritesInfo = ({ panToFavorite }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [listState, setListState] = useState("place");
-
   const [openState, setOpenState] = useRecoilState(bottomSheetOpenState);
 
   const dragControls = useDragControls();
@@ -186,14 +185,14 @@ const FavoritesInfo = () => {
                 >
                   <mask id="path-1-inside-1_315_2278" fill="white">
                     <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
+                      fillRule="evenodd"
+                      clipRule="evenodd"
                       d="M9.84249 8.2618C10.322 7.44158 10.5978 6.48087 10.5978 5.45386C10.5978 2.44178 8.22543 0 5.29892 0C2.37241 0 0 2.44178 0 5.45386C0 6.48165 0.276226 7.44304 0.756439 8.26367L5.29894 16.3616L9.84249 8.2618Z"
                     />
                   </mask>
                   <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
+                    fillRule="evenodd"
+                    clipRule="evenodd"
                     d="M9.84249 8.2618C10.322 7.44158 10.5978 6.48087 10.5978 5.45386C10.5978 2.44178 8.22543 0 5.29892 0C2.37241 0 0 2.44178 0 5.45386C0 6.48165 0.276226 7.44304 0.756439 8.26367L5.29894 16.3616L9.84249 8.2618Z"
                     fill={listState === "place" ? "black" : "#666"}
                   />
@@ -241,7 +240,7 @@ const FavoritesInfo = () => {
                     width="0.902311"
                     height="2.10539"
                     stroke={listState === "trafficLight" ? "black" : "#666"}
-                    stroke-width="0.902311"
+                    strokeWidth="0.902311"
                   />
                   <circle cx="4.23518" cy="3.60932" r="1.50385" fill="white" />
                   <circle cx="4.23518" cy="7.91743" r="1.50385" fill="white" />
@@ -270,8 +269,8 @@ const FavoritesInfo = () => {
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
                   d="M8.59532 0.303154C8.2026 -0.101052 7.5536 -0.101051 7.16088 0.303155L0.681015 6.97249C0.670956 6.98284 0.670956 6.99931 0.681015 7.00967C0.689245 7.01814 0.690586 7.03093 0.686915 7.04215C0.685443 7.04666 0.684244 7.05135 0.683347 7.05623L0.00176677 10.7636C-0.011145 10.8338 0.0486838 10.8954 0.11692 10.8821L3.71894 10.1806C3.72478 10.1794 3.73035 10.1778 3.73563 10.1758C3.74457 10.1724 3.75502 10.1736 3.76169 10.1804C3.76982 10.1888 3.78326 10.1888 3.79139 10.1804L10.3146 3.46643C10.6917 3.07837 10.6917 2.46081 10.3146 2.07274L8.59532 0.303154Z"
                   fill="#535CE8"
                 />
@@ -285,23 +284,29 @@ const FavoritesInfo = () => {
             <>
               {favoritesTraffic.data?.data.traffics.map((traffic) => (
                 <ListBox key={traffic.id}>
-                  <List>
-                    <svg
-                      width="23"
-                      height="23"
-                      viewBox="0 0 23 23"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <circle cx="11.5" cy="11.5" r="11.5" fill="#F25C5C" />
-                      <path
-                        d="M10.4173 9.20972L11.5 5.87731L12.5828 9.20972C12.6899 9.53934 12.997 9.76251 13.3436 9.76251L16.8475 9.76251L14.0128 11.822C13.7324 12.0258 13.6151 12.3869 13.7222 12.7165L14.805 16.0489L11.9702 13.9893C11.6899 13.7856 11.3102 13.7856 11.0298 13.9893L8.19507 16.0489L9.27784 12.7165C9.38494 12.3869 9.26761 12.0258 8.98722 11.822L6.15251 9.76251L9.65641 9.76251C10.003 9.76251 10.3102 9.53934 10.4173 9.20972Z"
-                        fill="white"
-                        stroke="white"
-                      />
-                    </svg>
-                    <Text>{traffic.name}</Text>
-                  </List>
+                  <button
+                    onClick={() => {
+                      panToFavorite(traffic.point);
+                    }}
+                  >
+                    <List>
+                      <svg
+                        width="23"
+                        height="23"
+                        viewBox="0 0 23 23"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <circle cx="11.5" cy="11.5" r="11.5" fill="#F25C5C" />
+                        <path
+                          d="M10.4173 9.20972L11.5 5.87731L12.5828 9.20972C12.6899 9.53934 12.997 9.76251 13.3436 9.76251L16.8475 9.76251L14.0128 11.822C13.7324 12.0258 13.6151 12.3869 13.7222 12.7165L14.805 16.0489L11.9702 13.9893C11.6899 13.7856 11.3102 13.7856 11.0298 13.9893L8.19507 16.0489L9.27784 12.7165C9.38494 12.3869 9.26761 12.0258 8.98722 11.822L6.15251 9.76251L9.65641 9.76251C10.003 9.76251 10.3102 9.53934 10.4173 9.20972Z"
+                          fill="white"
+                          stroke="white"
+                        />
+                      </svg>
+                      <Text>{traffic.name}</Text>
+                    </List>
+                  </button>
                 </ListBox>
               ))}
             </>
