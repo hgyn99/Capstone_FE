@@ -12,7 +12,6 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { bottomSheetOpenState } from "../../recoil/bottomSheetOpenState/atom";
 import { navigationState } from "../../recoil/navigationState/atom";
 import { fetchTraffic, fetchTrafficById } from "../../apis/api/traffic";
-import { TbCurrentLocation } from "react-icons/tb";
 import locationIcon from "../..//assets/icon/location.png";
 import { detailInfoByIdState } from "../../recoil/detailInfoByIdState/atom";
 
@@ -198,7 +197,7 @@ const HomePage = () => {
           $openState={openState}
           $navigationBarState={navigationBarState}
         >
-          <TbCurrentLocation />
+          O
         </PanToButton>
       </Container>
     </NavigationBarLayout>
