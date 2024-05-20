@@ -1,7 +1,5 @@
 import React,{ useState,useEffect } from "react";
 import styled from "styled-components";
-import { MdStars } from "react-icons/md";
-import { FaGripLines } from "react-icons/fa";
 import { motion,useAnimate,useDragControls,useMotionValue } from "framer-motion";
 
 const Container = styled(motion.div)`
@@ -110,7 +108,6 @@ const FavoritesRouteItem = ({ route,setIsButtonShow }) => {
       <ItemBox 
         onClick={() => console.log("클릭")}>
         <IconBox>
-          <MdStars color="#535CE8" size="32px" />
         </IconBox>
         <AliasBox>
             <Alias>
@@ -124,7 +121,6 @@ const FavoritesRouteItem = ({ route,setIsButtonShow }) => {
         </AliasBox>
       </ItemBox>
       <MoveBox>
-        <FaGripLines color="#666666" />
       </MoveBox>
     </Container>
   );

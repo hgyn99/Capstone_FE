@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { SlArrowLeft } from "react-icons/sl";
 
 const BookMarkHeader = styled.div`
   background-color:#fff;
@@ -40,7 +39,6 @@ const Header = ({children}) => {
   return(
     <BookMarkHeader>
       <PreClick onClick={handlePreClick}>
-        <SlArrowLeft color="#000" size="20px"/>
       </PreClick>
       <Title>{children}</Title>
     </BookMarkHeader>
