@@ -30,6 +30,11 @@ const GlobalStyle = createGlobalStyle`
     font-size: 100%;
     font: inherit;
     vertical-align: baseline;
+    &::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera */
+    }
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
   }
   /* HTML5 display-role reset for older browsers */
   article, aside, details, figcaption, figure,
@@ -39,6 +44,9 @@ const GlobalStyle = createGlobalStyle`
   /* HTML5 hidden-attribute fix for newer browsers */
   *[hidden] {
       display: none;
+  }
+  html {  
+    overscroll-behavior: none;
   }
   menu, ol, ul {
     list-style: none;
@@ -79,6 +87,10 @@ const GlobalStyle = createGlobalStyle`
     "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
     font-size: 14px;
     font-weight: 400;
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
   }
   input {
     font-family: "Pretendard Variable", Pretendard, -apple-system,

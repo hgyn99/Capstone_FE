@@ -24,7 +24,7 @@ const Title = styled.h2`
   margin:0;padding:0;
   display:inline-block;
   margin-top:5px;
-  font-size:17px;
+  font-size:18px;
   font-weight:bold;
   text-align:center;
   line-height:2.5;

@@ -1,6 +1,6 @@
 import React from "react";
-import styled from "styled-components"
-import MenuBarLayout from "../../components/MenuBarLayout";
+import styled from "styled-components";
+import NavigationBarLayout from "../../components/NavigationBarLayout";
 import Header from "./components/Header";
 import NonUserPage from "./components/NonUserPage"
 import UserPage from "./components/UserPage";
@@ -14,14 +14,13 @@ const Container = styled.div`
 
 const MyPage = () => {
   return (
-    <MenuBarLayout>
+    <NavigationBarLayout>
       <Header />
       <Container>
         {/* <NonUserPage /> */}
         <UserPage />
       </Container>
-    </MenuBarLayout>
+    </NavigationBarLayout>
   );
-};
-
+}
 export default MyPage;

@@ -1,51 +1,131 @@
+import { useState } from "react";
 import { CustomOverlayMap } from "react-kakao-maps-sdk";
+import styled from "styled-components";
+import { ReactComponent as Traffic } from "../../../assets/icon/traffic.svg";
+import Text from "./Text";
+import { useSetRecoilState } from "recoil";
+import { detailInfoByIdState } from "../../../recoil/detailInfoByIdState/atom";
 
-const Data = {
-  message: "성공",
-  code: "success",
-  timestamp: "2024-03-17 05:20:53",
-  data: {
-    intersectionInfos: [
-      {
-        //intersectionInfo
-        id: 1506,
-        name: "신영초교",
-        location: { lat: 35.1755091, lng: 126.9071166 },
-        isFavorite: true,
-        alias: "우리초등학교 앞",
-        trafficInfos: [
-          {
-            //trafficInfo
-            direction: "nt",
-            status: true,
-            timeLeft: 12.7,
-            redDuration: 127,
-            greenDuration: 40,
-          },
-          {
-            //trafficInfo
-          },
-        ],
-      },
-      {
-        //intersectionInfo
-      },
-    ],
-  },
-};
+const Container = styled.div`
+  position: relative;
+`;
 
-const CustomOverLay = () => {
+const Box = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 95%;
+  height: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ImageBox = styled.div`
+  width: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const TextBox = styled.div`
+  width: 60%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const CustomOverLay = ({ surroundingLightInfoData, isOpen, onToggle }) => {
+  const { id, isFavorite, point, viewName } = surroundingLightInfoData;
+  // console.log(surroundingLightInfoData);
+
+  const setTrafficIdState = useSetRecoilState(detailInfoByIdState);
+
   return (
-    <CustomOverlayMap // 커스텀 오버레이를 표시할 Container
-      // 커스텀 오버레이가 표시될 위치입니다
-      position={{
-        lat: 37.49887,
-        lng: 127.026581,
-      }}
-      // 커스텀 오버레이가에 대한 확장 옵션
-      xAnchor={0.3}
-      yAnchor={0.91}
-    ></CustomOverlayMap>
+    <>
+      {isOpen ? (
+        <CustomOverlayMap position={point} yAnchor={1.0} xAnchor={0.45}>
+          <Container>
+            <button
+              onClick={() => {
+                console.log(" 상세 정보 오픈");
+                setTrafficIdState(id);
+              }}
+            >
+              <svg
+                width="187"
+                height="84"
+                viewBox="0 0 187 84"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g filter="url(#filter0_d_315_682)">
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M10 1C4.47715 1 0 5.47715 0 11V59C0 64.5228 4.47715 69 10 69H82.6189L85.0855 75.9908C85.5563 77.3254 87.4437 77.3254 87.9145 75.9908L90.3811 69H166C171.523 69 176 64.5228 176 59V11C176 5.47715 171.523 1 166 1H10Z"
+                    fill="white"
+                  />
+                </g>
+                <defs>
+                  <filter
+                    id="filter0_d_315_682"
+                    x="0"
+                    y="0"
+                    width="187"
+                    height="83.9917"
+                    filterUnits="userSpaceOnUse"
+                    colorInterpolationFilters="sRGB"
+                  >
+                    <feFlood floodOpacity="0" result="BackgroundImageFix" />
+                    <feColorMatrix
+                      in="SourceAlpha"
+                      type="matrix"
+                      values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                      result="hardAlpha"
+                    />
+                    <feOffset dx="7" dy="3" />
+                    <feGaussianBlur stdDeviation="2" />
+                    <feComposite in2="hardAlpha" operator="out" />
+                    <feColorMatrix
+                      type="matrix"
+                      values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+                    />
+                    <feBlend
+                      mode="normal"
+                      in2="BackgroundImageFix"
+                      result="effect1_dropShadow_315_682"
+                    />
+                    <feBlend
+                      mode="normal"
+                      in="SourceGraphic"
+                      in2="effect1_dropShadow_315_682"
+                      result="shape"
+                    />
+                  </filter>
+                </defs>
+              </svg>
+              <Box>
+                <ImageBox>
+                  <Traffic />
+                </ImageBox>
+                <TextBox>
+                  <Text $fontSize="16px" $fontWeight="600">
+                    {viewName}
+                  </Text>
+                </TextBox>
+              </Box>
+            </button>
+          </Container>
+        </CustomOverlayMap>
+      ) : (
+        <CustomOverlayMap position={point} yAnchor={1.0}>
+          <button onClick={onToggle}>
+            <Traffic />
+          </button>
+        </CustomOverlayMap>
+      )}
+    </>
   );
 };
 

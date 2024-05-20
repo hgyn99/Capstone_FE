@@ -10,11 +10,13 @@ const KakaoLoginButton = styled.button`
   color: black;
   display: flex;
   align-items: center;
+  justify-content: center;
+  gap: 12px;
   font-size: 16px;
   width: 300px;
-  height: 50px;
+  height: 44px;
   cursor: pointer;
-  margin-top: 20px;
+  margin-top: 34px;
 `;
 
 const KakaoLoginButtonImage = styled.img`
@@ -24,12 +26,12 @@ const KakaoLoginButtonImage = styled.img`
 `;
 
 const Text = styled.p`
+  margin-top: 32px;
   font-size: 18px;
   text-align: center;
 `;
 
 const KakaoLoginButtonText = styled.span`
-  flex-grow: 1;
   text-align: center;
 `;
 

@@ -1,15 +1,15 @@
 import axios from "axios";
 
-export const instance = axios.create({
-  baseURL: process.env.REACT_APP_BASE_URL,
+export const trafficInstance = axios.create({
+  baseURL: process.env.REACT_APP_BASE_URL + "/traffics",
   timeout: 2000,
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true,
 });
 
-// api 요청
-instance.interceptors.request.use((config) => {
+trafficInstance.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
     config.headers["Authorization"] = token;
@@ -17,12 +17,11 @@ instance.interceptors.request.use((config) => {
   return config;
 });
 
-//middleware : 중간에서 처리하는 일종의 프록시 서버같은 역할
-instance.interceptors.response.use(
+trafficInstance.interceptors.response.use(
   (response) => {
     return response;
   },
   (error) => {
-    return Promise.reject(error?.response?.data.error.message);
+    return Promise.reject(error);
   }
 );

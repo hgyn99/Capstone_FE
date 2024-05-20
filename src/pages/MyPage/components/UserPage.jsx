@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import {Link} from 'react-router-dom';
-import uploadImg from "../../../assets/icon/basicUserImage.png";
-import { IoLocationSharp } from "react-icons/io5"; //장소 아이콘
-import trafficIcon from "../../../assets/icon/trafficlight.svg"
-import routeIcon from "../../../assets/icon/route.svg"
-import { PiUser } from "react-icons/pi";
-import { LuLogOut } from "react-icons/lu";
+import Profile from "../../../assets/icon/basicProfileW.webp";
+import LocationIcon from "../../../assets/icon/locationIcon.webp";
+import TrafficIcon from "../../../assets/icon/trafficIcon.webp";
+import RouteIcon from "../../../assets/icon/routeIcon.webp";
+import EditUserButton from "../../../assets/icon/editUserButton.webp";
+import LogoutButton from "../../../assets/icon/logoutIcon.webp";
 
 const Container = styled.div`
   width:100%;
@@ -42,6 +42,7 @@ const UserImgBox = styled.div`
   display:flex;
   justify-content:center;
   align-items:center;
+  border:1px solid #dadada;
 `;
 const UserImg = styled.img`
   width:100%;
@@ -110,15 +111,7 @@ const IconBox = styled.div`
   justify-content:center;
   align-items:center;
 `;
-
-const TrafficIcon = styled.img`
-  width: 20px;
-  height: 36px;
-`;
-
-const RouteIcon = styled.img`
-  width: 35px;
-  height: 36px;
+const Icon = styled.img`
 `;
 
 const Text = styled.p`
@@ -150,6 +143,14 @@ const EditLink = styled(Link)`
   gap:18px;
 `;
 
+const EditText = styled.p`
+  font-size: 14px;
+  color:#666666;
+  text-decoration:none;
+  margin:5px;
+  text-align:center;
+`;  
+
 const UserPage = () => {
   return(
     <Container>
@@ -158,7 +159,7 @@ const UserPage = () => {
           <UserProfileInner>
             <UserImgBox>
               <UserImg
-                src={uploadImg}
+                src={Profile}
                 size={100}
               />
             </UserImgBox>
@@ -169,21 +170,27 @@ const UserPage = () => {
       <FavoriteContainer>
         <Title>즐겨찾기</Title>
         <FavoriteButton>
-          <StyledLink to="/">
+          <StyledLink to="/favoriteslocation">
             <IconBox>
-              <IoLocationSharp color="#B4D491" size="38" stroke="#373838" strokeWidth="5px"/>
+              <Icon src={LocationIcon} 
+                alt="location icon" 
+                style={{width:22}}/>
             </IconBox>
             <Text>장소</Text>
           </StyledLink>
-          <StyledLink to="/">
+          <StyledLink to="/favoritestraffic">
             <IconBox>
-              <TrafficIcon src={trafficIcon} alt="traffic icon" />
+              <Icon src={TrafficIcon} 
+                alt="TrafficIcon"
+                style={{width:19}} />
             </IconBox>
             <Text>신호등</Text>
           </StyledLink>
-          <StyledLink to="/">
+          <StyledLink to="/favoritesroute">
             <IconBox>
-              <RouteIcon src={routeIcon} alt="route icon" />
+              <Icon src={RouteIcon} 
+                alt="RouteIcon"
+                style={{width:33}} />
             </IconBox>
             <Text>경로</Text>
           </StyledLink>
@@ -192,14 +199,20 @@ const UserPage = () => {
         <Title>프로필 관리</Title>
           <EditList>
             <EditLink to="/">
-              <PiUser size="26" color="#666666"/>
-               <Text>회원 정보 수정</Text>
+              {/* <PiUser size="26" color="#666666"/> */}
+              <Icon src={EditUserButton} 
+                alt="EditUserButton"
+                style={{width:19}} />
+              <EditText>회원 정보 수정</EditText>
             </EditLink>
           </EditList>
           <EditList>
             <EditLink to="/">
-              <LuLogOut size="26" color="#666666"/>
-              <Text>로그아웃</Text>
+              {/* <LuLogOut size="26" color="#666666"/> */}
+              <Icon src={LogoutButton} 
+                alt="LogoutButton"
+                style={{width:19}} />
+              <EditText>로그아웃</EditText>
             </EditLink>
           </EditList>
         </ProfileEditButton>
