@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { ReactComponent as Arrow } from "../../../assets/icon/arrow.svg";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const Container = styled.div`
   z-index: 1000;
@@ -65,6 +65,13 @@ const TopBar = () => {
     }
   };
 
+  // const handleKeyPress = async (event) => {
+  //   if (event.key === "Enter") {
+  //     const places = await searchPlaces(inputValue);
+  //     console.log(places); // 검색 결과를 콘솔에 로그
+  //   }
+  // };
+
   return (
     <Container>
       <InputBox
@@ -73,17 +80,19 @@ const TopBar = () => {
         value={inputValue}
         onChange={handleInputChange}
         onKeyDown={handleKeyPress}
-        // onClick={() => {
-        //   console.log("목적지 입력창 클릭");
-        // }}
+        //onClick={() => {
+        // console.log("목적지 입력창 클릭");
+        //}}
       ></InputBox>
       <DirectionSearchButton
         onClick={() => {
           console.log("길찾기 페이지 이동");
         }}
       >
-        <Arrow />
-        <DirectionSearchText>길찾기</DirectionSearchText>
+        <Link to="/path">
+          <Arrow />
+          <DirectionSearchText>길찾기</DirectionSearchText>
+        </Link>
       </DirectionSearchButton>
     </Container>
   );
