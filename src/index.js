@@ -10,7 +10,6 @@ import { RecoilRoot } from "recoil";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 const GlobalStyle = createGlobalStyle`
-  @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css");
   html, body, div, span, applet, object, iframe,
   h1, h2, h3, h4, h5, h6, p, blockquote, pre,
   a, abbr, acronym, address, big, cite, code,
@@ -73,8 +72,6 @@ const GlobalStyle = createGlobalStyle`
     justify-content: center;
     align-items: center;
     cursor: default;
-
-
   }
   a {
     text-decoration: none;

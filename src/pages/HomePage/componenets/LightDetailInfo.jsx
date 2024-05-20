@@ -126,14 +126,23 @@ const LightDetailInfo = ({ lightInfo }) => {
 
         const isGoDown = info.offset.y > 0;
 
-        if (isGoDown && openState.detailInfoOpenState === "top") {
-          setOpenState({ detailInfoOpenState: "mid" });
-        } else if (isGoDown && openState.detailInfoOpenState === "mid") {
-          setOpenState({ detailInfoOpenState: "closed" });
-        } else if (!isGoDown && openState.detailInfoOpenState === "mid") {
-          setOpenState({ detailInfoOpenState: "top" });
-        } else if (!isGoDown && openState.detailInfoOpenState === "closed") {
-          setOpenState({ detailInfoOpenState: "top" });
+        if (isGoDown && openState.detailInfoOpenState.openState === "top") {
+          setOpenState({ detailInfoOpenState: { openState: "mid" } });
+        } else if (
+          isGoDown &&
+          openState.detailInfoOpenState.openState === "mid"
+        ) {
+          setOpenState({ detailInfoOpenState: { openState: "closed" } });
+        } else if (
+          !isGoDown &&
+          openState.detailInfoOpenState.openState === "mid"
+        ) {
+          setOpenState({ detailInfoOpenState: { openState: "top" } });
+        } else if (
+          !isGoDown &&
+          openState.detailInfoOpenState.openState === "closed"
+        ) {
+          setOpenState({ detailInfoOpenState: { openState: "top" } });
         }
       }}
     >

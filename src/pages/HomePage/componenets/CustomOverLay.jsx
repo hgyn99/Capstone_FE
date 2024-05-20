@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { CustomOverlayMap } from "react-kakao-maps-sdk";
 import styled from "styled-components";
 import { ReactComponent as Traffic } from "../../../assets/icon/traffic.svg";

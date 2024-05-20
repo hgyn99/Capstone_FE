@@ -1,6 +1,5 @@
 import { styled } from "styled-components";
 import trafficLightImage from "../../../assets/trafficLightImg.png";
-import { useState } from "react";
 import Text from "./Text";
 
 const Contianer = styled.div`
