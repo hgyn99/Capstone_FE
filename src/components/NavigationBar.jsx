@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useRecoilState } from "recoil";
 import { navigationState } from "../recoil/navigationState/atom";
+import { useNavigate } from "react-router-dom";
 
 const NavigationBarContainer = styled.div`
   display: flex;
@@ -29,6 +30,8 @@ const Button = styled.button`
 const NavigationBar = () => {
   const [currentNavigationState, setCurrentNavigationState] =
     useRecoilState(navigationState);
+
+  const navigate = useNavigate();
 
   return (
     <NavigationBarContainer>
@@ -166,7 +169,12 @@ const NavigationBar = () => {
         )}
         <Text>즐겨찾기</Text>
       </Button>
-      <Button onClick={() => setCurrentNavigationState("MyPage")}>
+      <Button
+        onClick={() => {
+          setCurrentNavigationState("MyPage");
+          navigate("/mypage");
+        }}
+      >
         {currentNavigationState === "MyPage" ? (
           <svg
             width="30"

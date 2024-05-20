@@ -17,10 +17,10 @@ const Container = styled(motion.div)`
 
 const HeaderBox = styled.div`
   width: 100%;
-  margin-bottom: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  /* border-bottom: 1px solid ${({ theme }) => theme.gray}; */
 `;
 
 const HandleBar = styled.div`
@@ -43,6 +43,7 @@ const TitleText = styled.span`
 `;
 
 const ContentsBox = styled.div`
+  margin: 12px 0;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -51,8 +52,8 @@ const ContentsBox = styled.div`
 
 const ScrollBox = styled.div`
   overflow-y: scroll;
-  height: ${({ openState }) =>
-    openState === "mid" ? "calc(50dvh - 158px)" : "100%"};
+  height: ${({ $openState }) =>
+    $openState === "mid" ? "calc(50dvh - 136px)" : "100%"};
 `;
 
 const SurroundingLightInfo = ({ surroundingLightInfoData }) => {
@@ -116,7 +117,7 @@ const SurroundingLightInfo = ({ surroundingLightInfoData }) => {
         </TopBox>
       </HeaderBox>
       <ScrollBox
-        openState={openState.surroundingLightInfoOpenState}
+        $openState={openState.surroundingLightInfoOpenState}
         ref={observerRef}
       >
         <ContentsBox>
