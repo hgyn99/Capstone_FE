@@ -4,7 +4,7 @@ import Header from "../../components/Header";
 import LocationEmptyPage from "./components/LocationEmptyPage";
 import FavoritesLocationList from "./components/FavoritesLocationList";
 
-const FavoritesLocation = () => {
+const FavoritesLocationPage = () => {
   const locations = [
     {
       locationId: 1,
@@ -32,4 +32,4 @@ const FavoritesLocation = () => {
   );
 }
 
-export default FavoritesLocation;
+export default FavoritesLocationPage;

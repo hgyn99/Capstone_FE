@@ -3,7 +3,7 @@ import SearchingBar from "./SearchingBar";
 import FavoriteList from "./FavoriteList";
 import RecentPath from "./RecentPath";
 
-const Path = () => {
+const PathPage = () => {
   return (
     <NavigationBarLayout>
       <SearchingBar />
@@ -13,4 +13,4 @@ const Path = () => {
   );
 };
 
-export default Path;
+export default PathPage;

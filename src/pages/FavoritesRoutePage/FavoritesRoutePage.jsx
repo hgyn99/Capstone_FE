@@ -4,7 +4,7 @@ import Header from "../../components/Header";
 import RouteEmptyPage from "./components/RouteEmptyPage";
 import FavoritesRouteList from "./components/FavoritesRouteList";
 
-const FavoritesRoute = () => {
+const FavoritesRoutePage = () => {
   const routes = [
     {
         routeId : 1,
@@ -33,4 +33,4 @@ const FavoritesRoute = () => {
   );
 }
 
-export default FavoritesRoute;
+export default FavoritesRoutePage;
