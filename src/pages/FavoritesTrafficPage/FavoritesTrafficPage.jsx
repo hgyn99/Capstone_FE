@@ -4,7 +4,7 @@ import Header from "../../components/Header";
 import TrafficEmptyPage from "./components/TrafficEmptyPage";
 import FavoritesTrafficList from "./components/FavoritesTrafficList";
 
-const FavoritesTraffic = () => {
+const FavoritesTrafficPage = () => {
   const traffics = [
     {
       trafficId: 1,
@@ -32,4 +32,4 @@ const FavoritesTraffic = () => {
   );
 }
 
-export default FavoritesTraffic;
+export default FavoritesTrafficPage;

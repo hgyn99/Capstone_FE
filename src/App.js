@@ -1,6 +1,10 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage/HomePage";
 import MyPage from "./pages/MyPage/MyPage";
+import PathPage from "./pages/PathPage/PathPage";
+import FavoritesLocationPage from "./pages/FavoritesLocationPage/FavoritesLocationPage";
+import FavoritesTrafficPage from "./pages/FavoritesTrafficPage/FavoritesTrafficPage";
+import FavoritesRoutePage from "./pages/FavoritesRoutePage/FavoritesRoutePage";
 
 function App() {
   return (
@@ -8,10 +12,12 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />}></Route>
         <Route path="/trafficlights" element={<HomePage />}></Route>{" "}
-        {/** 추후 element 수정*/}
         <Route path="/favorites" element={<HomePage />}></Route>{" "}
-        {/** 추후 element 수정*/}
         <Route path="/mypage" element={<MyPage />}></Route>
+        <Route path="/mypage/favoritelocation" element={<FavoritesLocationPage />}></Route>
+        <Route path="/mypage/favoritestraffic" element={<FavoritesTrafficPage />}></Route>
+        <Route path="/mypage/favoritesroute" element={<FavoritesRoutePage />}></Route>
+        <Route path="/path" element={<PathPage />}></Route>
       </Routes>
     </BrowserRouter>
   );
