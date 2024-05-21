@@ -4,6 +4,8 @@ import Text from "./Text";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
 import { bottomSheetOpenState } from "../../../recoil/bottomSheetOpenState/atom";
+import { useQuery } from "@tanstack/react-query";
+import { fetchTrafficById } from "../../../apis/api/traffic";
 
 const Container = styled(motion.div)`
   width: 100%;
@@ -96,14 +98,29 @@ const LightDetailInfo = ({ lightInfo }) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [openState, setOpenState] = useRecoilState(bottomSheetOpenState);
 
+  const { isLoading, data: trafficByIdData } = useQuery({
+    queryKey: ["trafficById", openState.detailInfoOpenState.id],
+    queryFn: () => fetchTrafficById(openState.detailInfoOpenState.id),
+    enabled: openState.detailInfoOpenState.openState === "mid",
+    onError: (e) => {
+      console.log(e);
+    },
+  });
+
+  console.log(trafficByIdData);
+
   const dragControls = useDragControls();
+
+  if (isLoading) {
+    return;
+  }
 
   return (
     <Container
-      $DetailInfoOpenState={openState.detailInfoOpenState}
+      $DetailInfoOpenState={openState.detailInfoOpenState.openState}
       drag="y"
       dragConstraints={{ top: 0, bottom: 0 }}
-      animate={openState.detailInfoOpenState}
+      animate={openState.detailInfoOpenState.openState}
       variants={{
         top: { top: `10dvh` },
         mid: { top: `50dvh` },

@@ -11,7 +11,7 @@ import TopBar from "./componenets/TopBar";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { bottomSheetOpenState } from "../../recoil/bottomSheetOpenState/atom";
 import { navigationState } from "../../recoil/navigationState/atom";
-import { fetchTraffic, fetchTrafficById } from "../../apis/api/traffic";
+import { fetchTraffic } from "../../apis/api/traffic";
 import locationIcon from "../..//assets/icon/location.png";
 import { detailInfoByIdState } from "../../recoil/detailInfoByIdState/atom";
 
@@ -50,8 +50,6 @@ const PanToButton = styled.button`
 
 const HomePage = () => {
   const navigationBarState = useRecoilValue(navigationState);
-  const trafficId = useRecoilValue(detailInfoByIdState);
-  // console.log(trafficId);
   const [openState, setOpenState] = useRecoilState(bottomSheetOpenState);
 
   const [map, setMap] = useState(null);
@@ -73,15 +71,6 @@ const HomePage = () => {
   const { isLoading, data: surroundingLightInfoData } = useQuery({
     queryKey: ["traffic"],
     queryFn: fetchTraffic,
-    onError: (e) => {
-      console.log(e);
-    },
-  });
-
-  const { isLoading: trafficByIdLoading, data: trafficByIdData } = useQuery({
-    queryKey: ["trafficById", trafficId],
-    queryFn: () => fetchTrafficById(trafficId),
-    enabled: !!trafficId,
     onError: (e) => {
       console.log(e);
     },
