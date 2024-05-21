@@ -15,9 +15,18 @@ function App() {
         <Route path="/trafficlights" element={<HomePage />}></Route>{" "}
         <Route path="/favorites" element={<HomePage />}></Route>{" "}
         <Route path="/mypage" element={<MyPage />}></Route>
-        <Route path="/mypage/favoritelocation" element={<FavoritesLocationPage />}></Route>
-        <Route path="/mypage/favoritestraffic" element={<FavoritesTrafficPage />}></Route>
-        <Route path="/mypage/favoritesroute" element={<FavoritesRoutePage />}></Route>
+        <Route
+          path="/mypage/favoritelocation"
+          element={<FavoritesLocationPage />}
+        ></Route>
+        <Route
+          path="/mypage/favoritestraffic"
+          element={<FavoritesTrafficPage />}
+        ></Route>
+        <Route
+          path="/mypage/favoritesroute"
+          element={<FavoritesRoutePage />}
+        ></Route>
         <Route path="/path" element={<PathPage />}></Route>
         <Route path="/pathsearch" element={<PathSearchPage />}></Route>
       </Routes>
