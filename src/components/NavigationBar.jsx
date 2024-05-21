@@ -35,7 +35,12 @@ const NavigationBar = () => {
 
   return (
     <NavigationBarContainer>
-      <Button onClick={() => setCurrentNavigationState("Home")}>
+      <Button
+        onClick={() => {
+          setCurrentNavigationState("Home");
+          navigate("/");
+        }}
+      >
         {currentNavigationState === "Home" ? (
           <svg
             width="30"
@@ -75,7 +80,12 @@ const NavigationBar = () => {
         )}
         <Text>홈</Text>
       </Button>
-      <Button onClick={() => setCurrentNavigationState("TrafficSignal")}>
+      <Button
+        onClick={() => {
+          setCurrentNavigationState("TrafficSignal");
+          navigate("/");
+        }}
+      >
         {currentNavigationState === "TrafficSignal" ? (
           <svg
             width="15"
@@ -138,7 +148,12 @@ const NavigationBar = () => {
         )}
         <Text>신호등</Text>
       </Button>
-      <Button onClick={() => setCurrentNavigationState("Favorites")}>
+      <Button
+        onClick={() => {
+          setCurrentNavigationState("Favorites");
+          navigate("/");
+        }}
+      >
         {currentNavigationState === "Favorites" ? (
           <svg
             width="30"
