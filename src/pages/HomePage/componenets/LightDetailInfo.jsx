@@ -1,11 +1,12 @@
 import styled from "styled-components";
 import { motion, useDragControls } from "framer-motion";
 import Text from "./Text";
-import { useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { bottomSheetOpenState } from "../../../recoil/bottomSheetOpenState/atom";
 import { useQuery } from "@tanstack/react-query";
 import { fetchTrafficById } from "../../../apis/api/traffic";
+import { navigationState } from "../../../recoil/navigationState/atom";
+import { useEffect } from "react";
 
 const Container = styled(motion.div)`
   width: 100%;
@@ -95,21 +96,29 @@ const RemainingTimeText = styled.span`
 `;
 
 const LightDetailInfo = ({ lightInfo }) => {
-  const [isFavorite, setIsFavorite] = useState(false);
   const [openState, setOpenState] = useRecoilState(bottomSheetOpenState);
 
-  const { isLoading, data: trafficByIdData } = useQuery({
-    queryKey: ["trafficById", openState.detailInfoOpenState.id],
+  const dragControls = useDragControls();
+
+  const { isLoading, data } = useQuery({
+    queryKey: ["trafficById", openState.detailInfoOpenState],
     queryFn: () => fetchTrafficById(openState.detailInfoOpenState.id),
-    enabled: openState.detailInfoOpenState.openState === "mid",
+    enabled: openState.detailInfoOpenState?.openState === "mid",
     onError: (e) => {
       console.log(e);
     },
   });
 
-  console.log(trafficByIdData);
-
-  const dragControls = useDragControls();
+  const {
+    color,
+    detail,
+    greenCycle,
+    isFavorite,
+    point,
+    redCycle,
+    timeLeft,
+    viewName,
+  } = data?.data.data.traffic || {};
 
   if (isLoading) {
     return;
@@ -117,10 +126,10 @@ const LightDetailInfo = ({ lightInfo }) => {
 
   return (
     <Container
-      $DetailInfoOpenState={openState.detailInfoOpenState.openState}
+      $DetailInfoOpenState={openState.detailInfoOpenState?.openState}
       drag="y"
       dragConstraints={{ top: 0, bottom: 0 }}
-      animate={openState.detailInfoOpenState.openState}
+      animate={openState.detailInfoOpenState?.openState}
       variants={{
         top: { top: `10dvh` },
         mid: { top: `50dvh` },
@@ -144,22 +153,34 @@ const LightDetailInfo = ({ lightInfo }) => {
         const isGoDown = info.offset.y > 0;
 
         if (isGoDown && openState.detailInfoOpenState.openState === "top") {
-          setOpenState({ detailInfoOpenState: { openState: "mid" } });
+          setOpenState((prev) => ({
+            ...prev,
+            detailInfoOpenState: { openState: "mid" },
+          }));
         } else if (
           isGoDown &&
           openState.detailInfoOpenState.openState === "mid"
         ) {
-          setOpenState({ detailInfoOpenState: { openState: "closed" } });
+          setOpenState((prev) => ({
+            ...prev,
+            detailInfoOpenState: { openState: "closed" },
+          }));
         } else if (
           !isGoDown &&
           openState.detailInfoOpenState.openState === "mid"
         ) {
-          setOpenState({ detailInfoOpenState: { openState: "top" } });
+          setOpenState((prev) => ({
+            ...prev,
+            detailInfoOpenState: { openState: "top" },
+          }));
         } else if (
           !isGoDown &&
           openState.detailInfoOpenState.openState === "closed"
         ) {
-          setOpenState({ detailInfoOpenState: { openState: "top" } });
+          setOpenState((prev) => ({
+            ...prev,
+            detailInfoOpenState: { openState: "top" },
+          }));
         }
       }}
     >
@@ -167,13 +188,13 @@ const LightDetailInfo = ({ lightInfo }) => {
         <HandleBar />
         <TopBox>
           <div>
-            <AddressText>전남대공과대학</AddressText>
+            <AddressText>{viewName}</AddressText>
             <DetailAddressText>176-48 (전남대공과대학 방면)</DetailAddressText>
           </div>
           <IsFavoriteButton
             onClick={() => {
               //저장
-              setIsFavorite((prev) => !prev);
+              console.log("dsa");
             }}
           >
             <svg
@@ -196,8 +217,10 @@ const LightDetailInfo = ({ lightInfo }) => {
       <DirectionInfoBox>
         <Text $fontWeight={600}>서쪽</Text>
         <RemainingTimeBox>
-          <Circle $isTimeLeft={false}></Circle>
-          <RemainingTimeText $isTimeLeft={false}>8초</RemainingTimeText>
+          <Circle $isTimeLeft={timeLeft}></Circle>
+          <RemainingTimeText $isTimeLeft={timeLeft}>
+            {timeLeft}초
+          </RemainingTimeText>
         </RemainingTimeBox>
       </DirectionInfoBox>
     </Container>

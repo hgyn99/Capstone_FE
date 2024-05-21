@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { ReactComponent as Traffic } from "../../../assets/icon/traffic.svg";
 import Text from "./Text";
 import { useSetRecoilState } from "recoil";
-import { detailInfoByIdState } from "../../../recoil/detailInfoByIdState/atom";
 import { bottomSheetOpenState } from "../../../recoil/bottomSheetOpenState/atom";
+import { navigationState } from "../../../recoil/navigationState/atom";
 
 const Container = styled.div`
   position: relative;
@@ -38,9 +38,7 @@ const TextBox = styled.div`
 const CustomOverLay = ({ surroundingLightInfoData, isOpen, onToggle }) => {
   const { id, isFavorite, point, viewName } = surroundingLightInfoData;
   const setDetailInfoOpenState = useSetRecoilState(bottomSheetOpenState);
-  // console.log(surroundingLightInfoData);
-
-  const setTrafficIdState = useSetRecoilState(detailInfoByIdState);
+  const setCurrentNavigationState = useSetRecoilState(navigationState);
 
   return (
     <>
@@ -53,6 +51,7 @@ const CustomOverLay = ({ surroundingLightInfoData, isOpen, onToggle }) => {
                 setDetailInfoOpenState({
                   detailInfoOpenState: { openState: "mid", id: id },
                 });
+                setCurrentNavigationState("Home");
               }}
             >
               <svg

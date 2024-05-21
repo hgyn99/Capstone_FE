@@ -154,16 +154,28 @@ const FavoritesInfo = ({ panToFavorite }) => {
           const isGoDown = info.offset.y > 0;
 
           if (isGoDown && openState.favoritesInfoOpenState === "top") {
-            setOpenState({ favoritesInfoOpenState: "mid" });
+            setOpenState((prev) => ({
+              ...prev,
+              favoritesInfoOpenState: "mid",
+            }));
           } else if (isGoDown && openState.favoritesInfoOpenState === "mid") {
-            setOpenState({ favoritesInfoOpenState: "closed" });
+            setOpenState((prev) => ({
+              ...prev,
+              favoritesInfoOpenState: "closed",
+            }));
           } else if (!isGoDown && openState.favoritesInfoOpenState === "mid") {
-            setOpenState({ favoritesInfoOpenState: "top" });
+            setOpenState((prev) => ({
+              ...prev,
+              favoritesInfoOpenState: "top",
+            }));
           } else if (
             !isGoDown &&
             openState.favoritesInfoOpenState === "closed"
           ) {
-            setOpenState({ favoritesInfoOpenState: "mid" });
+            setOpenState((prev) => ({
+              ...prev,
+              favoritesInfoOpenState: "mid",
+            }));
           }
         }}
       >

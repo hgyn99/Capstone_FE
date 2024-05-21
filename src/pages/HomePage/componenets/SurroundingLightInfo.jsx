@@ -91,22 +91,34 @@ const SurroundingLightInfo = ({ surroundingLightInfoData }) => {
         const isGoDown = info.offset.y > 0;
 
         if (isGoDown && openState.surroundingLightInfoOpenState === "top") {
-          setOpenState({ surroundingLightInfoOpenState: "mid" });
+          setOpenState((prev) => ({
+            ...prev,
+            surroundingLightInfoOpenState: "mid",
+          }));
         } else if (
           isGoDown &&
           openState.surroundingLightInfoOpenState === "mid"
         ) {
-          setOpenState({ surroundingLightInfoOpenState: "closed" });
+          setOpenState((prev) => ({
+            ...prev,
+            surroundingLightInfoOpenState: "closed",
+          }));
         } else if (
           !isGoDown &&
           openState.surroundingLightInfoOpenState === "mid"
         ) {
-          setOpenState({ surroundingLightInfoOpenState: "top" });
+          setOpenState((prev) => ({
+            ...prev,
+            surroundingLightInfoOpenState: "top",
+          }));
         } else if (
           !isGoDown &&
           openState.surroundingLightInfoOpenState === "closed"
         ) {
-          setOpenState({ surroundingLightInfoOpenState: "mid" });
+          setOpenState((prev) => ({
+            ...prev,
+            surroundingLightInfoOpenState: "mid",
+          }));
         }
       }}
     >
