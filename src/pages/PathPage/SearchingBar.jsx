@@ -107,10 +107,6 @@ const PinButton = styled.button`
   height: 25px; // Adjust as needed
 `;
 
-const InvisibleButton = styled(InputButton)`
-  visibility: hidden;
-`;
-
 const SearchingBar = () => {
   const [isDepartureInputClicked, setDepartureInputClicked] = useState(false);
   const [departureInput, setDepartureInput] = useState("");
@@ -162,8 +158,10 @@ const SearchingBar = () => {
         <>
           <PantoButton />
           <span style={{ marginRight: '40px' }}>현재 위치</span>
+          <Link to="/pathsearch" style={{ display: 'flex', alignItems: 'center', gap: '10px'}}>
           <PinButton />
           <span>지도에서 선택</span>
+          </Link>
         </>
       ) : (
         <InputButton>도착지 입력</InputButton>
