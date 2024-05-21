@@ -48,9 +48,10 @@ const CustomOverLay = ({ surroundingLightInfoData, isOpen, onToggle }) => {
             <button
               onClick={() => {
                 console.log(" 상세 정보 오픈");
-                setDetailInfoOpenState({
+                setDetailInfoOpenState((prev) => ({
+                  ...prev,
                   detailInfoOpenState: { openState: "mid", id: id },
-                });
+                }));
                 setCurrentNavigationState("Home");
               }}
             >

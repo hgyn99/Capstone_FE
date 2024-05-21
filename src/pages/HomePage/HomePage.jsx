@@ -122,7 +122,7 @@ const HomePage = () => {
     map.panTo(newLatLng);
   };
 
-  const panToFavorite = (point) => {
+  const panToPoint = (point) => {
     const newLatLng = new kakao.maps.LatLng(point.lat, point.lng);
     map.panTo(newLatLng);
   };
@@ -171,7 +171,7 @@ const HomePage = () => {
             </>
           ) : null}
           {navigationBarState === "Favorites" ? (
-            <FavoriteInfo panToFavorite={panToFavorite} />
+            <FavoriteInfo panToPoint={panToPoint} />
           ) : null}
           <MapMarker
             position={state.center}

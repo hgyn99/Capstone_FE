@@ -102,7 +102,7 @@ const List = styled.div`
   margin-left: 16px;
 `;
 
-const FavoritesInfo = ({ panToFavorite }) => {
+const FavoritesInfo = ({ panToPoint }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [listState, setListState] = useState("place");
   const [openState, setOpenState] = useRecoilState(bottomSheetOpenState);
@@ -298,7 +298,7 @@ const FavoritesInfo = ({ panToFavorite }) => {
                 <ListBox key={traffic.id}>
                   <button
                     onClick={() => {
-                      panToFavorite(traffic.point);
+                      panToPoint(traffic.point);
                     }}
                   >
                     <List>
