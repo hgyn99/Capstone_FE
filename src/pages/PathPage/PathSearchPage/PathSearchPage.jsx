@@ -2,8 +2,9 @@ import { styled } from "styled-components";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import { useEffect, useState } from "react";
 import locationIcon from "../../../assets/icon/location.png";
-import backwardIcon from "../../../assets/icon/backwardIcon.webp";
-import { Link } from "react-router-dom";
+import centerLocationIcon from "../../../assets/icon/centerLocationIcon.webp";
+import PathTitle from "./PathTitle";
+import Adress from "./Adress";
 
 const { kakao } = window;
 
@@ -13,7 +14,6 @@ const Container = styled.div`
   //height: calc(100vh - 80px);
   height: 100vh;
   height: 100dvh; /* Mobile */
-  overflow: hidden;
   position: relative;
 
   &::-webkit-scrollbar {
@@ -25,7 +25,7 @@ const Container = styled.div`
 
 const PanToButton = styled.button`
   position: absolute;
-  bottom: 4dvh;
+  bottom: 19dvh;
   right: 10px;
   border: none;
   border-radius: 50%;
@@ -42,45 +42,18 @@ const PanToButton = styled.button`
   align-items: center;
 `;
 
-const TitleContainer = styled.div`
+const CenterLocationIcon = styled.img.attrs({
+  src: centerLocationIcon,
+  alt: "centerLocationIcon",
+})`
   z-index: 1000;
-  display: flex;
-  flex-direction: row;
-  max-width: 390px;
-  width: 100%;
-  height: 60px;
-  text-align: center;
-  position: relative;
-`;
-
-const BackwardBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: 60px;
   position: absolute;
-  width: 15%;
-  z-index: 1;
-`;
-
-const TitleBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  font-size: 18px;
-  font-weight: 700;
-`;
-
-const BackwardButton = styled.button`
-  background-image: url(${backwardIcon});
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  border: none;
-  width: 25px;
-  height: 25px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30px;
+  height: 45px;
+  margin-top: -45px; // 좌표 아이콘 위치 조정(하단 꼭지점이 중앙에 위치하도록)
 `;
 
 const PathSearchPage = () => {
@@ -93,6 +66,7 @@ const PathSearchPage = () => {
     errMsg: null,
     isLoading: true,
   });
+  const [result, setResult] = useState("");
 
   const panTo = () => {
     const newLatLng = new kakao.maps.LatLng(state.center.lat, state.center.lng);
@@ -135,35 +109,31 @@ const PathSearchPage = () => {
 
   return (
     <Container>
-      <TitleContainer>
-        <BackwardBox>
-          <Link to="/path">
-            <BackwardButton />
-          </Link>
-        </BackwardBox>
-        <TitleBox>지도에서 선택</TitleBox>
-      </TitleContainer>
+      <PathTitle />
       <Map
         id="map"
         center={state.center}
         style={{
           width: "100%",
           //height: "calc(100vh - 80px)",
-          height: "calc(100vh)",
+          height: "calc(100dvh - 205px)",
         }}
         padding={64}
         level={3}
         minLevel={4}
         onCreate={setMap}
-        onDragEnd={() => {
-          // console.log(map.getBounds());
+        onDragEnd={(map) => {
+          const latlng = map.getCenter();
+          // setResult(
+          //   `변경된 지도 중심좌표는 ${latlng.getLat()} 이고, 경도는 ${latlng.getLng()} 입니다`
+          // );
         }}
       >
-        {" "}
-        <MapMarker
+        {/* <MapMarker
           position={state.center}
           image={{ src: locationIcon, size: { width: 30, height: 30 } }}
-        />
+        /> Mapmarker 필요시 코드 사용*/}
+        <CenterLocationIcon />
       </Map>
       <PanToButton
         onClick={() => {
@@ -200,6 +170,7 @@ const PathSearchPage = () => {
           <circle cx="9" cy="9" r="1" fill="black" />
         </svg>
       </PanToButton>
+      <Adress />
     </Container>
   );
 };
