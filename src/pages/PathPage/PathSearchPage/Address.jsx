@@ -34,10 +34,10 @@ const ConfirmButton = styled.button`
   font-size: 16px;
   color: white;
 `;
-const Adress = () => {
+const Address = ( {address}) => {
   return (
     <TitleContainer>
-      광주 북구 용봉동 163
+      {address}
       <Link to="/path">
         <ConfirmButton>확인</ConfirmButton>
       </Link>
@@ -45,4 +45,4 @@ const Adress = () => {
   );
 };
 
-export default Adress;
+export default Address;

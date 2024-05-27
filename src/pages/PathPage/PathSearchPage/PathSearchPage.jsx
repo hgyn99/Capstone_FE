@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import locationIcon from "../../../assets/icon/location.png";
 import centerLocationIcon from "../../../assets/icon/centerLocationIcon.webp";
 import PathTitle from "./PathTitle";
-import Adress from "./Adress";
+import Address from "./Address";
 
 const { kakao } = window;
 
@@ -67,6 +67,7 @@ const PathSearchPage = () => {
     isLoading: true,
   });
   const [result, setResult] = useState("");
+  const [address, setAddress] = useState("");
 
   const panTo = () => {
     const newLatLng = new kakao.maps.LatLng(state.center.lat, state.center.lng);
@@ -82,6 +83,7 @@ const PathSearchPage = () => {
   var callback = function (result, status) {
     if (status === kakao.maps.services.Status.OK) {
       console.log(result[0].address.address_name);
+      setAddress(result[0].address.address_name);
     }
   };
 
@@ -184,7 +186,7 @@ const PathSearchPage = () => {
           <circle cx="9" cy="9" r="1" fill="black" />
         </svg>
       </PanToButton>
-      <Adress />
+      <Address address={address}/>
     </Container>
   );
 };
