@@ -22,7 +22,7 @@ const TitleBox = styled.div`
   font-weight: bold;
   border-bottom: 3px solid ${(props) => props.theme.gray};
   padding-left: 20px;
-  flex: 1;
+  flex: 1.3636;
 `;
 
 const RecentListBox = styled.div`
@@ -30,7 +30,7 @@ const RecentListBox = styled.div`
   flex-direction: column;
   //background-color: gray;
   padding: 0 10px;
-  flex: 7;
+  flex: 8.6364;
   overflow-y: auto;
 `;
 
