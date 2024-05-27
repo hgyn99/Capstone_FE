@@ -53,7 +53,7 @@ const CenterLocationIcon = styled.img.attrs({
   transform: translate(-50%, -50%);
   width: 30px;
   height: 45px;
-  margin-top: -45px; // 좌표 아이콘 위치 조정(하단 꼭지점이 중앙에 위치하도록)
+  margin-top: -60px; // 좌표 아이콘 위치 조정(하단 꼭지점이 중앙에 위치하도록)
 `;
 
 const PathSearchPage = () => {
@@ -76,6 +76,14 @@ const PathSearchPage = () => {
   // const handleBackwardButtonClick = (event) => {
   //   event.stopPropagation();
   // };
+
+  var geocoder = new kakao.maps.services.Geocoder();
+
+  var callback = function (result, status) {
+    if (status === kakao.maps.services.Status.OK) {
+      console.log(result[0].address.address_name);
+    }
+  };
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -124,9 +132,15 @@ const PathSearchPage = () => {
         onCreate={setMap}
         onDragEnd={(map) => {
           const latlng = map.getCenter();
-          // setResult(
-          //   `변경된 지도 중심좌표는 ${latlng.getLat()} 이고, 경도는 ${latlng.getLng()} 입니다`
-          // );
+          var coord = new kakao.maps.LatLng(
+            map.getCenter().getLat(),
+            map.getCenter().getLng()
+          );
+          geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
+          setResult(
+            `변경된 지도 중심좌표는 ${latlng.getLat()} 이고, 경도는 ${latlng.getLng()} 입니다`
+          );
+          //console.log(result);
         }}
       >
         {/* <MapMarker
