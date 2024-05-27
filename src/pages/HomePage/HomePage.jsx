@@ -50,7 +50,6 @@ const PanToButton = styled.button`
 const HomePage = () => {
   const navigationBarState = useRecoilValue(navigationState);
   const [openState, setOpenState] = useRecoilState(bottomSheetOpenState);
-  console.log("Home", openState);
 
   const [map, setMap] = useState(null);
   const [state, setState] = useState({
@@ -143,7 +142,7 @@ const HomePage = () => {
           minLevel={4}
           onCreate={setMap}
           onDragEnd={() => {
-            // console.log(map.getBounds());
+            console.log(map.getBounds().toString());
           }}
         >
           {surroundingLightInfoData?.data.data.traffics.map((data, index) => {

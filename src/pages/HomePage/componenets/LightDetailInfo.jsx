@@ -1,12 +1,10 @@
 import styled from "styled-components";
 import { motion, useDragControls } from "framer-motion";
 import Text from "./Text";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { bottomSheetOpenState } from "../../../recoil/bottomSheetOpenState/atom";
 import { useQuery } from "@tanstack/react-query";
 import { fetchTrafficById } from "../../../apis/api/traffic";
-import { navigationState } from "../../../recoil/navigationState/atom";
-import { useEffect } from "react";
 
 const Container = styled(motion.div)`
   width: 100%;
@@ -21,10 +19,10 @@ const Container = styled(motion.div)`
 const HeaderBox = styled.div`
   width: 100%;
   height: 68px;
-  margin-bottom: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  border-bottom: 2px solid ${({ theme }) => theme.gray};
 `;
 
 const HandleBar = styled.div`
@@ -54,16 +52,6 @@ const IsFavoriteButton = styled.button`
   background: none;
   border: none;
   padding: 0;
-`;
-
-const PosibilityBox = styled.div`
-  width: 100%;
-  height: 36px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-top: 2px solid ${({ theme }) => theme.gray};
-  border-bottom: 2px solid ${({ theme }) => theme.gray};
 `;
 
 const DirectionInfoBox = styled.div`
@@ -213,7 +201,6 @@ const LightDetailInfo = ({ lightInfo }) => {
           </IsFavoriteButton>
         </TopBox>
       </HeaderBox>
-      <PosibilityBox></PosibilityBox>
       <DirectionInfoBox>
         <Text $fontWeight={600}>서쪽</Text>
         <RemainingTimeBox>
