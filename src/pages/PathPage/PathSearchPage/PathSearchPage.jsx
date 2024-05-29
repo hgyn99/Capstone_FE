@@ -1,6 +1,8 @@
 import { styled } from "styled-components";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
+import { adressState } from "../../../recoil/addressState/atom";
 import locationIcon from "../../../assets/icon/location.png";
 import centerLocationIcon from "../../../assets/icon/centerLocationIcon.webp";
 import PathTitle from "./PathTitle";
@@ -67,8 +69,11 @@ const PathSearchPage = () => {
     isLoading: true,
   });
   const [result, setResult] = useState("");
-  const [address, setAddress] = useState("");
-
+  const [address, setAddress] = useState("지도를 움직여 주소를 확인하세요");
+  const [newAddress, setNewAddress] = useRecoilState(adressState);
+  if (address !== "지도를 움직여 주소를 확인하세요") {
+    setNewAddress(address);
+  }
   const panTo = () => {
     const newLatLng = new kakao.maps.LatLng(state.center.lat, state.center.lng);
     map.panTo(newLatLng);
@@ -186,7 +191,7 @@ const PathSearchPage = () => {
           <circle cx="9" cy="9" r="1" fill="black" />
         </svg>
       </PanToButton>
-      <Address address={address}/>
+      <Address address={address} />
     </Container>
   );
 };

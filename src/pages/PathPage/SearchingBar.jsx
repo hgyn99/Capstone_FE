@@ -4,7 +4,9 @@ import backwardIcon from "../../assets/icon/backwardIcon.webp";
 import pinIcon from "../../assets/icon/pinIcon.webp";
 import pantoIcon from "../../assets/icon/pantoIcon.webp";
 import { Link } from "react-router-dom";
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { useRecoilValue } from "recoil";
+import { adressState } from "../../recoil/addressState/atom";
 
 const MainContainer = styled.div`
   margin-top: 10px;
@@ -72,7 +74,7 @@ const CloseButton = styled.button`
   background-position: center;
   background-size: contain;
   border: none;
-  width: 50px; 
+  width: 50px;
   height: 50px;
 `;
 const BackwardButton = styled.button`
@@ -110,6 +112,7 @@ const PinButton = styled.button`
 const SearchingBar = () => {
   const [isDepartureInputClicked, setDepartureInputClicked] = useState(false);
   const [departureInput, setDepartureInput] = useState("");
+  const address = useRecoilValue(adressState);
 
   const handleDepartureInputClick = () => {
     setDepartureInputClicked(true);
@@ -123,7 +126,7 @@ const SearchingBar = () => {
   const handleInputChange = (event) => {
     setDepartureInput(event.target.value);
   };
-  
+
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
       console.log(departureInput);
@@ -131,42 +134,51 @@ const SearchingBar = () => {
   };
   return (
     <MainContainer>
-    <InputBox1>
-      {isDepartureInputClicked ? (
-        <InputButton     
-        as="input"
-        type="text"
-        //placeholder="출발지 입력"
-        value={departureInput}
-        onChange={handleInputChange}
-        onKeyDown={handleKeyPress}
-         />
-      ) : (
-        <InputButton onClick={handleDepartureInputClick}>출발지 입력</InputButton>
-      )}
-      {isDepartureInputClicked ? (
-        <BackwardButton onClick={handleBackwardButtonClick} />
-      ) : (
-        <Link to="/">
-          <CloseButton />
-        </Link>
-      )}
-    </InputBox1>
-    {/* <InputBox2 center={isDepartureInputClicked}> */}
-    <InputBox2>
-      {isDepartureInputClicked ? (
-        <>
-          <PantoButton />
-          <span style={{ marginRight: '40px' }}>현재 위치</span>
-          <Link to="/pathsearch" style={{ display: 'flex', alignItems: 'center', gap: '10px'}}>
-          <PinButton />
-          <span>지도에서 선택</span>
+      <InputBox1>
+        {isDepartureInputClicked ? (
+          <InputButton
+            as="input"
+            type="text"
+            //placeholder="출발지 입력"
+            value={departureInput}
+            onChange={handleInputChange}
+            onKeyDown={handleKeyPress}
+          />
+        ) : (
+          <InputButton onClick={handleDepartureInputClick}>
+            {address === "" ? (
+              "출발지 입력"
+            ) : (
+              <span style={{ color: "black" }}>{address}</span>
+            )}
+          </InputButton>
+        )}
+        {isDepartureInputClicked ? (
+          <BackwardButton onClick={handleBackwardButtonClick} />
+        ) : (
+          <Link to="/">
+            <CloseButton />
           </Link>
-        </>
-      ) : (
-        <InputButton>도착지 입력</InputButton>
-      )}
-    </InputBox2>
+        )}
+      </InputBox1>
+      {/* <InputBox2 center={isDepartureInputClicked}> */}
+      <InputBox2>
+        {isDepartureInputClicked ? (
+          <>
+            <PantoButton />
+            <span style={{ marginRight: "40px" }}>현재 위치</span>
+            <Link
+              to="/pathsearch"
+              style={{ display: "flex", alignItems: "center", gap: "10px" }}
+            >
+              <PinButton />
+              <span>지도에서 선택</span>
+            </Link>
+          </>
+        ) : (
+          <InputButton>도착지 입력</InputButton>
+        )}
+      </InputBox2>
     </MainContainer>
   );
 };
