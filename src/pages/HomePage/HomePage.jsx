@@ -163,6 +163,7 @@ const HomePage = () => {
           {navigationBarState === "TrafficSignal" ? (
             <>
               <SurroundingLightInfo
+                isLoading={isLoading}
                 surroundingLightInfoData={
                   surroundingLightInfoData.data.data.traffics
                 }

@@ -3,6 +3,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import KakaoLoginModal from "./KakaoLoginModal";
 import Text from "./Text";
+import Loader from "./Loader";
 import { fetchFavoriteTraffic } from "../../../apis/api/traffic";
 import { useQuery } from "@tanstack/react-query";
 import { useRecoilState } from "recoil";
@@ -120,8 +121,6 @@ const FavoritesInfo = ({ panToPoint }) => {
   const handleLoginModal = () => {
     setIsOpen((prev) => !prev);
   };
-
-  if (isLoading) return;
 
   return (
     <>
@@ -290,37 +289,50 @@ const FavoritesInfo = ({ panToPoint }) => {
               편집
             </Button>
           </ContentHeader>
-          {listState === "place" ? (
-            <></>
+          {isLoading ? (
+            <>
+              <Loader />
+            </>
           ) : (
             <>
-              {favoritesTraffic.data?.data.traffics.map((traffic) => (
-                <ListBox key={traffic.id}>
-                  <button
-                    onClick={() => {
-                      panToPoint(traffic.point);
-                    }}
-                  >
-                    <List>
-                      <svg
-                        width="23"
-                        height="23"
-                        viewBox="0 0 23 23"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
+              {listState === "place" ? (
+                <></>
+              ) : (
+                <>
+                  {favoritesTraffic.data?.data.traffics.map((traffic) => (
+                    <ListBox key={traffic.id}>
+                      <button
+                        onClick={() => {
+                          panToPoint(traffic.point);
+                        }}
                       >
-                        <circle cx="11.5" cy="11.5" r="11.5" fill="#F25C5C" />
-                        <path
-                          d="M10.4173 9.20972L11.5 5.87731L12.5828 9.20972C12.6899 9.53934 12.997 9.76251 13.3436 9.76251L16.8475 9.76251L14.0128 11.822C13.7324 12.0258 13.6151 12.3869 13.7222 12.7165L14.805 16.0489L11.9702 13.9893C11.6899 13.7856 11.3102 13.7856 11.0298 13.9893L8.19507 16.0489L9.27784 12.7165C9.38494 12.3869 9.26761 12.0258 8.98722 11.822L6.15251 9.76251L9.65641 9.76251C10.003 9.76251 10.3102 9.53934 10.4173 9.20972Z"
-                          fill="white"
-                          stroke="white"
-                        />
-                      </svg>
-                      <Text>{traffic.name}</Text>
-                    </List>
-                  </button>
-                </ListBox>
-              ))}
+                        <List>
+                          <svg
+                            width="23"
+                            height="23"
+                            viewBox="0 0 23 23"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <circle
+                              cx="11.5"
+                              cy="11.5"
+                              r="11.5"
+                              fill="#F25C5C"
+                            />
+                            <path
+                              d="M10.4173 9.20972L11.5 5.87731L12.5828 9.20972C12.6899 9.53934 12.997 9.76251 13.3436 9.76251L16.8475 9.76251L14.0128 11.822C13.7324 12.0258 13.6151 12.3869 13.7222 12.7165L14.805 16.0489L11.9702 13.9893C11.6899 13.7856 11.3102 13.7856 11.0298 13.9893L8.19507 16.0489L9.27784 12.7165C9.38494 12.3869 9.26761 12.0258 8.98722 11.822L6.15251 9.76251L9.65641 9.76251C10.003 9.76251 10.3102 9.53934 10.4173 9.20972Z"
+                              fill="white"
+                              stroke="white"
+                            />
+                          </svg>
+                          <Text>{traffic.name}</Text>
+                        </List>
+                      </button>
+                    </ListBox>
+                  ))}
+                </>
+              )}
             </>
           )}
         </Content>

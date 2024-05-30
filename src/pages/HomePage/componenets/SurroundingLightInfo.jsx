@@ -4,6 +4,7 @@ import Card from "./Card";
 import { bottomSheetOpenState } from "../../../recoil/bottomSheetOpenState/atom";
 import { useRecoilState } from "recoil";
 import { useRef } from "react";
+import Loader from "./Loader";
 
 const Container = styled(motion.div)`
   width: 100%;
@@ -56,7 +57,7 @@ const ScrollBox = styled.div`
     $openState === "mid" ? "calc(50dvh - 136px)" : "100%"};
 `;
 
-const SurroundingLightInfo = ({ surroundingLightInfoData }) => {
+const SurroundingLightInfo = ({ isLoading, surroundingLightInfoData }) => {
   const [openState, setOpenState] = useRecoilState(bottomSheetOpenState);
   const observerRef = useRef(null);
 
@@ -122,22 +123,30 @@ const SurroundingLightInfo = ({ surroundingLightInfoData }) => {
         }
       }}
     >
-      <HeaderBox onPointerDown={(e) => dragControls.start(e)}>
-        <HandleBar />
-        <TopBox>
-          <TitleText>주변 신호등</TitleText>
-        </TopBox>
-      </HeaderBox>
-      <ScrollBox
-        $openState={openState.surroundingLightInfoOpenState}
-        ref={observerRef}
-      >
-        <ContentsBox>
-          {surroundingLightInfoData.map((data, index) => {
-            return <Card key={index} surroundingLightInfoData={data} />;
-          })}
-        </ContentsBox>
-      </ScrollBox>
+      {isLoading ? (
+        <>
+          <Loader />
+        </>
+      ) : (
+        <>
+          <HeaderBox onPointerDown={(e) => dragControls.start(e)}>
+            <HandleBar />
+            <TopBox>
+              <TitleText>주변 신호등</TitleText>
+            </TopBox>
+          </HeaderBox>
+          <ScrollBox
+            $openState={openState.surroundingLightInfoOpenState}
+            ref={observerRef}
+          >
+            <ContentsBox>
+              {surroundingLightInfoData.map((data, index) => {
+                return <Card key={index} surroundingLightInfoData={data} />;
+              })}
+            </ContentsBox>
+          </ScrollBox>
+        </>
+      )}
     </Container>
   );
 };
