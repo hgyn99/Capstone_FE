@@ -5,6 +5,7 @@ import pinIcon from "../../assets/icon/pinIcon.webp";
 import pantoIcon from "../../assets/icon/pantoIcon.webp";
 import { Link } from "react-router-dom";
 import React, { useState } from 'react';
+import { ReactComponent as Arrow } from "../../assets/icon/arrow.svg";
 
 const MainContainer = styled.div`
   margin-top: 10px;
@@ -107,6 +108,21 @@ const PinButton = styled.button`
   height: 25px; // Adjust as needed
 `;
 
+const DirectionSearchButton = styled.button`
+  width: 33px;
+  height: 37px;
+  border: none;
+  border-radius: 5px;
+  background-color: ${(props) => props.theme.blue};
+  display: block;
+  box-shadow: 0px 4px 8px -1px rgba(0, 0, 0, 0.3);
+`;
+
+const DirectionSearchText = styled.p`
+  font-size: 6px;
+  color: white;
+`;
+
 const SearchingBar = () => {
   const [isDepartureInputClicked, setDepartureInputClicked] = useState(false);
   const [departureInput, setDepartureInput] = useState("");
@@ -117,7 +133,7 @@ const SearchingBar = () => {
 
   const handleBackwardButtonClick = (event) => {
     event.stopPropagation();
-    setDepartureInputClicked(false);
+    setDepartureInputClicked(false); // 출발지 버튼 클릭 상태 0으로 함
   };
 
   const handleInputChange = (event) => {
@@ -164,7 +180,19 @@ const SearchingBar = () => {
           </Link>
         </>
       ) : (
+        <>
         <InputButton>도착지 입력</InputButton>
+        <DirectionSearchButton
+        onClick={() => {
+          console.log("주소 서버 전송 및 경로 좌표 받아오기");
+        }}
+      >
+        <Link to="/direction">
+          <Arrow />
+          <DirectionSearchText>길찾기</DirectionSearchText>
+        </Link>
+      </DirectionSearchButton>
+        </>
       )}
     </InputBox2>
     </MainContainer>

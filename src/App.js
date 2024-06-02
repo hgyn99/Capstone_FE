@@ -6,6 +6,7 @@ import PathSearchPage from "./pages/PathPage/PathSearchPage/PathSearchPage";
 import FavoritesLocationPage from "./pages/FavoritesLocationPage/FavoritesLocationPage";
 import FavoritesTrafficPage from "./pages/FavoritesTrafficPage/FavoritesTrafficPage";
 import FavoritesRoutePage from "./pages/FavoritesRoutePage/FavoritesRoutePage";
+import DirectionPage from "./pages/PathPage/DirectionPage/DirectionPage"
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         ></Route>
         <Route path="/path" element={<PathPage />}></Route>
         <Route path="/pathsearch" element={<PathSearchPage />}></Route>
+        <Route path="/direction" element={<DirectionPage />}></Route>
       </Routes>
     </BrowserRouter>
   );
