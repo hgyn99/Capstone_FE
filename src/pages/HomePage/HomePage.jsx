@@ -28,7 +28,8 @@ const PanToButton = styled.button`
     ($openState.surroundingLightInfoOpenState === "closed" &&
       $navigationBarState === "TrafficSignal") ||
     ($openState.favoritesInfoOpenState === "closed" &&
-      $navigationBarState === "Favorites")
+      $navigationBarState === "Favorites") ||
+    $navigationBarState === "MyPage"
       ? "4dvh"
       : "42dvh"};
   right: 10px;
@@ -116,13 +117,10 @@ const HomePage = () => {
     }
   }, [navigationBarState]);
 
-  const panTo = () => {
-    const newLatLng = new kakao.maps.LatLng(state.center.lat, state.center.lng);
-    map.panTo(newLatLng);
-  };
-
-  const panToPoint = (point) => {
-    const newLatLng = new kakao.maps.LatLng(point.lat, point.lng);
+  const panTo = (point) => {
+    const lat = point.lat ? point.lat : state.center.lat;
+    const lng = point.lng ? point.lng : state.center.lng;
+    const newLatLng = new kakao.maps.LatLng(lat, lng);
     map.panTo(newLatLng);
   };
 
@@ -144,6 +142,9 @@ const HomePage = () => {
           onDragEnd={() => {
             // console.log(map.getBounds().toString());
           }}
+          onClick={() => {
+            // setOpenIndex(null);
+          }}
         >
           {surroundingLightInfoData?.data.data.traffics.map((data, index) => {
             return (
@@ -155,8 +156,7 @@ const HomePage = () => {
               />
             );
           })}
-          {navigationBarState === "Home" &&
-          openState.detailInfoOpenState.openState !== "closed" ? (
+          {navigationBarState === "Home" ? (
             <>
               <LightDetailInfo />
             </>
@@ -172,7 +172,7 @@ const HomePage = () => {
             </>
           ) : null}
           {navigationBarState === "Favorites" ? (
-            <FavoriteInfo panToPoint={panToPoint} />
+            <FavoriteInfo panToPoint={panTo} />
           ) : null}
           <MapMarker
             position={state.center}

@@ -91,10 +91,11 @@ const LightDetailInfo = () => {
 
   const dragControls = useDragControls();
 
+  console.log(openState.detailInfoOpenState);
+
   const { isLoading, data, refetch } = useQuery({
     queryKey: ["trafficById", openState.detailInfoOpenState],
     queryFn: () => fetchTrafficById(openState.detailInfoOpenState.id),
-    enabled: openState.detailInfoOpenState?.openState !== "closed",
     onError: (e) => {
       console.log(e);
     },
@@ -152,7 +153,10 @@ const LightDetailInfo = () => {
         if (isGoDown && openState.detailInfoOpenState.openState === "top") {
           setOpenState((prev) => ({
             ...prev,
-            detailInfoOpenState: { openState: "mid" },
+            detailInfoOpenState: {
+              openState: "mid",
+              id: openState.detailInfoOpenState.id,
+            },
           }));
         } else if (
           isGoDown &&
@@ -160,7 +164,10 @@ const LightDetailInfo = () => {
         ) {
           setOpenState((prev) => ({
             ...prev,
-            detailInfoOpenState: { openState: "closed" },
+            detailInfoOpenState: {
+              openState: "closed",
+              id: openState.detailInfoOpenState.id,
+            },
           }));
         } else if (
           !isGoDown &&
@@ -168,7 +175,10 @@ const LightDetailInfo = () => {
         ) {
           setOpenState((prev) => ({
             ...prev,
-            detailInfoOpenState: { openState: "top" },
+            detailInfoOpenState: {
+              openState: "top",
+              id: openState.detailInfoOpenState.id,
+            },
           }));
         } else if (
           !isGoDown &&
@@ -176,7 +186,10 @@ const LightDetailInfo = () => {
         ) {
           setOpenState((prev) => ({
             ...prev,
-            detailInfoOpenState: { openState: "top" },
+            detailInfoOpenState: {
+              openState: "top",
+              id: openState.detailInfoOpenState.id,
+            },
           }));
         }
       }}
