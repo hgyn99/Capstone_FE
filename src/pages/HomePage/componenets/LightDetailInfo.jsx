@@ -77,13 +77,13 @@ const Circle = styled.div`
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background-color: ${({ $isTimeLeft, theme }) =>
-    $isTimeLeft ? theme.green : theme.red};
+  background-color: ${({ color, theme }) =>
+    color === "green " ? theme.green : theme.red};
 `;
 
 const RemainingTimeText = styled.span`
   font-weight: 700;
-  color: ${({ $isTimeLeft, theme }) => ($isTimeLeft ? theme.green : theme.red)};
+  color: ${({ color, theme }) => (color === "green" ? theme.green : theme.red)};
 `;
 
 const LightDetailInfo = () => {
@@ -99,6 +99,8 @@ const LightDetailInfo = () => {
       console.log(e);
     },
   });
+
+  console.log(data?.data.data.traffic);
 
   const {
     color,
@@ -221,8 +223,8 @@ const LightDetailInfo = () => {
           <DirectionInfoBox>
             <Text $fontWeight={600}>서쪽</Text>
             <RemainingTimeBox>
-              <Circle $isTimeLeft={timeLeft}></Circle>
-              <RemainingTimeText $isTimeLeft={timeLeft}>
+              <Circle color={color}></Circle>
+              <RemainingTimeText color={color}>
                 {timeLeftCountDown}초
               </RemainingTimeText>
             </RemainingTimeBox>
