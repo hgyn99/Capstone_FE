@@ -100,8 +100,6 @@ const LightDetailInfo = () => {
     },
   });
 
-  console.log(data?.data.data.traffic);
-
   const {
     color,
     detail,
