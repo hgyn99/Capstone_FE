@@ -47,7 +47,6 @@ const CustomOverLay = ({ surroundingLightInfoData, isOpen, onToggle }) => {
           <Container>
             <button
               onClick={() => {
-                console.log(" 상세 정보 오픈");
                 setDetailInfoOpenState((prev) => ({
                   ...prev,
                   detailInfoOpenState: { openState: "mid", id: id },

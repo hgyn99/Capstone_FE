@@ -6,6 +6,8 @@ import { bottomSheetOpenState } from "../../../recoil/bottomSheetOpenState/atom"
 import { useQuery } from "@tanstack/react-query";
 import { fetchTrafficById } from "../../../apis/api/traffic";
 import Loader from "./Loader";
+import { useCountDown } from "../../../hooks/useCountDown";
+import { useEffect } from "react";
 
 const Container = styled(motion.div)`
   width: 100%;
@@ -84,15 +86,15 @@ const RemainingTimeText = styled.span`
   color: ${({ $isTimeLeft, theme }) => ($isTimeLeft ? theme.green : theme.red)};
 `;
 
-const LightDetailInfo = ({ lightInfo }) => {
+const LightDetailInfo = () => {
   const [openState, setOpenState] = useRecoilState(bottomSheetOpenState);
 
   const dragControls = useDragControls();
 
-  const { isLoading, data } = useQuery({
+  const { isLoading, data, refetch } = useQuery({
     queryKey: ["trafficById", openState.detailInfoOpenState],
     queryFn: () => fetchTrafficById(openState.detailInfoOpenState.id),
-    enabled: openState.detailInfoOpenState?.openState === "mid",
+    enabled: openState.detailInfoOpenState?.openState !== "closed",
     onError: (e) => {
       console.log(e);
     },
@@ -108,6 +110,16 @@ const LightDetailInfo = ({ lightInfo }) => {
     timeLeft,
     viewName,
   } = data?.data.data.traffic || {};
+
+  const timeLeftCountDown = useCountDown(timeLeft);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refetch();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [refetch]);
 
   return (
     <Container
@@ -211,7 +223,7 @@ const LightDetailInfo = ({ lightInfo }) => {
             <RemainingTimeBox>
               <Circle $isTimeLeft={timeLeft}></Circle>
               <RemainingTimeText $isTimeLeft={timeLeft}>
-                {timeLeft}초
+                {timeLeftCountDown}초
               </RemainingTimeText>
             </RemainingTimeBox>
           </DirectionInfoBox>

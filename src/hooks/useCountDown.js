@@ -4,11 +4,16 @@ export const useCountDown = (initialTime) => {
   const [timeLeft, setTimeLeft] = useState(initialTime);
 
   useEffect(() => {
+    setTimeLeft(initialTime);
+  }, [initialTime]);
+
+  useEffect(() => {
     if (timeLeft > 0) {
-      const interval = setInterval(() => {
-        setTimeLeft(timeLeft - 1);
+      const id = setInterval(() => {
+        setTimeLeft((prevTime) => prevTime - 1);
       }, 1000);
-      return () => clearInterval(interval);
+
+      return () => clearInterval(id);
     }
   }, [timeLeft]);
 

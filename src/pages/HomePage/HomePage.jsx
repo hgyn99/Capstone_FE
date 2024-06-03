@@ -142,7 +142,7 @@ const HomePage = () => {
           minLevel={4}
           onCreate={setMap}
           onDragEnd={() => {
-            console.log(map.getBounds().toString());
+            // console.log(map.getBounds().toString());
           }}
         >
           {surroundingLightInfoData?.data.data.traffics.map((data, index) => {
@@ -155,7 +155,8 @@ const HomePage = () => {
               />
             );
           })}
-          {navigationBarState === "Home" ? (
+          {navigationBarState === "Home" &&
+          openState.detailInfoOpenState.openState !== "closed" ? (
             <>
               <LightDetailInfo />
             </>
