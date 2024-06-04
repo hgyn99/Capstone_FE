@@ -180,7 +180,7 @@ const HomePage = () => {
               <SurroundingLightInfo
                 isLoading={isLoading}
                 surroundingLightInfoData={
-                  surroundingLightInfoData.data.data.traffics
+                  surroundingLightInfoData?.data.data.traffics
                 }
               />
             </>

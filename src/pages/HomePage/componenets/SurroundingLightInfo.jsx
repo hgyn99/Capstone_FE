@@ -140,7 +140,7 @@ const SurroundingLightInfo = ({ isLoading, surroundingLightInfoData }) => {
             ref={observerRef}
           >
             <ContentsBox>
-              {surroundingLightInfoData.map((data, index) => {
+              {surroundingLightInfoData?.map((data, index) => {
                 return <Card key={index} surroundingLightInfoData={data} />;
               })}
             </ContentsBox>
