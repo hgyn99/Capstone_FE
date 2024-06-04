@@ -3,7 +3,7 @@ import crossIcon from "../../assets/icon/cross.webp";
 import backwardIcon from "../../assets/icon/backwardIcon.webp";
 import pinIcon from "../../assets/icon/pinIcon.webp";
 import pantoIcon from "../../assets/icon/pantoIcon.webp";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useNavigation } from "react-router-dom";
 import React, { useState } from "react";
 import { ReactComponent as Arrow } from "../../assets/icon/arrow.svg";
 import { useRecoilState } from "recoil";
@@ -46,6 +46,18 @@ const InputBox2 = styled.div`
   //background-color: blue;
   //padding: 0 0px; // 상하 여백 0, 좌우 여백 10px
   //flex: 9;
+`;
+
+const SelectFromMap = styled.button`
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-items: center;
+  color: gray;
+  font-size: 15px;
+  font-weight: 600;
+  height: 40px;
+  gap: 10px;
 `;
 
 const InputButton = styled.button`
@@ -101,12 +113,10 @@ const PantoButton = styled.button`
   height: 25px;
 `;
 
-const PinButton = styled.button`
-  background-image: url(${pinIcon});
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  border: none;
+const PinButton = styled.img.attrs({
+  src: pinIcon,
+  alt: "pinIcon",
+})`
   width: 25px; // Adjust as needed
   height: 25px; // Adjust as needed
 `;
@@ -129,11 +139,13 @@ const DirectionSearchText = styled.p`
 const SearchingBar = () => {
   const [isDepartureInputClicked, setDepartureInputClicked] = useState(false);
   const [isArrivalInputClicked, setArrivalInputClicked] = useState(false);
+  const navigate = useNavigate();
   // const [departureInput, setDepartureInput] = useRecoilState(addressState);
   // const [arrivalInput, setArrivalInput] = useRecoilState(addressState);
   const [departureAddress, setDepartureAddress] = useRecoilState(
     departureAddressState
   );
+  console.log(!!departureAddress.departureAddress);
   const [arrivalAddress, setArrivalAddress] =
     useRecoilState(arrivalAddressState);
 
@@ -168,9 +180,13 @@ const SearchingBar = () => {
     if (event.key === "Enter") {
       if (isDepartureInputClicked) {
         console.log("출발지: " + departureAddress.departureAddress);
+        console.log("isDepartureInputClicked: " + isDepartureInputClicked);
+        console.log("isArrivalInputClicked: " + isArrivalInputClicked);
       }
       if (isArrivalInputClicked) {
         console.log("도착지: " + arrivalAddress.arrivalAddress);
+        console.log("isDepartureInputClicked: " + isDepartureInputClicked);
+        console.log("isArrivalInputClicked: " + isArrivalInputClicked);
       }
     }
   };
@@ -181,7 +197,7 @@ const SearchingBar = () => {
         isArrivalInputClicked === false ? (
           <>
             <InputButton onClick={handleDepartureInputClick}>
-              {departureAddress.departureAddress !== ""
+              {!!departureAddress.departureAddress !== ""
                 ? departureAddress.departureAddress
                 : "출발지 입력"}
             </InputButton>
@@ -243,34 +259,41 @@ const SearchingBar = () => {
           <>
             <PantoButton />
             <span style={{ marginRight: "40px" }}>현재 위치</span>
-            <Link
-              // to="/pathsearch"
-              to={{
-                pathname: "/pathsearch",
-                state: { isDepartureInputClicked, isArrivalInputClicked },
+
+            <SelectFromMap
+              onClick={() => {
+                navigate("/pathsearch", {
+                  state: {
+                    isDepartureInputClicked: isDepartureInputClicked,
+                    isArrivalInputClicked: isArrivalInputClicked,
+                  },
+                });
               }}
               style={{ display: "flex", alignItems: "center", gap: "10px" }}
             >
               <PinButton />
               <span>지도에서 선택</span>
-            </Link>
+            </SelectFromMap>
           </>
         ) : null}
         {isArrivalInputClicked ? (
           <>
             <PantoButton />
             <span style={{ marginRight: "40px" }}>현재 위치</span>
-            <Link
-              //to="/pathsearch"
-              to={{
-                pathname: "/pathsearch",
-                state: { isDepartureInputClicked, isArrivalInputClicked },
+            <SelectFromMap
+              onClick={() => {
+                navigate("/pathsearch", {
+                  state: {
+                    isDepartureInputClicked: isDepartureInputClicked,
+                    isArrivalInputClicked: isArrivalInputClicked,
+                  },
+                });
               }}
               style={{ display: "flex", alignItems: "center", gap: "10px" }}
             >
               <PinButton />
               <span>지도에서 선택</span>
-            </Link>
+            </SelectFromMap>
           </>
         ) : null}
       </InputBox2>

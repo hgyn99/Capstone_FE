@@ -4,5 +4,6 @@ export const departureAddressState = atom({
   key: "departureAddressState",
   default: {
     departureAddress: "",
+    arrivalAddress: "",
   },
 });
