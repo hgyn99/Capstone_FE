@@ -91,11 +91,12 @@ const LightDetailInfo = () => {
 
   const dragControls = useDragControls();
 
-  console.log(openState.detailInfoOpenState);
+  // console.log(!!openState.detailInfoOpenState.id);
 
   const { isLoading, data, refetch } = useQuery({
     queryKey: ["trafficById", openState.detailInfoOpenState],
     queryFn: () => fetchTrafficById(openState.detailInfoOpenState.id),
+    enabled: !!openState.detailInfoOpenState.id,
     onError: (e) => {
       console.log(e);
     },
@@ -115,7 +116,9 @@ const LightDetailInfo = () => {
   const timeLeftCountDown = useCountDown(timeLeft);
 
   useEffect(() => {
+    if (!openState.detailInfoOpenState.id) return;
     const interval = setInterval(() => {
+      console.log("refetch");
       refetch();
     }, 5000);
 

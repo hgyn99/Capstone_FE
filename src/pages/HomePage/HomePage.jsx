@@ -53,6 +53,8 @@ const HomePage = () => {
   const [openState, setOpenState] = useRecoilState(bottomSheetOpenState);
 
   const [map, setMap] = useState(null);
+  const [mapBounds, setMapBounds] = useState(null);
+  const [openIndex, setOpenIndex] = useState(null);
   const [state, setState] = useState({
     center: {
       lat: 33.450701,
@@ -62,15 +64,18 @@ const HomePage = () => {
     isLoading: true,
   });
 
-  const [openIndex, setOpenIndex] = useState(null);
-
   const handleToggle = (index) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
-  const { isLoading, data: surroundingLightInfoData } = useQuery({
+  const {
+    isLoading,
+    data: surroundingLightInfoData,
+    refetch: surroundingDataRefetch,
+  } = useQuery({
     queryKey: ["traffic"],
     queryFn: fetchTraffic,
+    enabled: !mapBounds,
     onError: (e) => {
       console.log(e);
     },
@@ -140,7 +145,8 @@ const HomePage = () => {
           minLevel={4}
           onCreate={setMap}
           onDragEnd={() => {
-            // console.log(map.getBounds().toString());
+            setMapBounds(map.getBounds().toString());
+            // surroundingDataRefetch(mapBounds);
           }}
           onClick={() => {
             // setOpenIndex(null);
