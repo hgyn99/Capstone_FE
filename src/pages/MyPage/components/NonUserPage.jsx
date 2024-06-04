@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import kakaoImage from "../../../assets/icon/kakaoImage.png";
 import characterImg from "../../../assets/icon/characterImage.png"
+import { KAKAO_AUTH_URL } from "../../../shared/KakaoAuth";
 
 const Container = styled.div`
   width:100%;
@@ -12,7 +13,7 @@ const Container = styled.div`
 
 const TextBox = styled.div`
   position:absolute;
-  top:76px;
+  top:120px;
   left:32px;
 `;
 
@@ -61,9 +62,9 @@ const KakaoLoginButtonText = styled.span`
 
 const NonUserPage = () => {
   // kakao 로그인 버튼 누르면 REDIRECT_URL로 이동
-//   const handleLogin = () => {
-//     window.location.href = KAKAO_AUTH_URL;
-//   };
+    const handleLogin = () => {
+      window.location.href = KAKAO_AUTH_URL;
+    };
 
   return(
     <Container>
@@ -75,7 +76,7 @@ const NonUserPage = () => {
         </Text>
       </TextBox>
       <Img src={characterImg} alt="character_img"></Img>
-      <KakaoLoginButton>
+      <KakaoLoginButton onClick={handleLogin}>
         <KakaoLoginButtonImage src={kakaoImage} alt="Kakao logo" />
         <KakaoLoginButtonText>카카오톡으로 시작하기</KakaoLoginButtonText>
       </KakaoLoginButton>

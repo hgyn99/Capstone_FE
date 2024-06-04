@@ -3,30 +3,29 @@ import Layout from "../../components/Layout";
 import Header from "../../components/Header";
 import TrafficEmptyPage from "./components/TrafficEmptyPage";
 import FavoritesTrafficList from "./components/FavoritesTrafficList";
+import { fetchFavoriteTraffic } from "../../apis/api/traffic";
+import { useQuery } from "@tanstack/react-query";
 
 const FavoritesTrafficPage = () => {
-  const traffics = [
-    {
-      trafficId: 1,
-      trafficAlias: "alias1",
-    },
-    {
-      trafficId: 2,
-      trafficAlias: "alias2",
-    },
-    {
-      trafficId: 3,
-      trafficAlias: "alias3",
-    },
-  ];
+  // const { isLoading, data: favoritesTraffic } = useQuery({
+  //   queryKey: ["favorites"],
+  //   queryFn: fetchFavoriteTraffic,
+  //   onError: (e) => {
+  //     console.log(e);
+  //   },
+  // });
+  // console.log(favoritesTraffic);
 
-  const EmptyList = traffics.length === 0;
+  // if (isLoading) return;
+  
+  const favoritesTraffic = [];
+  const EmptyList = favoritesTraffic.length === 0;
   return(
     <Layout>
       <Header>즐겨찾기 신호등</Header>
       {EmptyList
        ? <TrafficEmptyPage />
-       : <FavoritesTrafficList traffics={traffics} />
+       : <FavoritesTrafficList favoritesTraffic={favoritesTraffic} />
       }
     </Layout>
   );

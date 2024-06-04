@@ -1,4 +1,4 @@
-import React from "react";
+import React,{ useState } from "react";
 import styled from "styled-components";
 import NavigationBarLayout from "../../components/NavigationBarLayout";
 import Header from "./components/Header";
@@ -13,12 +13,15 @@ const Container = styled.div`
 `;
 
 const MyPage = () => {
+  const token = localStorage.getItem('kakaoLoginToken');
+  console.log(token);
+
   return (
     <NavigationBarLayout>
       <Header />
       <Container>
-        {/* <NonUserPage /> */}
-        <UserPage />
+        {token ? <UserPage /> : 
+        <NonUserPage />}
       </Container>
     </NavigationBarLayout>
   );

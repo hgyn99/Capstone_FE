@@ -5,6 +5,8 @@ import PathPage from "./pages/PathPage/PathPage";
 import FavoritesTrafficPage from "./pages/FavoritesTrafficPage/FavoritesTrafficPage";
 import FavoritesRoutePage from "./pages/FavoritesRoutePage/FavoritesRoutePage";
 import FavoritesLocationPage from "./pages/FavoritesLocationPage/FavoritesLocation";
+import UserProfileUpdate from "./pages/UpdatePage/UserProfileUpdate";
+import KakaoRedirect from "./shared/KakaoRedirect";
 
 function App() {
   return (
@@ -17,7 +19,9 @@ function App() {
         <Route path="/mypage/favoriteslocation" element={<FavoritesLocationPage />}></Route>
         <Route path="/mypage/favoritestraffic" element={<FavoritesTrafficPage />}></Route>
         <Route path="/mypage/favoritesroute" element={<FavoritesRoutePage />}></Route>
+        <Route path="/mypage/updateprofile" element={<UserProfileUpdate />}></Route>
         <Route path="/path" element={<PathPage />}></Route>
+        <Route path="/oauth/kakao/callback" element={<KakaoRedirect />}></Route>
       </Routes>
     </BrowserRouter>
   );

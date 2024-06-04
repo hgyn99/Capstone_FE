@@ -14,6 +14,7 @@ const BookMarkHeader = styled.div`
 const PreClick = styled.button`
   position:absolute;
   top:15px;
+  left:15px;
   border:none;
   background-color:transparent;
 `;
@@ -39,6 +40,7 @@ const Header = ({children}) => {
   return(
     <BookMarkHeader>
       <PreClick onClick={handlePreClick}>
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="22" fill="none"><path stroke="#000" stroke-linecap="round" stroke-width="2" d="M12.037 1.55 1.431 11.082M1.667 11.293l10.606 9.532"/></svg>
       </PreClick>
       <Title>{children}</Title>
     </BookMarkHeader>
