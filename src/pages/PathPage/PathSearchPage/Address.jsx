@@ -1,6 +1,10 @@
 import { styled } from "styled-components";
 import backwardIcon from "../../../assets/icon/backwardIcon.webp";
 import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import { useRecoilState } from "recoil";
+import { addressState } from "../../../recoil/addressState/atom";
 
 const TitleContainer = styled.div`
   background-color: white;
@@ -34,12 +38,40 @@ const ConfirmButton = styled.button`
   font-size: 16px;
   color: white;
 `;
-const Address = ( {address}) => {
+const Address = ({ mapAddress }) => {
+  const location = useLocation();
+  //console.log(location);
+  const { isDepartureInputClicked, isArrivalInputClicked } = location.state;
+  //console.log(isArrivalInputClicked);
+  // const [departureAddress, setDepartureAddress] = useRecoilState(
+  //   departureAddressState
+  // );
+  // const [arrivalAddress, setArrivalAddress] =
+  //   useRecoilState(arrivalAddressState);
+
+  // console.log(isDepartureInputClicked);
+  const [recoilAddress, setRecoilAddress] = useRecoilState(addressState);
+
+  const handleConfirmClick = () => {
+    if (isDepartureInputClicked) {
+      setRecoilAddress((prev) => ({
+        ...prev,
+        departureAddress: mapAddress,
+      }));
+    } else if (isArrivalInputClicked) {
+      //setArrivalAddress(address);
+      setRecoilAddress((prev) => ({
+        ...prev,
+        arrivalAddress: mapAddress,
+      }));
+    }
+  };
+
   return (
     <TitleContainer>
-      {address}
+      {mapAddress}
       <Link to="/path">
-        <ConfirmButton>확인</ConfirmButton>
+        <ConfirmButton onClick={handleConfirmClick}>확인</ConfirmButton>
       </Link>
     </TitleContainer>
   );

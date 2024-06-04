@@ -1,5 +1,6 @@
 import React,{ useState,useEffect } from "react";
 import styled from "styled-components";
+import MoveButton from "../../../assets/icon/moveButton.webp";
 import { motion,useAnimate,useDragControls,useMotionValue } from "framer-motion";
 
 const Container = styled(motion.div)`
@@ -52,6 +53,8 @@ const MoveBox = styled.div`
   align-items:center;
 `;
 
+const Move = styled.img``;
+
 const FavoritesLocationItem = ({ location,setIsButtonShow }) => {
   const { locationId, locationAlias} = location;
   const dragControls = useDragControls();
@@ -96,6 +99,7 @@ const FavoritesLocationItem = ({ location,setIsButtonShow }) => {
         </AliasBox>
       </ItemBox>
       <MoveBox>
+        <Move src={MoveButton} alt="move"/>
       </MoveBox>
     </Container>
   );

@@ -3,10 +3,11 @@ import crossIcon from "../../assets/icon/cross.webp";
 import backwardIcon from "../../assets/icon/backwardIcon.webp";
 import pinIcon from "../../assets/icon/pinIcon.webp";
 import pantoIcon from "../../assets/icon/pantoIcon.webp";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useNavigation } from "react-router-dom";
 import React, { useState } from "react";
-import { useRecoilValue } from "recoil";
-import { adressState } from "../../recoil/addressState/atom";
+import { ReactComponent as Arrow } from "../../assets/icon/arrow.svg";
+import { useRecoilState } from "recoil";
+import { addressState } from "../../recoil/addressState/atom";
 
 const MainContainer = styled.div`
   margin-top: 10px;
@@ -44,6 +45,18 @@ const InputBox2 = styled.div`
   //background-color: blue;
   //padding: 0 0px; // 상하 여백 0, 좌우 여백 10px
   //flex: 9;
+`;
+
+const SelectFromMap = styled.button`
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-items: center;
+  color: gray;
+  font-size: 15px;
+  font-weight: 600;
+  height: 40px;
+  gap: 10px;
 `;
 
 const InputButton = styled.button`
@@ -99,85 +112,194 @@ const PantoButton = styled.button`
   height: 25px;
 `;
 
-const PinButton = styled.button`
-  background-image: url(${pinIcon});
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  border: none;
+const PinButton = styled.img.attrs({
+  src: pinIcon,
+  alt: "pinIcon",
+})`
   width: 25px; // Adjust as needed
   height: 25px; // Adjust as needed
 `;
 
+const DirectionSearchButton = styled.button`
+  width: 33px;
+  height: 37px;
+  border: none;
+  border-radius: 5px;
+  background-color: ${(props) => props.theme.blue};
+  display: block;
+  box-shadow: 0px 4px 8px -1px rgba(0, 0, 0, 0.3);
+`;
+
+const DirectionSearchText = styled.p`
+  font-size: 6px;
+  color: white;
+`;
+
 const SearchingBar = () => {
   const [isDepartureInputClicked, setDepartureInputClicked] = useState(false);
-  const [departureInput, setDepartureInput] = useState("");
-  const address = useRecoilValue(adressState);
+  const [isArrivalInputClicked, setArrivalInputClicked] = useState(false);
+  const navigate = useNavigate();
+  // const [departureInput, setDepartureInput] = useRecoilState(addressState);
+  // const [arrivalInput, setArrivalInput] = useRecoilState(addressState);
+  const [address, setAddress] = useRecoilState(addressState);
+  //console.log(!!departureAddress.departureAddress);
+  // const [arrivalAddress, setArrivalAddress] =
+  //   useRecoilState(arrivalAddressState);
 
   const handleDepartureInputClick = () => {
     setDepartureInputClicked(true);
   };
 
+  const handleArrivalInputClick = () => {
+    setArrivalInputClicked(true);
+  };
+
   const handleBackwardButtonClick = (event) => {
     event.stopPropagation();
-    setDepartureInputClicked(false);
+    if (isDepartureInputClicked) {
+      setDepartureInputClicked(false); // 출발지 버튼 클릭 상태 0으로 함
+    }
+    if (isArrivalInputClicked) {
+      setArrivalInputClicked(false); // 도착지 버튼 클릭 상태 0으로 함
+    }
   };
 
   const handleInputChange = (event) => {
-    setDepartureInput(event.target.value);
+    if (isDepartureInputClicked) {
+      setAddress((prev) => ({
+        ...prev,
+        departureAddress: event.target.value,
+      }));
+      //({ departureAddress: event.target.value });
+    }
+    if (isArrivalInputClicked) {
+      setAddress((prev) => ({
+        ...prev,
+        arrivalAddress: event.target.value,
+      }));
+    }
   };
 
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
-      console.log(departureInput);
+      if (isDepartureInputClicked) {
+        console.log("출발지: " + address.departureAddress);
+        console.log("isDepartureInputClicked: " + isDepartureInputClicked);
+        console.log("isArrivalInputClicked: " + isArrivalInputClicked);
+      }
+      if (isArrivalInputClicked) {
+        console.log("도착지: " + address.arrivalAddress);
+        console.log("isDepartureInputClicked: " + isDepartureInputClicked);
+        console.log("isArrivalInputClicked: " + isArrivalInputClicked);
+      }
     }
   };
   return (
     <MainContainer>
       <InputBox1>
+        {isDepartureInputClicked === false &&
+        isArrivalInputClicked === false ? (
+          <>
+            <InputButton onClick={handleDepartureInputClick}>
+              {address.departureAddress !== ""
+                ? address.departureAddress
+                : "출발지 입력"}
+            </InputButton>
+            <Link to="/">
+              <CloseButton />
+            </Link>
+          </>
+        ) : null}
+
         {isDepartureInputClicked ? (
-          <InputButton
-            as="input"
-            type="text"
-            //placeholder="출발지 입력"
-            value={departureInput}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyPress}
-          />
-        ) : (
-          <InputButton onClick={handleDepartureInputClick}>
-            {address === "" ? (
-              "출발지 입력"
-            ) : (
-              <span style={{ color: "black" }}>{address}</span>
-            )}
-          </InputButton>
-        )}
-        {isDepartureInputClicked ? (
-          <BackwardButton onClick={handleBackwardButtonClick} />
-        ) : (
-          <Link to="/">
-            <CloseButton />
-          </Link>
-        )}
+          <>
+            <InputButton
+              as="input"
+              type="text"
+              //placeholder="출발지 입력"
+              value={address.departureAddress}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyPress}
+            />
+            <BackwardButton onClick={handleBackwardButtonClick} />
+          </>
+        ) : null}
+        {isArrivalInputClicked ? (
+          <>
+            <InputButton
+              as="input"
+              type="text"
+              //placeholder="도착지 입력"
+              value={address.arrivalAddress}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyPress}
+            />
+            <BackwardButton onClick={handleBackwardButtonClick} />
+          </>
+        ) : null}
       </InputBox1>
-      {/* <InputBox2 center={isDepartureInputClicked}> */}
       <InputBox2>
+        {isDepartureInputClicked === false &&
+        isArrivalInputClicked === false ? (
+          <>
+            <InputButton onClick={handleArrivalInputClick}>
+              {address.arrivalAddress !== ""
+                ? address.arrivalAddress
+                : "도착지 입력"}
+            </InputButton>
+            <DirectionSearchButton
+              onClick={() => {
+                console.log("주소 서버 전송 및 경로 좌표 받아오기");
+              }}
+            >
+              <Link to="/direction">
+                <Arrow />
+                <DirectionSearchText>길찾기</DirectionSearchText>
+              </Link>
+            </DirectionSearchButton>
+          </>
+        ) : null}
         {isDepartureInputClicked ? (
           <>
             <PantoButton />
             <span style={{ marginRight: "40px" }}>현재 위치</span>
-            <Link
-              to="/pathsearch"
+
+            <SelectFromMap
+              onClick={() => {
+                navigate("/pathsearch", {
+                  state: {
+                    isDepartureInputClicked: isDepartureInputClicked,
+                    isArrivalInputClicked: isArrivalInputClicked,
+                  },
+                });
+              }}
               style={{ display: "flex", alignItems: "center", gap: "10px" }}
             >
               <PinButton />
               <span>지도에서 선택</span>
-            </Link>
+            </SelectFromMap>
           </>
-        ) : (
-          <InputButton>도착지 입력</InputButton>
-        )}
+        ) : null}
+        {isArrivalInputClicked ? (
+          <>
+            <PantoButton />
+            <span style={{ marginRight: "40px" }}>현재 위치</span>
+            <SelectFromMap
+              onClick={() => {
+                navigate("/pathsearch", {
+                  state: {
+                    isDepartureInputClicked: isDepartureInputClicked,
+                    isArrivalInputClicked: isArrivalInputClicked,
+                  },
+                });
+              }}
+              style={{ display: "flex", alignItems: "center", gap: "10px" }}
+            >
+              <PinButton />
+              <span>지도에서 선택</span>
+            </SelectFromMap>
+          </>
+        ) : null}
       </InputBox2>
     </MainContainer>
   );

@@ -151,6 +151,8 @@ const EditText = styled.p`
   text-align:center;
 `;  
 
+
+
 const UserPage = () => {
   return(
     <Container>
@@ -170,7 +172,7 @@ const UserPage = () => {
       <FavoriteContainer>
         <Title>즐겨찾기</Title>
         <FavoriteButton>
-          <StyledLink to="/favoriteslocation">
+          <StyledLink to="/mypage/favoriteslocation">
             <IconBox>
               <Icon src={LocationIcon} 
                 alt="location icon" 
@@ -178,7 +180,7 @@ const UserPage = () => {
             </IconBox>
             <Text>장소</Text>
           </StyledLink>
-          <StyledLink to="/favoritestraffic">
+          <StyledLink to="/mypage/favoritestraffic">
             <IconBox>
               <Icon src={TrafficIcon} 
                 alt="TrafficIcon"
@@ -186,7 +188,7 @@ const UserPage = () => {
             </IconBox>
             <Text>신호등</Text>
           </StyledLink>
-          <StyledLink to="/favoritesroute">
+          <StyledLink to="/mypage/favoritesroute">
             <IconBox>
               <Icon src={RouteIcon} 
                 alt="RouteIcon"
@@ -198,7 +200,7 @@ const UserPage = () => {
         <ProfileEditButton>
         <Title>프로필 관리</Title>
           <EditList>
-            <EditLink to="/">
+            <EditLink to="/mypage/updateprofile">
               {/* <PiUser size="26" color="#666666"/> */}
               <Icon src={EditUserButton} 
                 alt="EditUserButton"
