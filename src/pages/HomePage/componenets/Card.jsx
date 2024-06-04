@@ -1,6 +1,7 @@
 import { styled } from "styled-components";
 import trafficLightImage from "../../../assets/trafficLightImg.png";
 import Text from "./Text";
+import { useCountDown } from "../../../hooks/useCountDown";
 
 const Contianer = styled.div`
   width: 90%;
@@ -90,6 +91,8 @@ const Card = ({ surroundingLightInfoData }) => {
     viewName,
   } = surroundingLightInfoData;
 
+  const timeLeftCountDown = useCountDown(timeLeft);
+
   return (
     <Contianer>
       <Image src={trafficLightImage}></Image>
@@ -120,7 +123,7 @@ const Card = ({ surroundingLightInfoData }) => {
         <Light>
           <Text>서쪽</Text>
           <RemainingTimeText $lightColor={color}>
-            {timeLeft}초
+            {timeLeftCountDown}초
           </RemainingTimeText>
           <Circle $lightColor={color} />
         </Light>
