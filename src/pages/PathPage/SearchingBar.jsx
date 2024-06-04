@@ -71,7 +71,7 @@ const InputButton = styled.button`
   text-align: left;
   width: 80%;
   border-radius: 3px;
-  color: gray;
+  color: black;
   &:focus {
     outline: none; // 기본 테두리 스타일 제거
     border: 2px solid ${(props) => props.theme.blue}; // 테두리 스타일 설정
@@ -201,9 +201,11 @@ const SearchingBar = () => {
         isArrivalInputClicked === false ? (
           <>
             <InputButton onClick={handleDepartureInputClick}>
-              {address.departureAddress !== ""
-                ? address.departureAddress
-                : "출발지 입력"}
+              {address.departureAddress !== "" ? (
+                address.departureAddress
+              ) : (
+                <span style={{ color: "gray" }}>출발지 입력</span>
+              )}
             </InputButton>
             <Link to="/">
               <CloseButton />
@@ -243,9 +245,11 @@ const SearchingBar = () => {
         isArrivalInputClicked === false ? (
           <>
             <InputButton onClick={handleArrivalInputClick}>
-              {address.arrivalAddress !== ""
-                ? address.arrivalAddress
-                : "도착지 입력"}
+              {address.arrivalAddress !== "" ? (
+                address.arrivalAddress
+              ) : (
+                <span style={{ color: "gray" }}>도착지 입력</span>
+              )}
             </InputButton>
             <DirectionSearchButton
               onClick={() => {
