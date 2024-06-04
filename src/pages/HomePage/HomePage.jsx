@@ -11,9 +11,9 @@ import TopBar from "./componenets/TopBar";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { bottomSheetOpenState } from "../../recoil/bottomSheetOpenState/atom";
 import { navigationState } from "../../recoil/navigationState/atom";
-import { fetchTraffic, fetchTrafficById } from "../../apis/api/traffic";
+import { fetchTraffic } from "../../apis/api/traffic";
 import locationIcon from "../..//assets/icon/location.png";
-import { detailInfoByIdState } from "../../recoil/detailInfoByIdState/atom";
+import { roundCoordinates } from "../../utils/roundCoordinates";
 
 const { kakao } = window;
 
@@ -24,12 +24,13 @@ const Container = styled.div`
 const PanToButton = styled.button`
   position: absolute;
   bottom: ${({ $openState, $navigationBarState }) =>
-    ($openState.detailInfoOpenState === "closed" &&
+    ($openState.detailInfoOpenState.openState === "closed" &&
       $navigationBarState === "Home") ||
     ($openState.surroundingLightInfoOpenState === "closed" &&
       $navigationBarState === "TrafficSignal") ||
     ($openState.favoritesInfoOpenState === "closed" &&
-      $navigationBarState === "Favorites")
+      $navigationBarState === "Favorites") ||
+    $navigationBarState === "MyPage"
       ? "4dvh"
       : "42dvh"};
   right: 10px;
@@ -50,11 +51,11 @@ const PanToButton = styled.button`
 
 const HomePage = () => {
   const navigationBarState = useRecoilValue(navigationState);
-  const trafficId = useRecoilValue(detailInfoByIdState);
-  // console.log(trafficId);
   const [openState, setOpenState] = useRecoilState(bottomSheetOpenState);
 
   const [map, setMap] = useState(null);
+  const [mapBounds, setMapBounds] = useState(null);
+  const [openIndex, setOpenIndex] = useState(null);
   const [state, setState] = useState({
     center: {
       lat: 33.450701,
@@ -64,30 +65,24 @@ const HomePage = () => {
     isLoading: true,
   });
 
-  const [openIndex, setOpenIndex] = useState(null);
-
   const handleToggle = (index) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
-  const { isLoading, data: surroundingLightInfoData } = useQuery({
+  const {
+    isLoading,
+    data: surroundingLightInfoData,
+    refetch: surroundingDataRefetch,
+  } = useQuery({
     queryKey: ["traffic"],
-    queryFn: fetchTraffic,
+    queryFn: () => fetchTraffic(roundCoordinates(mapBounds)),
+    enabled: !!mapBounds,
+    // keepPreviousData: true,
+    // staleTime: 5000,
     onError: (e) => {
       console.log(e);
     },
   });
-
-  const { isLoading: trafficByIdLoading, data: trafficByIdData } = useQuery({
-    queryKey: ["trafficById", trafficId],
-    queryFn: () => fetchTrafficById(trafficId),
-    enabled: !!trafficId,
-    onError: (e) => {
-      console.log(e);
-    },
-  });
-
-  // console.log("id로 ", trafficByIdData);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -120,22 +115,27 @@ const HomePage = () => {
   }, []);
 
   useEffect(() => {
-    setOpenState({ detailInfoOpenState: "closed" });
     if (navigationBarState === "TrafficSignal") {
-      setOpenState({ surroundingLightInfoOpenState: "mid" });
+      setOpenState((prev) => ({
+        ...prev,
+        surroundingLightInfoOpenState: "mid",
+      }));
     } else if (navigationBarState === "Favorites") {
-      setOpenState({ favoritesInfoOpenState: "mid" });
+      setOpenState((prev) => ({ ...prev, favoritesInfoOpenState: "mid" }));
     }
   }, [navigationBarState]);
 
-  const panTo = () => {
-    const newLatLng = new kakao.maps.LatLng(state.center.lat, state.center.lng);
+  const panTo = (point) => {
+    const lat = point.lat ? point.lat : state.center.lat;
+    const lng = point.lng ? point.lng : state.center.lng;
+    const newLatLng = new kakao.maps.LatLng(lat, lng);
     map.panTo(newLatLng);
   };
 
-  const panToFavorite = (point) => {
-    const newLatLng = new kakao.maps.LatLng(point.lat, point.lng);
-    map.panTo(newLatLng);
+  const handleMapDragEnd = () => {
+    const newBounds = map.getBounds(); // 맵 API로부터 새로운 bounds 정보를 가져옴
+    setMapBounds(newBounds);
+    surroundingDataRefetch(); // 새로운 bounds로 데이터 페칭 실행
   };
 
   return (
@@ -154,7 +154,10 @@ const HomePage = () => {
           minLevel={4}
           onCreate={setMap}
           onDragEnd={() => {
-            // console.log(map.getBounds());
+            handleMapDragEnd();
+          }}
+          onClick={() => {
+            // setOpenIndex(null);
           }}
         >
           {surroundingLightInfoData?.data.data.traffics.map((data, index) => {
@@ -175,6 +178,7 @@ const HomePage = () => {
           {navigationBarState === "TrafficSignal" ? (
             <>
               <SurroundingLightInfo
+                isLoading={isLoading}
                 surroundingLightInfoData={
                   surroundingLightInfoData.data.data.traffics
                 }
@@ -182,7 +186,7 @@ const HomePage = () => {
             </>
           ) : null}
           {navigationBarState === "Favorites" ? (
-            <FavoriteInfo panToFavorite={panToFavorite} />
+            <FavoriteInfo panToPoint={panTo} />
           ) : null}
           <MapMarker
             position={state.center}
@@ -190,10 +194,7 @@ const HomePage = () => {
           />
         </Map>
         <PanToButton
-          onClick={() => {
-            panTo();
-            // console.log(map.getBounds());
-          }}
+          onClick={panTo}
           $openState={openState}
           $navigationBarState={navigationBarState}
         >

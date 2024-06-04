@@ -1,6 +1,7 @@
 import { trafficInstance } from "..";
 
-export const fetchTraffic = () => {
+export const fetchTraffic = (mapBounds) => {
+  console.log(mapBounds);
   return trafficInstance.get();
 };
 
