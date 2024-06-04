@@ -6,6 +6,9 @@ import pantoIcon from "../../assets/icon/pantoIcon.webp";
 import { Link } from "react-router-dom";
 import React, { useState } from "react";
 import { ReactComponent as Arrow } from "../../assets/icon/arrow.svg";
+import { useRecoilState } from "recoil";
+import { departureAddressState } from "../../recoil/departureAddressState/atom";
+import { arrivalAddressState } from "../../recoil/arrivalAddressState/atom";
 
 const MainContainer = styled.div`
   margin-top: 10px;
@@ -126,8 +129,13 @@ const DirectionSearchText = styled.p`
 const SearchingBar = () => {
   const [isDepartureInputClicked, setDepartureInputClicked] = useState(false);
   const [isArrivalInputClicked, setArrivalInputClicked] = useState(false);
-  const [departureInput, setDepartureInput] = useState("");
-  const [arrivalInput, setArrivalInput] = useState("");
+  // const [departureInput, setDepartureInput] = useRecoilState(addressState);
+  // const [arrivalInput, setArrivalInput] = useRecoilState(addressState);
+  const [departureAddress, setDepartureAddress] = useRecoilState(
+    departureAddressState
+  );
+  const [arrivalAddress, setArrivalAddress] =
+    useRecoilState(arrivalAddressState);
 
   const handleDepartureInputClick = () => {
     setDepartureInputClicked(true);
@@ -149,20 +157,20 @@ const SearchingBar = () => {
 
   const handleInputChange = (event) => {
     if (isDepartureInputClicked) {
-      setDepartureInput(event.target.value);
+      setDepartureAddress({ departureAddress: event.target.value });
     }
     if (isArrivalInputClicked) {
-      setArrivalInput(event.target.value);
+      setArrivalAddress({ arrivalAddress: event.target.value });
     }
   };
 
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
       if (isDepartureInputClicked) {
-        console.log("출발지: " + departureInput);
+        console.log("출발지: " + departureAddress.departureAddress);
       }
       if (isArrivalInputClicked) {
-        console.log("도착지: " + arrivalInput);
+        console.log("도착지: " + arrivalAddress.arrivalAddress);
       }
     }
   };
@@ -173,7 +181,9 @@ const SearchingBar = () => {
         isArrivalInputClicked === false ? (
           <>
             <InputButton onClick={handleDepartureInputClick}>
-              출발지 입력
+              {departureAddress.departureAddress !== ""
+                ? departureAddress.departureAddress
+                : "출발지 입력"}
             </InputButton>
             <Link to="/">
               <CloseButton />
@@ -187,7 +197,7 @@ const SearchingBar = () => {
               as="input"
               type="text"
               //placeholder="출발지 입력"
-              value={departureInput}
+              value={departureAddress.departureAddress}
               onChange={handleInputChange}
               onKeyDown={handleKeyPress}
             />
@@ -199,8 +209,8 @@ const SearchingBar = () => {
             <InputButton
               as="input"
               type="text"
-              //placeholder="출발지 입력"
-              value={arrivalInput}
+              //placeholder="도착지 입력"
+              value={arrivalAddress.arrivalAddress}
               onChange={handleInputChange}
               onKeyDown={handleKeyPress}
             />
@@ -213,7 +223,9 @@ const SearchingBar = () => {
         isArrivalInputClicked === false ? (
           <>
             <InputButton onClick={handleArrivalInputClick}>
-              도착지 입력
+              {arrivalAddress.arrivalAddress !== ""
+                ? arrivalAddress.arrivalAddress
+                : "도착지 입력"}
             </InputButton>
             <DirectionSearchButton
               onClick={() => {

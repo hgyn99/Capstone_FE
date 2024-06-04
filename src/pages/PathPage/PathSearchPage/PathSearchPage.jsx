@@ -186,7 +186,7 @@ const PathSearchPage = () => {
           <circle cx="9" cy="9" r="1" fill="black" />
         </svg>
       </PanToButton>
-      <Address address={address}/>
+      <Address address={address} />
     </Container>
   );
 };

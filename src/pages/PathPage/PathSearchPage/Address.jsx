@@ -34,7 +34,7 @@ const ConfirmButton = styled.button`
   font-size: 16px;
   color: white;
 `;
-const Address = ( {address}) => {
+const Address = ({ address }) => {
   return (
     <TitleContainer>
       {address}
