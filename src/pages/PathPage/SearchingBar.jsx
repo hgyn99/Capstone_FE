@@ -47,18 +47,6 @@ const InputBox2 = styled.div`
   //flex: 9;
 `;
 
-const SelectFromMap = styled.button`
-  display: flex;
-  flex-direction: row;
-  justify-content: left;
-  align-items: center;
-  color: gray;
-  font-size: 15px;
-  font-weight: 600;
-  height: 40px;
-  gap: 10px;
-`;
-
 const InputButton = styled.button`
   background-color: #f0f0f0;
   border: none;
@@ -101,15 +89,37 @@ const BackwardButton = styled.button`
   height: 25px;
 `;
 
-const PantoButton = styled.button`
+const CurrentLocation = styled.button`
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-items: center;
+  color: gray;
+  font-size: 15px;
+  font-weight: 600;
+  height: 40px;
+  gap: 10px;
+`;
+
+const PantoButton = styled.img.attrs({
+  src: pantoIcon,
+  alt: "pantoIcon",
+})`
   margin-left: 40px;
-  background-image: url(${pantoIcon});
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  border: none;
   width: 25px;
   height: 25px;
+`;
+
+const SelectFromMap = styled.button`
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-items: center;
+  color: gray;
+  font-size: 15px;
+  font-weight: 600;
+  height: 40px;
+  gap: 10px;
 `;
 
 const PinButton = styled.img.attrs({
@@ -194,6 +204,23 @@ const SearchingBar = () => {
       }
     }
   };
+
+  const handleCurrentLocationClick = () => {
+    console.log("현재 위치 클릭");
+    if (isDepartureInputClicked) {
+      setAddress((prev) => ({
+        ...prev,
+        departureAddress: "", // 현재 위치 주소 받아오는 코드로 변경
+      }));
+    }
+    if (isArrivalInputClicked) {
+      setAddress((prev) => ({
+        ...prev,
+        arrivalAddress: "", // 현재 위치 주소 받아오는 코드로 변경
+      }));
+    }
+  };
+
   return (
     <MainContainer>
       <InputBox1>
@@ -265,9 +292,10 @@ const SearchingBar = () => {
         ) : null}
         {isDepartureInputClicked ? (
           <>
-            <PantoButton />
-            <span style={{ marginRight: "40px" }}>현재 위치</span>
-
+            <CurrentLocation onClick={handleCurrentLocationClick}>
+              <PantoButton />
+              <span style={{ marginRight: "40px" }}>현재 위치</span>
+            </CurrentLocation>
             <SelectFromMap
               onClick={() => {
                 navigate("/pathsearch", {
@@ -286,8 +314,10 @@ const SearchingBar = () => {
         ) : null}
         {isArrivalInputClicked ? (
           <>
-            <PantoButton />
-            <span style={{ marginRight: "40px" }}>현재 위치</span>
+            <CurrentLocation onClick={handleCurrentLocationClick}>
+              <PantoButton />
+              <span style={{ marginRight: "40px" }}>현재 위치</span>
+            </CurrentLocation>
             <SelectFromMap
               onClick={() => {
                 navigate("/pathsearch", {
