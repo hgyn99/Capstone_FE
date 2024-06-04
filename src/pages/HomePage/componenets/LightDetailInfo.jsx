@@ -118,12 +118,11 @@ const LightDetailInfo = () => {
   useEffect(() => {
     if (!openState.detailInfoOpenState.id) return;
     const interval = setInterval(() => {
-      console.log("refetch");
       refetch();
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [refetch]);
+  }, [refetch, openState.detailInfoOpenState.id]);
 
   return (
     <Container
@@ -169,7 +168,7 @@ const LightDetailInfo = () => {
             ...prev,
             detailInfoOpenState: {
               openState: "closed",
-              id: openState.detailInfoOpenState.id,
+              id: null,
             },
           }));
         } else if (
