@@ -13,6 +13,7 @@ import { bottomSheetOpenState } from "../../recoil/bottomSheetOpenState/atom";
 import { navigationState } from "../../recoil/navigationState/atom";
 import { fetchTraffic } from "../../apis/api/traffic";
 import locationIcon from "../..//assets/icon/location.png";
+import { roundCoordinates } from "../../utils/roundCoordinates";
 
 const { kakao } = window;
 
@@ -74,8 +75,10 @@ const HomePage = () => {
     refetch: surroundingDataRefetch,
   } = useQuery({
     queryKey: ["traffic"],
-    queryFn: fetchTraffic,
-    enabled: !mapBounds,
+    queryFn: () => fetchTraffic(roundCoordinates(mapBounds)),
+    enabled: !!mapBounds,
+    // keepPreviousData: true,
+    // staleTime: 5000,
     onError: (e) => {
       console.log(e);
     },
@@ -129,6 +132,12 @@ const HomePage = () => {
     map.panTo(newLatLng);
   };
 
+  const handleMapDragEnd = () => {
+    const newBounds = map.getBounds(); // 맵 API로부터 새로운 bounds 정보를 가져옴
+    setMapBounds(newBounds);
+    surroundingDataRefetch(); // 새로운 bounds로 데이터 페칭 실행
+  };
+
   return (
     <NavigationBarLayout>
       <Container>
@@ -145,8 +154,7 @@ const HomePage = () => {
           minLevel={4}
           onCreate={setMap}
           onDragEnd={() => {
-            setMapBounds(map.getBounds().toString());
-            // surroundingDataRefetch(mapBounds);
+            handleMapDragEnd();
           }}
           onClick={() => {
             // setOpenIndex(null);
