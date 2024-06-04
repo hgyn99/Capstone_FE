@@ -1,6 +1,8 @@
 import { styled } from "styled-components";
 import backwardIcon from "../../../assets/icon/backwardIcon.webp";
 import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 const TitleContainer = styled.div`
   background-color: white;
@@ -35,6 +37,13 @@ const ConfirmButton = styled.button`
   color: white;
 `;
 const Address = ({ address }) => {
+  // const location = useLocation();
+  // //const { isDepartureInputClicked, isArrivalInputClicked } = location.state;
+
+  // useEffect(() => {
+  //   console.log(location);
+  // }, [location]);
+
   return (
     <TitleContainer>
       {address}

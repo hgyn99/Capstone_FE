@@ -244,7 +244,11 @@ const SearchingBar = () => {
             <PantoButton />
             <span style={{ marginRight: "40px" }}>현재 위치</span>
             <Link
-              to="/pathsearch"
+              // to="/pathsearch"
+              to={{
+                pathname: "/pathsearch",
+                state: { isDepartureInputClicked, isArrivalInputClicked },
+              }}
               style={{ display: "flex", alignItems: "center", gap: "10px" }}
             >
               <PinButton />
@@ -257,7 +261,11 @@ const SearchingBar = () => {
             <PantoButton />
             <span style={{ marginRight: "40px" }}>현재 위치</span>
             <Link
-              to="/pathsearch"
+              //to="/pathsearch"
+              to={{
+                pathname: "/pathsearch",
+                state: { isDepartureInputClicked, isArrivalInputClicked },
+              }}
               style={{ display: "flex", alignItems: "center", gap: "10px" }}
             >
               <PinButton />
@@ -266,60 +274,6 @@ const SearchingBar = () => {
           </>
         ) : null}
       </InputBox2>
-
-      {/* <InputBox1>
-        {isDepartureInputClicked ? (
-          <InputButton
-            as="input"
-            type="text"
-            //placeholder="출발지 입력"
-            value={departureInput}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyPress}
-          />
-        ) : (
-          <InputButton onClick={handleDepartureInputClick}>
-            출발지 입력
-          </InputButton>
-        )}
-        {isDepartureInputClicked ? (
-          <BackwardButton onClick={handleBackwardButtonClick} />
-        ) : (
-          <Link to="/">
-            <CloseButton />
-          </Link>
-        )}
-      </InputBox1> */}
-      {/* <InputBox2 center={isDepartureInputClicked}> */}
-      {/* <InputBox2>
-        {isDepartureInputClicked ? (
-          <>
-            <PantoButton />
-            <span style={{ marginRight: "40px" }}>현재 위치</span>
-            <Link
-              to="/pathsearch"
-              style={{ display: "flex", alignItems: "center", gap: "10px" }}
-            >
-              <PinButton />
-              <span>지도에서 선택</span>
-            </Link>
-          </>
-        ) : (
-          <>
-            <InputButton>도착지 입력</InputButton>
-            <DirectionSearchButton
-              onClick={() => {
-                console.log("주소 서버 전송 및 경로 좌표 받아오기");
-              }}
-            >
-              <Link to="/direction">
-                <Arrow />
-                <DirectionSearchText>길찾기</DirectionSearchText>
-              </Link>
-            </DirectionSearchButton>
-          </>
-        )}
-      </InputBox2> */}
     </MainContainer>
   );
 };
