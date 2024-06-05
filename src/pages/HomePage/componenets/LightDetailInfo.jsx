@@ -3,11 +3,16 @@ import { motion, useDragControls } from "framer-motion";
 import Text from "./Text";
 import { useRecoilState } from "recoil";
 import { bottomSheetOpenState } from "../../../recoil/bottomSheetOpenState/atom";
-import { useQuery } from "@tanstack/react-query";
-import { fetchTrafficById } from "../../../apis/api/traffic";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import {
+  addFavoriteTraffic,
+  fetchTrafficById,
+} from "../../../apis/api/traffic";
 import Loader from "./Loader";
 import { useCountDown } from "../../../hooks/useCountDown";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useHandleFavoriteTraffic } from "./../../../hooks/handleFavoriteTraffic";
+import KakaoLoginModal from "./KakaoLoginModal";
 
 const Container = styled(motion.div)`
   width: 100%;
@@ -86,12 +91,13 @@ const RemainingTimeText = styled.span`
   color: ${({ color, theme }) => (color === "green" ? theme.green : theme.red)};
 `;
 
-const LightDetailInfo = () => {
+const LightDetailInfo = ({ isLoggein }) => {
   const [openState, setOpenState] = useRecoilState(bottomSheetOpenState);
+  const [isModalOpened, setIsModalOpened] = useState(false);
 
-  const dragControls = useDragControls();
-
-  // console.log(!!openState.detailInfoOpenState.id);
+  const handleLoginModal = () => {
+    setIsModalOpened((prev) => !prev);
+  };
 
   const { isLoading, data, refetch } = useQuery({
     queryKey: ["trafficById", openState.detailInfoOpenState],
@@ -103,6 +109,7 @@ const LightDetailInfo = () => {
   });
 
   const {
+    id,
     color,
     detail,
     greenCycle,
@@ -115,14 +122,22 @@ const LightDetailInfo = () => {
 
   const timeLeftCountDown = useCountDown(timeLeft);
 
+  const handleFavorite = useHandleFavoriteTraffic({
+    id: id,
+    viewName: viewName,
+    isFavorite: isFavorite,
+  });
+
+  const dragControls = useDragControls();
+
   useEffect(() => {
-    if (!openState.detailInfoOpenState.id) return;
+    if (!id) return;
     const interval = setInterval(() => {
       refetch();
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [refetch, openState.detailInfoOpenState.id]);
+  }, [refetch, id]);
 
   return (
     <Container
@@ -208,13 +223,12 @@ const LightDetailInfo = () => {
               <div>
                 <AddressText>{viewName}</AddressText>
                 <DetailAddressText>
-                  176-48 (전남대공과대학 방면)
+                  {/* 176-48 (전남대공과대학 방면) */}
                 </DetailAddressText>
               </div>
               <IsFavoriteButton
                 onClick={() => {
-                  //저장
-                  console.log("dsa");
+                  isLoggein ? handleFavorite() : handleLoginModal();
                 }}
               >
                 <svg
@@ -244,6 +258,10 @@ const LightDetailInfo = () => {
           </DirectionInfoBox>
         </>
       )}
+      <KakaoLoginModal
+        isOpen={isModalOpened}
+        onRequestClose={handleLoginModal}
+      />
     </Container>
   );
 };
