@@ -160,7 +160,7 @@ const TrafficDirection = () => {
     },
   });
 
-  console.log(pathDetailData?.data.data);
+  // console.log(pathDetailData?.data.data);
 
   const trafficLights = pathDetailData?.data.data.traffics.map((traffic) => ({
     id: traffic.viewName,
