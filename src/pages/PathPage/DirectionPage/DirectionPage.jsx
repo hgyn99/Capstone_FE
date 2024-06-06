@@ -220,7 +220,7 @@ const DirectionPage = () => {
             setResult(
               `변경된 지도 중심좌표는 ${latlng.getLat()} 이고, 경도는 ${latlng.getLng()} 입니다`
             );
-            console.log(result);
+            //console.log(result);
             //console.log(avgLat, avgLng);
           }}
         >

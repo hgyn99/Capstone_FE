@@ -2,6 +2,10 @@ import { motion, useDragControls } from "framer-motion";
 import { useState } from "react";
 import styled from "styled-components";
 import TrafficLight from "./TrafficLight";
+import { useQuery } from "@tanstack/react-query";
+import { fetchPathDetail } from "../../../apis/api/paths";
+import { useRecoilValue } from "recoil";
+import { pathInfoState } from "../../../recoil/pathInfoState/atom";
 
 const Container = styled(motion.div)`
   //bottom: 0;
@@ -136,6 +140,7 @@ const NumberingIcon = styled.div`
 const TrafficDirection = () => {
   const dragControls = useDragControls();
   const [openState, setOpenState] = useState("mid");
+  const pathInfo = useRecoilValue(pathInfoState);
 
   const trafficLights = [
     { id: "중흥삼거리", redTime: 32, greenTime: 15 },
@@ -189,9 +194,11 @@ const TrafficDirection = () => {
       <HeaderBox onPointerDown={(e) => dragControls.start(e)}>
         <HandleBar />
         <Box1>
-          <StartTimeBox>오전 8:27 출발</StartTimeBox>
-          <TimeBox>25분</TimeBox>
-          <InfoBox>1.6km | 횡단보도 3회</InfoBox>
+          <StartTimeBox>{pathInfo.suggestedDepartureTime} 출발</StartTimeBox>
+          <TimeBox>{pathInfo.timeTakes}분</TimeBox>
+          <InfoBox>
+            {pathInfo.totalDistance}km | 횡단보도 {pathInfo.trafficCounts}회
+          </InfoBox>
         </Box1>
         <Box2>신호등 정보</Box2>
         <Box3>

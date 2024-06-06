@@ -1,10 +1,11 @@
 import { styled } from "styled-components";
 import { Link } from "react-router-dom";
 import Walking from "../../../assets/icon/Walking.webp";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TrafficDirection from "./TrafficDirection.jsx";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useResetRecoilState } from "recoil";
 import { addressState } from "../../../recoil/addressState/atom";
+import { pathInfoState } from "../../../recoil/pathInfoState/atom";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPathDetail } from "../../../apis/api/paths";
 
@@ -108,6 +109,7 @@ const WalkingIcon = styled.img.attrs({
 const DirecrtionInfo = ({ onNavStartClick }) => {
   const [address, setAddress] = useRecoilState(addressState);
   const { startLat, startLng, endLat, endLng } = address;
+  const [pathInfo, setPathInfo] = useRecoilState(pathInfoState);
 
   const {
     isLoading,
@@ -136,7 +138,7 @@ const DirecrtionInfo = ({ onNavStartClick }) => {
 
     let hours = currentTime.getHours();
     const minutes = currentTime.getMinutes();
-    const seconds = currentTime.getSeconds();
+    // const seconds = currentTime.getSeconds();
     const ampm = hours >= 12 ? "오후" : "오전";
     hours = hours % 12;
     hours = hours ? hours : 12; // the hour '0' should be '12'
@@ -147,13 +149,29 @@ const DirecrtionInfo = ({ onNavStartClick }) => {
   const suggestedDepartureTime = getFormattedTime();
   const timeTakes = Math.ceil(pathDetailData?.data.data.totalTime / 60);
   const trafficCounts = pathDetailData?.data.data.trafficCount;
+  const totalDistance = 1.6;
+  //const totalDistance = pathDetailData?.data.data.totalDistance; // API에서 총 거리 반영되는대로 코드 수정
+
+  useEffect(() => {
+    setPathInfo(() => ({
+      //...prev,
+      suggestedDepartureTime: suggestedDepartureTime,
+      timeTakes: timeTakes,
+      //totalDistance: 1.6,
+      totalDistance: totalDistance,
+      trafficCounts: trafficCounts,
+    }));
+  }, []);
 
   return (
     <Container>
       <Box1>
-        <StartTimeBox>{suggestedDepartureTime} 출발</StartTimeBox>
-        <TimeBox>{timeTakes}분</TimeBox>
-        <InfoBox>1.6km | 횡단보도 {trafficCounts}회</InfoBox>
+        <StartTimeBox>{pathInfo.suggestedDepartureTime} 출발</StartTimeBox>
+        <TimeBox>{pathInfo.timeTakes}분</TimeBox>
+        <InfoBox>
+          {" "}
+          {pathInfo.totalDistance}km | 횡단보도 {pathInfo.trafficCounts}회
+        </InfoBox>
       </Box1>
       {/* <Box2>
         <StartTimeList>추천 출발시간</StartTimeList>
