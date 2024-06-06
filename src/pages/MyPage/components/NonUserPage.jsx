@@ -1,33 +1,33 @@
 import React from "react";
 import styled from "styled-components";
 import kakaoImage from "../../../assets/icon/kakaoImage.png";
-import characterImg from "../../../assets/icon/characterImage.png"
+import characterImg from "../../../assets/icon/characterImage.png";
 import { KAKAO_AUTH_URL } from "../../../shared/KakaoAuth";
 
 const Container = styled.div`
-  width:100%;
-  height:100%;
-  position:relative;
-  background-color:#FFFFFF;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background-color: #ffffff;
 `;
 
 const TextBox = styled.div`
-  position:absolute;
-  top:120px;
-  left:32px;
+  position: absolute;
+  top: 120px;
+  left: 32px;
 `;
 
 const Text = styled.span`
-  font-size:30px;
-  font-weight:bold;
-  line-height:2.2;
+  font-size: 30px;
+  font-weight: bold;
+  line-height: 2.2;
 `;
 
 const Img = styled.img`
   width: 220px;
-  position:absolute;
-  bottom:100px;
-  right:32px;
+  position: absolute;
+  bottom: 100px;
+  right: 32px;
 `;
 
 const KakaoLoginButton = styled.button`
@@ -42,10 +42,10 @@ const KakaoLoginButton = styled.button`
   height: 50px;
   cursor: pointer;
   margin-top: 20px;
-  position:absolute;
-  left:50%;
-  bottom:60px;
-  transform:translate(-50%, 0);
+  position: absolute;
+  left: 50%;
+  bottom: 60px;
+  transform: translate(-50%, 0);
 `;
 
 const KakaoLoginButtonImage = styled.img`
@@ -62,16 +62,16 @@ const KakaoLoginButtonText = styled.span`
 
 const NonUserPage = () => {
   // kakao 로그인 버튼 누르면 REDIRECT_URL로 이동
-    const handleLogin = () => {
-      window.location.href = KAKAO_AUTH_URL;
-    };
+  const handleLogin = () => {
+    window.location.href = KAKAO_AUTH_URL;
+  };
 
-  return(
+  return (
     <Container>
       <TextBox>
         <Text>
-          간편로그인 후 <br/>
-          이용이<br/>
+          간편로그인 후 <br />
+          이용이 <br />
           가능합니다.
         </Text>
       </TextBox>
@@ -82,6 +82,6 @@ const NonUserPage = () => {
       </KakaoLoginButton>
     </Container>
   );
-}
+};
 
 export default NonUserPage;

@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import { useRecoilState } from "recoil";
 import { navigationState } from "../recoil/navigationState/atom";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const NavigationBarContainer = styled.div`
   display: flex;
@@ -28,10 +29,18 @@ const Button = styled.button`
 `;
 
 const NavigationBar = () => {
+  const location = useLocation();
+
   const [currentNavigationState, setCurrentNavigationState] =
     useRecoilState(navigationState);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (location.pathname === "/mypage") {
+      setCurrentNavigationState("MyPage");
+    }
+  }, [location]);
 
   return (
     <NavigationBarContainer>
@@ -186,7 +195,6 @@ const NavigationBar = () => {
       </Button>
       <Button
         onClick={() => {
-          setCurrentNavigationState("MyPage");
           navigate("/mypage");
         }}
       >
