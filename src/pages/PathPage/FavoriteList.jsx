@@ -53,6 +53,8 @@ const FavoriteIcon = styled.button`
   height: 25px;
 `;
 
+// FavoriteList 서버에서 받아오기
+
 const FavoriteList = () => {
   const favorites = [
     "전남대학교 광주캠퍼스 정문",
@@ -61,7 +63,7 @@ const FavoriteList = () => {
     "공과대학 7호관",
     "스타벅스 전남대점",
     "전남대학교 스포츠센터",
-  ]; // API 호출로 변경
+  ];
 
   return (
     <MainContainer>

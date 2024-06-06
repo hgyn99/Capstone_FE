@@ -59,8 +59,8 @@ const HomePage = () => {
   const [openIndex, setOpenIndex] = useState(null);
   const [state, setState] = useState({
     center: {
-      lat: 33.450701,
-      lng: 126.570667,
+      lat: 35.17828963,
+      lng: 126.909254315,
     },
     errMsg: null,
     isLoading: true,
