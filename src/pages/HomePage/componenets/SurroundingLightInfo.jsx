@@ -5,6 +5,7 @@ import { bottomSheetOpenState } from "../../../recoil/bottomSheetOpenState/atom"
 import { useRecoilState } from "recoil";
 import { useRef } from "react";
 import Loader from "./Loader";
+import KakaoLoginModal from "./KakaoLoginModal";
 
 const Container = styled(motion.div)`
   width: 100%;
@@ -157,6 +158,7 @@ const SurroundingLightInfo = ({
           </ScrollBox>
         </>
       )}
+      <KakaoLoginModal />
     </Container>
   );
 };

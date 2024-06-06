@@ -55,7 +55,7 @@ const HomePage = () => {
   const isLoggein = !!localStorage.getItem("kakaoLoginToken");
 
   const [map, setMap] = useState(null);
-  const [mapBounds, setMapBounds] = useState(null);
+  const [mapBounds, setMapBounds] = useState(map?.getBounds());
   const [openIndex, setOpenIndex] = useState(null);
   const [state, setState] = useState({
     center: {
