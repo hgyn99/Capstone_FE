@@ -13,14 +13,14 @@ import DeleteModal from "../../../components/DeleteModal";
 
 const ListWrapper = styled.div`
   width: 100%;
-  height: 60px;
+  height: 65px;
   position: relative;
   border-bottom: 1px solid #f0f0f0;
 `;
 
 const EditContainer = styled(motion.div)`
   width: 100%;
-  height: 60px;
+  height: 65px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -54,7 +54,7 @@ const DeleteButton = styled.button`
 
 const SwipeContainer = styled(motion.div)`
   width: 100%;
-  height: 60px;
+  height: 65px;
   display: flex;
   justify-content: space-between;
   align-items: center;

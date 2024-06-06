@@ -157,6 +157,10 @@ const EditText = styled.p`
   text-align: center;
 `;
 
+const WaitText = styled.p`
+  text-align: center;
+`;
+
 const UserPage = () => {
   const setUserInfo = useSetRecoilState(userInformationState);
   const setNavigationState = useSetRecoilState(navigationState);
@@ -200,7 +204,7 @@ const UserPage = () => {
     <Container>
       <UserContainer>
         {isLoading ? (
-          <>회원 정보 불러오는 중 </>
+          <WaitText>회원 정보 불러오는 중... </WaitText>
         ) : (
           <>
             <UserProfile>
