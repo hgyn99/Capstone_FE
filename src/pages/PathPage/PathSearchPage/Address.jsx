@@ -38,7 +38,7 @@ const ConfirmButton = styled.button`
   font-size: 16px;
   color: white;
 `;
-const Address = ({ mapAddress }) => {
+const Address = ({ mapAddress, mapLat, mapLng }) => {
   const location = useLocation();
   //console.log(location);
   const { isDepartureInputClicked, isArrivalInputClicked } = location.state;
@@ -57,12 +57,16 @@ const Address = ({ mapAddress }) => {
       setRecoilAddress((prev) => ({
         ...prev,
         departureAddress: mapAddress,
+        startLat: mapLat,
+        startLng: mapLng,
       }));
     } else if (isArrivalInputClicked) {
       //setArrivalAddress(address);
       setRecoilAddress((prev) => ({
         ...prev,
         arrivalAddress: mapAddress,
+        endLat: mapLat,
+        endLng: mapLng,
       }));
     }
   };

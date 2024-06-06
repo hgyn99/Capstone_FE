@@ -3,11 +3,13 @@ import crossIcon from "../../assets/icon/cross.webp";
 import backwardIcon from "../../assets/icon/backwardIcon.webp";
 import pinIcon from "../../assets/icon/pinIcon.webp";
 import pantoIcon from "../../assets/icon/pantoIcon.webp";
-import { Link, useNavigate, useNavigation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import { ReactComponent as Arrow } from "../../assets/icon/arrow.svg";
 import { useRecoilState } from "recoil";
 import { addressState } from "../../recoil/addressState/atom";
+import { useQuery } from "@tanstack/react-query";
+import { fetchPathDetail } from "../../apis/api/paths";
 
 const MainContainer = styled.div`
   margin-top: 10px;
@@ -155,6 +157,7 @@ const SearchingBar = () => {
   //console.log(!!departureAddress.departureAddress);
   // const [arrivalAddress, setArrivalAddress] =
   //   useRecoilState(arrivalAddressState);
+  const { startLat, startLng, endLat, endLng } = address;
 
   const handleDepartureInputClick = () => {
     setDepartureInputClicked(true);
@@ -221,6 +224,21 @@ const SearchingBar = () => {
     }
   };
 
+  const {
+    isLoading,
+    data: pathDetailData, // 수정
+    refetch: pathDetailRefetch, // 수정
+  } = useQuery({
+    queryKey: ["pathDetail", startLat, startLng, endLat, endLng],
+    queryFn: () => fetchPathDetail(startLat, startLng, endLat, endLng),
+    enabled: !!address, // 수정
+    // keepPreviousData: true,
+    // staleTime: 5000,
+    onError: (e) => {
+      console.log(e);
+    },
+  });
+
   return (
     <MainContainer>
       <InputBox1>
@@ -280,13 +298,17 @@ const SearchingBar = () => {
             </InputButton>
             <DirectionSearchButton
               onClick={() => {
-                console.log("주소 서버 전송 및 경로 좌표 받아오기");
+                // console.log("출발지 위도: " + address.startLat);
+                // console.log("출발지 경도: " + address.startLng);
+                // console.log("도착지 위도: " + address.endLat);
+                // console.log("도착지 경도: " + address.endLng);
+                pathDetailRefetch();
+                // api로 출발지 및 도착지 위도 경도 전송
+                navigate("/direction");
               }}
             >
-              <Link to="/direction">
-                <Arrow />
-                <DirectionSearchText>길찾기</DirectionSearchText>
-              </Link>
+              <Arrow />
+              <DirectionSearchText>길찾기</DirectionSearchText>
             </DirectionSearchButton>
           </>
         ) : null}

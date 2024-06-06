@@ -3,6 +3,10 @@ import { Link } from "react-router-dom";
 import Walking from "../../../assets/icon/Walking.webp";
 import React, { useState } from "react";
 import TrafficDirection from "./TrafficDirection.jsx";
+import { useRecoilState } from "recoil";
+import { addressState } from "../../../recoil/addressState/atom";
+import { useQuery } from "@tanstack/react-query";
+import { fetchPathDetail } from "../../../apis/api/paths";
 
 const Container = styled.div`
   background-color: white;
@@ -102,12 +106,54 @@ const WalkingIcon = styled.img.attrs({
 `;
 
 const DirecrtionInfo = ({ onNavStartClick }) => {
+  const [address, setAddress] = useRecoilState(addressState);
+  const { startLat, startLng, endLat, endLng } = address;
+
+  const {
+    isLoading,
+    data: pathDetailData, // 수정
+    refetch: pathDetailRefetch, // 수정
+  } = useQuery({
+    queryKey: ["pathDetail", startLat, startLng, endLat, endLng],
+    queryFn: () => fetchPathDetail(startLat, startLng, endLat, endLng),
+    enabled: !!address, // 수정
+    // keepPreviousData: true,
+    // staleTime: 5000,
+    onError: (e) => {
+      console.log(e);
+    },
+  });
+
+  //console.log(pathDetailData?.data.data.totalTime);
+
+  const getFormattedTime = () => {
+    let currentTime = new Date();
+
+    if (pathDetailData?.data.data.traffics[0].color === "red") {
+      const timeLeftInSeconds = pathDetailData?.data.data.traffics[0].timeLeft;
+      currentTime = new Date(currentTime.getTime() + timeLeftInSeconds * 1000);
+    }
+
+    let hours = currentTime.getHours();
+    const minutes = currentTime.getMinutes();
+    const seconds = currentTime.getSeconds();
+    const ampm = hours >= 12 ? "오후" : "오전";
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    const formattedTime = `${ampm} ${hours}:${minutes < 10 ? "0" : ""}${minutes}`;
+    return formattedTime;
+  };
+
+  const suggestedDepartureTime = getFormattedTime();
+  const timeTakes = Math.ceil(pathDetailData?.data.data.totalTime / 60);
+  const trafficCounts = pathDetailData?.data.data.trafficCount;
+
   return (
     <Container>
       <Box1>
-        <StartTimeBox>오전 8:27 출발</StartTimeBox>
-        <TimeBox>25분</TimeBox>
-        <InfoBox>1.6km | 횡단보도 3회</InfoBox>
+        <StartTimeBox>{suggestedDepartureTime} 출발</StartTimeBox>
+        <TimeBox>{timeTakes}분</TimeBox>
+        <InfoBox>1.6km | 횡단보도 {trafficCounts}회</InfoBox>
       </Box1>
       {/* <Box2>
         <StartTimeList>추천 출발시간</StartTimeList>

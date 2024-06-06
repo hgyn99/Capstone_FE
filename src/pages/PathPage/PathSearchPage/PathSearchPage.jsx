@@ -60,14 +60,16 @@ const PathSearchPage = () => {
   const [map, setMap] = useState(null);
   const [state, setState] = useState({
     center: {
-      lat: 33.450701,
-      lng: 126.570667,
+      lat: 35.17828963,
+      lng: 126.909254315,
     },
     errMsg: null,
     isLoading: true,
   });
   const [result, setResult] = useState("");
   const [address, setAddress] = useState("");
+  const [lat, setLat] = useState(null);
+  const [lng, setLng] = useState(null);
 
   const panTo = () => {
     const newLatLng = new kakao.maps.LatLng(state.center.lat, state.center.lng);
@@ -142,6 +144,8 @@ const PathSearchPage = () => {
           setResult(
             `변경된 지도 중심좌표는 ${latlng.getLat()} 이고, 경도는 ${latlng.getLng()} 입니다`
           );
+          setLat(coord.getLat());
+          setLng(coord.getLng());
           //console.log(result);
         }}
       >
@@ -186,7 +190,7 @@ const PathSearchPage = () => {
           <circle cx="9" cy="9" r="1" fill="black" />
         </svg>
       </PanToButton>
-      <Address mapAddress={address} />
+      <Address mapAddress={address} mapLat={lat} mapLng={lng} />
     </Container>
   );
 };
