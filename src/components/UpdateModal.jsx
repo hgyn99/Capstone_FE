@@ -6,16 +6,16 @@ import { useMutation } from "@tanstack/react-query";
 import { updateFavoriteTraffic } from "../apis/api/traffic";
 
 const Title = styled.p`
-  font-size: 18px;
-  font-weight: bold;
+  font-size: 20px;
+  font-weight: 600;
 `;
 
 const UpdateContainer = styled.div`
   width: 300px;
-  height: 40px;
+  height: 45px;
   display: flex;
   align-items: center;
-  margin: 20px 0px;
+  margin: 15px 0px;
 `;
 const Alias = styled.input`
   width: 100%;
@@ -33,15 +33,27 @@ const ButtonContainer = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: 15px;
+  gap: 12px;
 `;
 const RequestBtn = styled.button`
+  width: 80px;
+  height: 40px;
+  background-color: #ddd;
+  border-radius: 5px;
+`;
+const RequestText = styled.p`
   font-size: 15px;
   color: #666666;
 `;
 const CommitBtn = styled.button`
+  width: 80px;
+  height: 40px;
+  background-color: #535ce8;
+  border-radius: 5px;
+`;
+const CommitText = styled.p`
   font-size: 15px;
-  color: #535ce8;
+  color: #fff;
 `;
 
 const UpdateModal = ({ isOpen, onRequestClose, id }) => {
@@ -101,10 +113,12 @@ const UpdateModal = ({ isOpen, onRequestClose, id }) => {
         </DeleteBtn>
       </UpdateContainer>
       <ButtonContainer>
-        <RequestBtn onClick={onRequestClose}>취소</RequestBtn>
         <CommitBtn onClick={updateAlias} disabled={!!alias ? false : true}>
-          확인
+          <CommitText>수정</CommitText>
         </CommitBtn>
+        <RequestBtn onClick={onRequestClose}>
+          <RequestText>취소</RequestText>
+        </RequestBtn>
       </ButtonContainer>
     </BaseModal>
   );
