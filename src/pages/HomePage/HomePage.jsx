@@ -52,7 +52,7 @@ const PanToButton = styled.button`
 const HomePage = () => {
   const navigationBarState = useRecoilValue(navigationState);
   const [openState, setOpenState] = useRecoilState(bottomSheetOpenState);
-  const isLoggein = !!localStorage.getItem("kakaoLoginToken");
+  const isLoggein = !!localStorage.getItem("token");
 
   const [map, setMap] = useState(null);
   const [mapBounds, setMapBounds] = useState(map?.getBounds());
