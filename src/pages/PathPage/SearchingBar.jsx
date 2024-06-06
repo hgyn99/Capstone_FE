@@ -238,6 +238,7 @@ const SearchingBar = () => {
       console.log(e);
     },
   });
+  console.log(!!address.arrivalAddress && !!address.departureAddress);
 
   return (
     <MainContainer>
@@ -297,13 +298,13 @@ const SearchingBar = () => {
               )}
             </InputButton>
             <DirectionSearchButton
+              disabled={!address.arrivalAddress || !address.departureAddress}
               onClick={() => {
                 // console.log("출발지 위도: " + address.startLat);
                 // console.log("출발지 경도: " + address.startLng);
                 // console.log("도착지 위도: " + address.endLat);
                 // console.log("도착지 경도: " + address.endLng);
-                pathDetailRefetch();
-                // api로 출발지 및 도착지 위도 경도 전송
+                pathDetailRefetch(); // 출발지 및 도착지 위도 경도 전송
                 navigate("/direction");
               }}
             >

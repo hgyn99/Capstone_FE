@@ -96,7 +96,7 @@ const DirectionPage = () => {
   var linePath = pathDetailData?.data.data.paths.map((path) => {
     return new kakao.maps.LatLng(path.lat, path.lng);
   });
-
+  console.log(linePath);
   // 위도와 경도를 추출합니다
   var lats = linePath.map((point) => point.getLat());
   var lngs = linePath.map((point) => point.getLng());

@@ -84,24 +84,18 @@ const FavoriteList = () => {
   //   "전남대학교 스포츠센터",
   // ];
 
-  const favoriteRoutes = favoritePathData?.data.data.favoriteRoutes.map(
-    (favoriteRoute) => ({
-      id: favoriteRoute.id,
-      name: favoriteRoute.name,
-      // 여기에 서버에서 받아온 값 중 필요한 값 추가
-    })
-  );
-
   return (
     <MainContainer>
       <TitleBox>내 즐겨찾기 장소</TitleBox>
       <FavoriteListBox>
-        {favoriteRoutes.map((favoriteRoute, index) => (
-          <FavoriteItem key={index}>
-            <FavoriteIcon />
-            {favoriteRoute.name}
-          </FavoriteItem>
-        ))}
+        {favoritePathData?.data.data.favoriteRoutes.map(
+          (favoriteRoute, index) => (
+            <FavoriteItem key={index}>
+              <FavoriteIcon />
+              {favoriteRoute.name}
+            </FavoriteItem>
+          )
+        )}
       </FavoriteListBox>
     </MainContainer>
   );
