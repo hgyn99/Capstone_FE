@@ -183,6 +183,43 @@ const FavoritesInfo = ({ panToPoint }) => {
           <ListStateBox>
             <button
               onClick={() => {
+                setListState("trafficLight");
+              }}
+            >
+              <TrafficLight $listState={listState}>
+                <svg
+                  width="9"
+                  height="19"
+                  viewBox="0 0 9 19"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect
+                    x="0.5"
+                    y="0.5"
+                    width="7.45438"
+                    height="15.2584"
+                    rx="2.5"
+                    fill={listState === "trafficLight" ? "black" : "#666"}
+                    stroke={listState === "trafficLight" ? "black" : "#666"}
+                  />
+                  <rect
+                    x="3.89793"
+                    y="16.0425"
+                    width="0.902311"
+                    height="2.10539"
+                    stroke={listState === "trafficLight" ? "black" : "#666"}
+                    strokeWidth="0.902311"
+                  />
+                  <circle cx="4.23518" cy="3.60932" r="1.50385" fill="white" />
+                  <circle cx="4.23518" cy="7.91743" r="1.50385" fill="white" />
+                  <circle cx="4.23518" cy="12.226" r="1.50385" fill="white" />
+                </svg>
+                신호등
+              </TrafficLight>
+            </button>
+            <button
+              onClick={() => {
                 setListState("place");
               }}
             >
@@ -222,43 +259,6 @@ const FavoritesInfo = ({ panToPoint }) => {
                 </svg>
                 장소
               </Place>
-            </button>
-            <button
-              onClick={() => {
-                setListState("trafficLight");
-              }}
-            >
-              <TrafficLight $listState={listState}>
-                <svg
-                  width="9"
-                  height="19"
-                  viewBox="0 0 9 19"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <rect
-                    x="0.5"
-                    y="0.5"
-                    width="7.45438"
-                    height="15.2584"
-                    rx="2.5"
-                    fill={listState === "trafficLight" ? "black" : "#666"}
-                    stroke={listState === "trafficLight" ? "black" : "#666"}
-                  />
-                  <rect
-                    x="3.89793"
-                    y="16.0425"
-                    width="0.902311"
-                    height="2.10539"
-                    stroke={listState === "trafficLight" ? "black" : "#666"}
-                    strokeWidth="0.902311"
-                  />
-                  <circle cx="4.23518" cy="3.60932" r="1.50385" fill="white" />
-                  <circle cx="4.23518" cy="7.91743" r="1.50385" fill="white" />
-                  <circle cx="4.23518" cy="12.226" r="1.50385" fill="white" />
-                </svg>
-                신호등
-              </TrafficLight>
             </button>
           </ListStateBox>
         </HeaderBox>
