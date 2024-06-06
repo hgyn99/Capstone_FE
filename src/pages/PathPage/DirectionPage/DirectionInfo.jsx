@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Walking from "../../../assets/icon/Walking.webp";
 import React, { useState, useEffect } from "react";
 import TrafficDirection from "./TrafficDirection.jsx";
-import { useRecoilState, useResetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { addressState } from "../../../recoil/addressState/atom";
 import { pathInfoState } from "../../../recoil/pathInfoState/atom";
 import { useQuery } from "@tanstack/react-query";
@@ -128,11 +128,11 @@ const DirecrtionInfo = ({ onNavStartClick }) => {
 
   //console.log(pathDetailData?.data.data.totalTime);
 
-  const getFormattedTime = () => {
+  const getSuggestedTime = () => {
     let currentTime = new Date();
 
     if (pathDetailData?.data.data.traffics[0].color === "red") {
-      const timeLeftInSeconds = pathDetailData?.data.data.traffics[0].timeLeft;
+      const timeLeftInSeconds = pathDetailData?.data.data.traffics[0].timeLeft; // -30 // -(n초)를 하면, 신호가 바뀌기 n초 전에 도착하도록 추천 출발 시간 설정 가능
       currentTime = new Date(currentTime.getTime() + timeLeftInSeconds * 1000);
     }
 
@@ -142,11 +142,11 @@ const DirecrtionInfo = ({ onNavStartClick }) => {
     const ampm = hours >= 12 ? "오후" : "오전";
     hours = hours % 12;
     hours = hours ? hours : 12; // the hour '0' should be '12'
-    const formattedTime = `${ampm} ${hours}:${minutes < 10 ? "0" : ""}${minutes}`;
-    return formattedTime;
+    const sugegestedTime = `${ampm} ${hours}:${minutes < 10 ? "0" : ""}${minutes}`;
+    return sugegestedTime;
   };
 
-  const suggestedDepartureTime = getFormattedTime();
+  const suggestedDepartureTime = getSuggestedTime();
   const timeTakes = Math.ceil(pathDetailData?.data.data.totalTime / 60);
   const trafficCounts = pathDetailData?.data.data.trafficCount;
   const totalDistance = 1.6;

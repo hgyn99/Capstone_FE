@@ -33,13 +33,13 @@ const Time = styled.span`
     props.state === "red"
       ? "red"
       : props.state === "green"
-      ? "green"
-      : "black"};
+        ? "green"
+        : "black"};
 `;
 
-const TrafficLight = ({ id, redTime, greenTime }) => {
-  const [state, setState] = useState("red");
-  const [time, setTime] = useState(redTime);
+const TrafficLight = ({ id, redCycle, greenCycle, color, timeLeft }) => {
+  const [state, setState] = useState(color);
+  const [time, setTime] = useState(timeLeft);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -47,10 +47,10 @@ const TrafficLight = ({ id, redTime, greenTime }) => {
         if (time === 1) {
           setState((state) => {
             if (state === "red") {
-              setTime(greenTime);
+              setTime(greenCycle);
               return "green";
             } else {
-              setTime(redTime);
+              setTime(redCycle);
               return "red";
             }
           });
@@ -60,7 +60,7 @@ const TrafficLight = ({ id, redTime, greenTime }) => {
       });
     }, 1000);
     return () => clearInterval(timer);
-  }, [redTime, greenTime]);
+  }, [redCycle, greenCycle]);
 
   return (
     <TrafficLightContainer>

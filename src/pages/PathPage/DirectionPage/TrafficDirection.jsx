@@ -4,8 +4,9 @@ import styled from "styled-components";
 import TrafficLight from "./TrafficLight";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPathDetail } from "../../../apis/api/paths";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { pathInfoState } from "../../../recoil/pathInfoState/atom";
+import { addressState } from "../../../recoil/addressState/atom";
 
 const Container = styled(motion.div)`
   //bottom: 0;
@@ -141,15 +142,43 @@ const TrafficDirection = () => {
   const dragControls = useDragControls();
   const [openState, setOpenState] = useState("mid");
   const pathInfo = useRecoilValue(pathInfoState);
+  const [address, setAddress] = useRecoilState(addressState);
+  const { startLat, startLng, endLat, endLng } = address;
 
-  const trafficLights = [
-    { id: "중흥삼거리", redTime: 32, greenTime: 15 },
-    { id: "효동초사거리", redTime: 17, greenTime: 7 },
-    { id: "북구청", redTime: 8, greenTime: 16 },
-    { id: "신호등 4", redTime: 15, greenTime: 15 },
-    { id: "신호등 5", redTime: 22, greenTime: 7 },
-    { id: "신호등 6", redTime: 6, greenTime: 16 },
-  ]; // API 호출로 변경
+  const {
+    isLoading,
+    data: pathDetailData, // 수정
+    refetch: pathDetailRefetch, // 수정
+  } = useQuery({
+    queryKey: ["pathDetail", startLat, startLng, endLat, endLng],
+    queryFn: () => fetchPathDetail(startLat, startLng, endLat, endLng),
+    enabled: !!address, // 수정
+    // keepPreviousData: true,
+    // staleTime: 5000,
+    onError: (e) => {
+      console.log(e);
+    },
+  });
+
+  console.log(pathDetailData?.data.data);
+
+  const trafficLights = pathDetailData?.data.data.traffics.map((traffic) => ({
+    id: traffic.viewName,
+    redCycle: traffic.redCycle,
+    greenCycle: traffic.greenCycle,
+    color: traffic.color,
+    timeLeft: traffic.timeLeft,
+    // 여기에 서버에서 받아온 값 중 필요한 값 추가
+  }));
+
+  // const trafficLights = [
+  //   { id: "중흥삼거리", redCycle: 32, greenCycle: 15 },
+  //   { id: "효동초사거리", redCycle: 17, greenCycle: 7 },
+  //   { id: "북구청", redCycle: 8, greenCycle: 16 },
+  //   { id: "신호등 4", redCycle: 15, greenCycle: 15 },
+  //   { id: "신호등 5", redCycle: 22, greenCycle: 7 },
+  //   { id: "신호등 6", redCycle: 6, greenCycle: 16 },
+  // ]; // API 호출로 변경
 
   return (
     <Container
@@ -211,8 +240,11 @@ const TrafficDirection = () => {
                   <TrafficLight
                     key={index}
                     id={trafficLight.id}
-                    redTime={trafficLight.redTime}
-                    greenTime={trafficLight.greenTime}
+                    redCycle={trafficLight.redCycle}
+                    greenCycle={trafficLight.greenCycle}
+                    color={trafficLight.color}
+                    timeLeft={trafficLight.timeLeft}
+                    // 여기에 추가로 넘겨줄 값 넣기
                   />
                 </TrafficLightContainer>
               </TrafficLightsItem>
