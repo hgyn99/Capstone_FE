@@ -324,7 +324,7 @@ const FavoritesInfo = ({ panToPoint }) => {
                     <></>
                   ) : (
                     <>
-                      {favoritesTraffic.data?.data.traffics.map((traffic) => (
+                      {favoritesTraffic.data.data.traffics?.map((traffic) => (
                         <ListBox key={traffic.id}>
                           <button
                             onClick={() => {
