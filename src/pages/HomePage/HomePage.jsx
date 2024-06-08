@@ -14,6 +14,7 @@ import { navigationState } from "../../recoil/navigationState/atom";
 import { fetchTraffic } from "../../apis/api/traffic";
 import locationIcon from "../..//assets/icon/location.png";
 import { roundCoordinates } from "../../utils/roundCoordinates";
+import { currentAddressState } from "../../recoil/currentAddressState/atom";
 
 const { kakao } = window;
 
@@ -56,6 +57,8 @@ const HomePage = () => {
   const [map, setMap] = useState(null);
   const [mapBounds, setMapBounds] = useState(null);
   const [openIndex, setOpenIndex] = useState(null);
+  const [currentAddress, setCurrentAddress] =
+    useRecoilState(currentAddressState);
   const [state, setState] = useState({
     center: {
       lat: 35.17828963,
@@ -95,6 +98,12 @@ const HomePage = () => {
               lng: position.coords.longitude,
             },
             isLoading: false,
+          }));
+          setCurrentAddress((prev) => ({
+            ...prev,
+            currentLat: position.coords.latitude,
+            currentLng: position.coords.longitude,
+            // currentAddress: "광주 북구 용봉동 300",
           }));
         },
         (err) => {

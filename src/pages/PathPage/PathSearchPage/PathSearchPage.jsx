@@ -6,6 +6,7 @@ import centerLocationIcon from "../../../assets/icon/centerLocationIcon.webp";
 import PathTitle from "./PathTitle";
 import Address from "./Address";
 
+
 const { kakao } = window;
 
 const Container = styled.div`

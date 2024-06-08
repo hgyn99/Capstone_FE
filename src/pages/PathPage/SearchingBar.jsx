@@ -10,6 +10,7 @@ import { useRecoilState } from "recoil";
 import { addressState } from "../../recoil/addressState/atom";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPathDetail } from "../../apis/api/paths";
+import { currentAddressState } from "../../recoil/currentAddressState/atom";
 
 const MainContainer = styled.div`
   margin-top: 10px;
@@ -154,6 +155,8 @@ const SearchingBar = () => {
   // const [departureInput, setDepartureInput] = useRecoilState(addressState);
   // const [arrivalInput, setArrivalInput] = useRecoilState(addressState);
   const [address, setAddress] = useRecoilState(addressState);
+  const [currentAddress, setCurrentAddress] =
+    useRecoilState(currentAddressState);
   //console.log(!!departureAddress.departureAddress);
   // const [arrivalAddress, setArrivalAddress] =
   //   useRecoilState(arrivalAddressState);
@@ -208,18 +211,49 @@ const SearchingBar = () => {
     }
   };
 
+  const { kakao } = window;
+
+  var geocoder = new kakao.maps.services.Geocoder();
+
+  var callback = function (result, status) {
+    if (status === kakao.maps.services.Status.OK) {
+      console.log(result[0].address.address_name);
+      if (isDepartureInputClicked) {
+        setAddress((prev) => ({
+          ...prev,
+          departureAddress: result[0].address.address_name,
+        }));
+      }
+      if (isArrivalInputClicked) {
+        setAddress((prev) => ({
+          ...prev,
+          arrivalAddress: result[0].address.address_name,
+        }));
+      }
+    }
+  };
+
   const handleCurrentLocationClick = () => {
     console.log("현재 위치 클릭");
+    var coord = new kakao.maps.LatLng(
+      currentAddress.currentLat,
+      currentAddress.currentLng
+    );
+    geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
     if (isDepartureInputClicked) {
       setAddress((prev) => ({
         ...prev,
-        departureAddress: "", // 현재 위치 주소 받아오는 코드로 변경
+        startLat: currentAddress.currentLat,
+        startLng: currentAddress.currentLng,
+        departureAddress: currentAddress.currentAddress, // 현재 위치 주소 받아오기
       }));
     }
     if (isArrivalInputClicked) {
       setAddress((prev) => ({
         ...prev,
-        arrivalAddress: "", // 현재 위치 주소 받아오는 코드로 변경
+        endLat: currentAddress.currentLat,
+        endLng: currentAddress.currentLng,
+        arrivalAddress: currentAddress.currentAddress, // 현재 위치 주소 받아오기
       }));
     }
   };
@@ -238,7 +272,7 @@ const SearchingBar = () => {
       console.log(e);
     },
   });
-  console.log(!!address.arrivalAddress && !!address.departureAddress);
+  //console.log(!!address.arrivalAddress && !!address.departureAddress);
 
   return (
     <MainContainer>
