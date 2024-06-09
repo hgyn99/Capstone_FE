@@ -1,15 +1,17 @@
 import styled from "styled-components";
 import crossIcon from "../../assets/icon/cross.webp";
 import backwardIcon from "../../assets/icon/backwardIcon.webp";
+import favoriteIcon from "../../assets/icon/favoriteIcon.webp";
+import favoriteIconFilled from "../../assets/icon/favoriteIconFilled.webp";
 import pinIcon from "../../assets/icon/pinIcon.webp";
 import pantoIcon from "../../assets/icon/pantoIcon.webp";
-import { Link, useNavigate } from "react-router-dom";
-import React, { useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import { ReactComponent as Arrow } from "../../assets/icon/arrow.svg";
 import { useRecoilState } from "recoil";
 import { addressState } from "../../recoil/addressState/atom";
 import { useQuery } from "@tanstack/react-query";
-import { fetchPathDetail } from "../../apis/api/paths";
+import { fetchPathDetail, addFavoritePath } from "../../apis/api/paths";
 import { currentAddressState } from "../../recoil/currentAddressState/atom";
 
 const MainContainer = styled.div`
@@ -135,12 +137,12 @@ const PinButton = styled.img.attrs({
 
 const DirectionSearchButton = styled.button`
   width: 33px;
-  height: 37px;
+  height: 40px;
   border: none;
   border-radius: 5px;
   background-color: ${(props) => props.theme.blue};
   display: block;
-  box-shadow: 0px 4px 8px -1px rgba(0, 0, 0, 0.3);
+  //box-shadow: 0px 4px 8px -1px rgba(0, 0, 0, 0.3);
 `;
 
 const DirectionSearchText = styled.p`
@@ -148,9 +150,22 @@ const DirectionSearchText = styled.p`
   color: white;
 `;
 
+const AddtoFavoriteButton = styled.button`
+  background-image: url(${favoriteIcon});
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  border: none;
+  width: 33px;
+  height: 40px;
+  border-radius: 5px;
+  display: block;
+`;
+
 const SearchingBar = () => {
   const [isDepartureInputClicked, setDepartureInputClicked] = useState(false);
   const [isArrivalInputClicked, setArrivalInputClicked] = useState(false);
+  const [isDirectionSearchClicked, setDirectionSearchClicked] = useState(false);
   const navigate = useNavigate();
   // const [departureInput, setDepartureInput] = useRecoilState(addressState);
   // const [arrivalInput, setArrivalInput] = useRecoilState(addressState);
@@ -161,6 +176,8 @@ const SearchingBar = () => {
   // const [arrivalAddress, setArrivalAddress] =
   //   useRecoilState(arrivalAddressState);
   const { startLat, startLng, endLat, endLng } = address;
+  const startName = address.departureAddress;
+  const endName = address.arrivalAddress;
 
   const handleDepartureInputClick = () => {
     setDepartureInputClicked(true);
@@ -258,6 +275,25 @@ const SearchingBar = () => {
     }
   };
 
+  const handleDirectionSearchClick = (event) => {
+    setDirectionSearchClicked(true);
+    event.stopPropagation();
+    // console.log("출발지 위도: " + address.startLat);
+    // console.log("출발지 경도: " + address.startLng);
+    // console.log("도착지 위도: " + address.endLat);
+    // console.log("도착지 경도: " + address.endLng);
+
+    pathDetailRefetch(); // 출발지 및 도착지 위도 경도 전송
+    navigate("/direction", {
+      state: { isDirectionSearchClicked: isDirectionSearchClicked },
+    });
+  };
+
+  const hanleAddtoFavoriteClick = () => {
+    console.log("즐겨찾기 클릭");
+    addFavoritePathRefetch();
+  };
+
   const {
     isLoading,
     data: pathDetailData, // 수정
@@ -272,7 +308,66 @@ const SearchingBar = () => {
       console.log(e);
     },
   });
+
+  const {
+    isLoading: isFavoritePathLoading,
+    data: addFavoritePathData, // 수정
+    refetch: addFavoritePathRefetch, // 수정
+  } = useQuery({
+    queryKey: [
+      "addFavoritePath",
+      startName,
+      startLat,
+      startLng,
+      endName,
+      endLat,
+      endLng,
+    ],
+    queryFn: () =>
+      addFavoritePath(startName, startLat, startLng, endName, endLat, endLng),
+    // enabled: !!address, // 수정
+    // keepPreviousData: true,
+    // staleTime: 5000,
+    onError: (e) => {
+      console.log(e);
+    },
+  });
+
+  const {
+    isLoading: deleteFavoritePathByIdLoading,
+    data: deleteFavoritePathByIdData, // 수정
+    refetch: deleteFavoritePathByIdRefetch, // 수정
+  } = useQuery({
+    /*
+    queryKey: [
+      "deleteFavoritePathById",
+      startName,
+      startLat,
+      startLng,
+      endName,
+      endLat,
+      endLng,
+    ],
+    queryFn: () =>
+      deleteFavoritePathById(
+        startName,
+        startLat,
+        startLng,
+        endName,
+        endLat,
+        endLng
+      ),
+      */
+    // enabled: !!address, // 수정
+    // keepPreviousData: true,
+    // staleTime: 5000,
+    onError: (e) => {
+      console.log(e);
+    },
+  });
   //console.log(!!address.arrivalAddress && !!address.departureAddress);
+
+  // const location = useLocation();
 
   return (
     <MainContainer>
@@ -331,20 +426,19 @@ const SearchingBar = () => {
                 <span style={{ color: "gray" }}>도착지 입력</span>
               )}
             </InputButton>
+
             <DirectionSearchButton
               disabled={!address.arrivalAddress || !address.departureAddress}
-              onClick={() => {
-                // console.log("출발지 위도: " + address.startLat);
-                // console.log("출발지 경도: " + address.startLng);
-                // console.log("도착지 위도: " + address.endLat);
-                // console.log("도착지 경도: " + address.endLng);
-                pathDetailRefetch(); // 출발지 및 도착지 위도 경도 전송
-                navigate("/direction");
-              }}
+              onClick={handleDirectionSearchClick}
+              style={{ display: isDirectionSearchClicked ? "none" : "block" }}
             >
               <Arrow />
               <DirectionSearchText>길찾기</DirectionSearchText>
             </DirectionSearchButton>
+            <AddtoFavoriteButton
+              onClick={hanleAddtoFavoriteClick}
+              style={{ display: isDirectionSearchClicked ? "block" : "none" }}
+            ></AddtoFavoriteButton>
           </>
         ) : null}
         {isDepartureInputClicked ? (

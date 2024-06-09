@@ -1,6 +1,7 @@
 import { styled } from "styled-components";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import locationIcon from "../../../assets/icon/location.png";
 import startingPoint from "../../../assets/icon/startingPoint.webp";
 import endingPoint from "../../../assets/icon/endingPoint.webp";
@@ -96,7 +97,9 @@ const DirectionPage = () => {
   var linePath = pathDetailData?.data.data.paths.map((path) => {
     return new kakao.maps.LatLng(path.lat, path.lng);
   });
-  console.log(linePath);
+  //console.log("lng: " + linePath[0].La);
+  //console.log("lat: " + linePath[0].Ma);
+
   // 위도와 경도를 추출합니다
   var lats = linePath.map((point) => point.getLat());
   var lngs = linePath.map((point) => point.getLng());
@@ -172,6 +175,8 @@ const DirectionPage = () => {
           setState((prev) => ({
             ...prev,
             center: {
+              //lat: position.coords.latitude,
+              //lng: position.coords.longitude,
               lat: avgLat - 0.002,
               lng: avgLng,
             },
@@ -195,6 +200,26 @@ const DirectionPage = () => {
     }
   }, []);
 
+  /*
+  useEffect(() => {
+  // 지도를 재설정할 범위정보를 가지고 있을 LatLngBounds 객체를 생성합니다
+  var bounds = new kakao.maps.LatLngBounds();
+
+  var i;
+  for (i = 0; i < linePath.length; i++) {
+    // LatLngBounds 객체에 좌표를 추가합니다
+    bounds.extend(linePath[i]);
+  }
+  function setBounds() {
+    // LatLngBounds 객체에 추가된 좌표들을 기준으로 지도의 범위를 재설정합니다
+    // 이때 지도의 중심좌표와 레벨이 변경될 수 있습니다
+    map.setBounds(bounds);
+  }
+  }, []);
+*/
+  //const location = useLocation();
+  //const isDirectionSearchClicked = location.state?.isDirectionSearchClicked;
+  //console.log(isDirectionSearchClicked);
   return (
     <NavigationBarLayout>
       <Container>
@@ -211,15 +236,16 @@ const DirectionPage = () => {
           minLevel={6}
           onCreate={setMap}
           onDragEnd={(map) => {
-            const latlng = map.getCenter();
+            //setBounds();
+            //const latlng = map.getCenter();
             // var coord = new kakao.maps.LatLng(
             //   map.getCenter().getLat(),
             //   map.getCenter().getLng()
             // );
             //geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
-            setResult(
-              `변경된 지도 중심좌표는 ${latlng.getLat()} 이고, 경도는 ${latlng.getLng()} 입니다`
-            );
+            //setResult(
+            //</Container>  `변경된 지도 중심좌표는 ${latlng.getLat()} 이고, 경도는 ${latlng.getLng()} 입니다`
+            //);
             //console.log(result);
             //console.log(avgLat, avgLng);
           }}

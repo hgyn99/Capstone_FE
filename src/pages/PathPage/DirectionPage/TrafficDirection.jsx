@@ -116,8 +116,9 @@ const TrafficLightsListBox = styled.div`
 const TrafficLightsItem = styled.div`
   display: flex;
   align-items: center;
-  //gap: 10px;
+  gap: 10px;
   line-height: 50px;
+  text-indent: 0;
   //border-bottom: 2px solid ${(props) => props.theme.gray};
 `;
 
