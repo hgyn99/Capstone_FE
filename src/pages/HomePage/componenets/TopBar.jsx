@@ -37,7 +37,7 @@ const InputBox = styled.input`
 `;
 
 const DirectionSearchButton = styled.button`
-  width: 44px;
+  width: 300px;
   height: 44px;
   border: none;
   border-radius: 5px;
@@ -74,7 +74,7 @@ const TopBar = () => {
 
   return (
     <Container>
-      <InputBox
+      {/* <InputBox
         type="text"
         placeholder="목적지를 입력해주세요"
         value={inputValue}
@@ -83,7 +83,7 @@ const TopBar = () => {
         //onClick={() => {
         // console.log("목적지 입력창 클릭");
         //}}
-      ></InputBox>
+      ></InputBox> */}
       <DirectionSearchButton
         onClick={() => {
           console.log("길찾기 페이지 이동");

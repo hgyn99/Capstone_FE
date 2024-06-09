@@ -393,10 +393,11 @@ const SearchingBar = () => {
             <InputButton
               as="input"
               type="text"
-              //placeholder="출발지 입력"
+              placeholder="아래 버튼을 통해 현재 위치를 입력해주세요"
               value={address.departureAddress}
               onChange={handleInputChange}
               onKeyDown={handleKeyPress}
+              readOnly
             />
             <BackwardButton onClick={handleBackwardButtonClick} />
           </>
@@ -406,10 +407,11 @@ const SearchingBar = () => {
             <InputButton
               as="input"
               type="text"
-              //placeholder="도착지 입력"
+              placeholder="아래 버튼을 통해 현재 위치를 입력해주세요"
               value={address.arrivalAddress}
               onChange={handleInputChange}
               onKeyDown={handleKeyPress}
+              readOnly
             />
             <BackwardButton onClick={handleBackwardButtonClick} />
           </>
