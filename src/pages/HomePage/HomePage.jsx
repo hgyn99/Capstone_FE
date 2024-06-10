@@ -17,6 +17,25 @@ import { roundCoordinates } from "../../utils/roundCoordinates";
 
 const { kakao } = window;
 
+const ToSeoulButton = styled.button`
+  position: absolute;
+  bottom: 80dvh;
+  left: 16px;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  z-index: 500;
+  font-size: 20px;
+  transition: bottom 0.5s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const Container = styled.div`
   position: relative;
 `;
@@ -126,7 +145,11 @@ const HomePage = () => {
   const panTo = (point) => {
     const lat = point.lat ? point.lat : state.center.lat;
     const lng = point.lng ? point.lng : state.center.lng;
-    // const newLatLng = new kakao.maps.LatLng(lat, lng);
+    const newLatLng = new kakao.maps.LatLng(lat, lng);
+    map.panTo(newLatLng);
+  };
+
+  const panToSeoul = () => {
     const newLatLng = new kakao.maps.LatLng(37.501601, 127.025916);
     map.panTo(newLatLng);
   };
@@ -150,13 +173,10 @@ const HomePage = () => {
           }}
           padding={64}
           level={3}
-          // minLevel={4}
+          minLevel={4}
           onCreate={setMap}
           onDragEnd={() => {
             handleMapDragEnd();
-          }}
-          onClick={() => {
-            // setOpenIndex(null);x`
           }}
         >
           {surroundingLightInfoData?.data.data.traffics.map((data, index) => {
@@ -193,6 +213,8 @@ const HomePage = () => {
             image={{ src: locationIcon, size: { width: 30, height: 30 } }}
           />
         </Map>
+        <ToSeoulButton onClick={panToSeoul}>S</ToSeoulButton>
+
         <PanToButton
           onClick={panTo}
           $openState={openState}

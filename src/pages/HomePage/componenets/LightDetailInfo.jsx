@@ -64,12 +64,12 @@ const DirectionInfoBox = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
-  gap: 220px;
+  gap: 200px;
   border-bottom: 2px solid ${({ theme }) => theme.gray};
 `;
 
 const RemainingTimeBox = styled.div`
-  width: 60px;
+  width: 80px;
   display: flex;
   justify-content: space-between;
 `;
@@ -245,7 +245,7 @@ const LightDetailInfo = ({ isLoggein }) => {
             <RemainingTimeBox>
               <Circle color={color}></Circle>
               <RemainingTimeText color={color}>
-                {timeLeftCountDown ? `${timeLeftCountDown} 초` : "정보 없음"}
+                {timeLeftCountDown ? `${timeLeftCountDown} 초` : "정보없음"}
               </RemainingTimeText>
             </RemainingTimeBox>
           </DirectionInfoBox>
