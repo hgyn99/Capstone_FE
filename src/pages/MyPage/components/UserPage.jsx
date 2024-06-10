@@ -87,7 +87,7 @@ const FavoriteContainer = styled.div`
 const Title = styled.p`
   font-size: 18px;
   font-weight: bold;
-  padding-left: 15px;
+  padding-left: 6%;
   margin-top: 25px;
 `;
 

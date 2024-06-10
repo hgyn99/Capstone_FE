@@ -40,14 +40,14 @@ const TimeOutModal = ({ isOpen, onRequestClose }) => {
             <path
               d="M1.00012 16.8787L16.8788 0.999999"
               stroke="black"
-              stroke-width="2"
-              stroke-linecap="round"
+              strokeWidth="2"
+              strokeLinecap="round"
             />
             <path
               d="M16.8788 16.8787L1.00012 0.999999"
               stroke="black"
-              stroke-width="2"
-              stroke-linecap="round"
+              strokeWidth="2"
+              strokeLinecap="round"
             />
           </svg>
         </Button>
@@ -64,7 +64,7 @@ const TimeOutModal = ({ isOpen, onRequestClose }) => {
             d="M66.53 132.06C102.445 132.06 131.56 102.945 131.56 67.03C131.56 31.1149 102.445 2 66.53 2C30.6149 2 1.5 31.1149 1.5 67.03C1.5 102.945 30.6149 132.06 66.53 132.06Z"
             fill="#E84034"
             stroke="#231815"
-            stroke-width="3"
+            strokeWidth="3"
             stroke-miterlimit="10"
           />
           <path
@@ -78,7 +78,7 @@ const TimeOutModal = ({ isOpen, onRequestClose }) => {
           <path
             d="M52.0099 92.1104C52.0099 83.6204 58.8899 76.7403 67.3799 76.7403C75.8699 76.7403 82.7499 83.6204 82.7499 92.1104"
             stroke="#231815"
-            stroke-width="6"
+            strokeWidth="6"
             stroke-miterlimit="10"
           />
         </svg>

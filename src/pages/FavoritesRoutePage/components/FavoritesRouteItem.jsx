@@ -131,9 +131,10 @@ const FavoritesRouteItem = ({ route }) => {
   const [animateRef, animate] = useAnimate();
   const [currentDraggedItemId, setCurrentDraggedItemId] = useState(null);
   const itemX = useMotionValue(0);
-  const [isOpen, setIsOpen] = useState(false);
   const [isButtonShow, setIsButtonShow] = useState(false);
   const buttonAnimateState = isButtonShow ? "visible" : "hidden";
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   useEffect(() => {
     itemX.on("change", (v) => {
@@ -141,13 +142,6 @@ const FavoritesRouteItem = ({ route }) => {
       setIsButtonShow(isOverThreshold);
     });
   });
-
-  const handleEditModal = () => {
-    setIsOpen((prev) => !prev);
-  };
-
-  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const handleEditUpdateModal = () => {
     setIsUpdateModalOpen((prev) => !prev);
@@ -190,7 +184,7 @@ const FavoritesRouteItem = ({ route }) => {
         }}
         ref={animateRef}
       >
-        <ItemBox onClick={() => console.log("클릭")}>
+        <ItemBox>
           <IconBox>
             <IconImg src={Icon} alt="icon" />
           </IconBox>
@@ -208,11 +202,6 @@ const FavoritesRouteItem = ({ route }) => {
         <MoveBox>
           <Move src={MoveButton} alt="move" />
         </MoveBox>
-        <UpdateModal
-          isOpen={isOpen}
-          onRequestClose={handleEditModal}
-          id={routeId}
-        />
       </SwipeContainer>
       <UpdateModal
         isOpen={isUpdateModalOpen}
