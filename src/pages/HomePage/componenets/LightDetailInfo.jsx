@@ -248,11 +248,11 @@ const LightDetailInfo = ({ isLoggein }) => {
             </TopBox>
           </HeaderBox>
           <DirectionInfoBox>
-            <Text $fontWeight={600}>서쪽</Text>
+            <Text $fontWeight={600}>1</Text>
             <RemainingTimeBox>
               <Circle color={color}></Circle>
               <RemainingTimeText color={color}>
-                {timeLeftCountDown}초
+                {timeLeftCountDown ? `${timeLeftCountDown} 초` : "정보 없음"}
               </RemainingTimeText>
             </RemainingTimeBox>
           </DirectionInfoBox>

@@ -127,7 +127,7 @@ const HomePage = () => {
     const lat = point.lat ? point.lat : state.center.lat;
     const lng = point.lng ? point.lng : state.center.lng;
     // const newLatLng = new kakao.maps.LatLng(lat, lng);
-    const newLatLng = new kakao.maps.LatLng(37.715133, 126.734086);
+    const newLatLng = new kakao.maps.LatLng(37.501601, 127.025916);
     map.panTo(newLatLng);
   };
 

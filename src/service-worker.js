@@ -19,7 +19,8 @@ clientsClaim();
 // Their URLs are injected into the manifest variable below.
 // This variable must be present somewhere in your service worker file,
 // even if you decide not to use precaching. See https://cra.link/PWA
-precacheAndRoute(self.__WB_MANIFEST);
+// precacheAndRoute 사용하여 offline.html을 캐싱
+precacheAndRoute([{ url: "/offline.html", revision: "12345" }]);
 
 // Set up App Shell-style routing, so that all navigation requests
 // are fulfilled with your index.html shell. Learn more at
@@ -61,6 +62,15 @@ registerRoute(
     ],
   })
 );
+
+self.addEventListener("fetch", function (event) {
+  event.respondWith(
+    fetch(event.request).catch(function () {
+      // 네트워크 요청 실패 시, offline.html 반환
+      return caches.match("/offline.html");
+    })
+  );
+});
 
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: 'SKIP_WAITING'})
