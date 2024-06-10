@@ -95,8 +95,6 @@ const Card = ({ surroundingLightInfoData, isLoggein }) => {
     viewName,
   } = surroundingLightInfoData;
 
-  console.log(detail.direction);
-
   const [isModalOpened, setIsModalOpened] = useState(false);
   const handleLoginModal = () => {
     setIsModalOpened((prev) => !prev);

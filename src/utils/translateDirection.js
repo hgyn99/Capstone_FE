@@ -1,6 +1,5 @@
 // utils.js 파일
 export const translateDirection = (directionCode) => {
-  console.log(directionCode);
   const directionMap = {
     nt: "북쪽",
     et: "동쪽",
