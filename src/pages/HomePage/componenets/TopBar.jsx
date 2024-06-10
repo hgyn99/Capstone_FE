@@ -15,29 +15,45 @@ const Container = styled.div`
   gap: 16px;
 `;
 
-const InputBox = styled.input`
+// const InputBox = styled.input`
+//   width: 300px;
+//   border: none;
+//   height: 44px;
+//   border-radius: 5px;
+//   background-color: white;
+//   text-align: left;
+//   padding-left: 15px;
+//   box-shadow: 0px 4px 8px -1px rgba(0, 0, 0, 0.3);
+//   &::placeholder {
+//     // 필요시 속성 추가
+//   }
+//   &:focus {
+//     outline: none; // 기본 테두리 스타일 제거
+//     border: 2px solid ${(props) => props.theme.blue}; // 테두리 스타일 설정
+//   }
+//   &:focus::placeholder {
+//     color: transparent;
+//   }
+// `;
+
+const InputBox = styled.div`
   width: 300px;
   border: none;
   height: 44px;
   border-radius: 5px;
   background-color: white;
   text-align: left;
-  padding-left: 15px;
+  //padding-left: 15px;
   box-shadow: 0px 4px 8px -1px rgba(0, 0, 0, 0.3);
-  &::placeholder {
-    // 필요시 속성 추가
-  }
-  &:focus {
-    outline: none; // 기본 테두리 스타일 제거
-    border: 2px solid ${(props) => props.theme.blue}; // 테두리 스타일 설정
-  }
-  &:focus::placeholder {
-    color: transparent;
-  }
+  font-weight: 700;
+  font-size: 17px;
+  text-indent: 20px;
+  line-height: 44px;
 `;
 
 const DirectionSearchButton = styled.button`
-  width: 300px;
+  width: 44px;
+  //width: 300px;
   height: 44px;
   border: none;
   border-radius: 5px;
@@ -51,10 +67,9 @@ const DirectionSearchText = styled.p`
   color: white;
 `;
 
-const TopBar = () => {
+const TopBar = (currentName) => {
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState("");
-
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
   };
@@ -84,6 +99,14 @@ const TopBar = () => {
         // console.log("목적지 입력창 클릭");
         //}}
       ></InputBox> */}
+      <InputBox
+      //onClick={() => {
+      // console.log("목적지 입력창 클릭");
+      //}}
+      >
+        현재 위치:{" "}
+        <span style={{ fontWeight: 500 }}>{currentName.currentName}</span>
+      </InputBox>
       <DirectionSearchButton
         onClick={() => {
           console.log("길찾기 페이지 이동");

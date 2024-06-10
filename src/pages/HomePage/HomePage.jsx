@@ -57,6 +57,7 @@ const HomePage = () => {
   const [map, setMap] = useState(null);
   const [mapBounds, setMapBounds] = useState(null);
   const [openIndex, setOpenIndex] = useState(null);
+  const [currentName, setCurrentName] = useState("");
   const [currentAddress, setCurrentAddress] =
     useRecoilState(currentAddressState);
   const [state, setState] = useState({
@@ -105,6 +106,11 @@ const HomePage = () => {
             currentLng: position.coords.longitude,
             // currentAddress: "광주 북구 용봉동 300",
           }));
+          var coord = new kakao.maps.LatLng(
+            position.coords.latitude,
+            position.coords.longitude
+          );
+          geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
         },
         (err) => {
           setState((prev) => ({
@@ -146,11 +152,27 @@ const HomePage = () => {
     setMapBounds(newBounds);
     surroundingDataRefetch(); // 새로운 bounds로 데이터 페칭 실행
   };
+  var geocoder = new kakao.maps.services.Geocoder();
+
+  var callback = function (result, status) {
+    if (status === kakao.maps.services.Status.OK) {
+      console.log(result[0].address.address_name);
+      setCurrentName(result[0].address.address_name);
+    }
+  };
+
+  // const getCurrentName = () => {
+  //   var coord = new kakao.maps.LatLng(
+  //     map.getCenter().getLat(),
+  //     map.getCenter().getLng()
+  //   );
+  //   geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
+  // };
 
   return (
     <NavigationBarLayout>
       <Container>
-        <TopBar />
+        <TopBar currentName={currentName} />
         <Map
           id="map"
           center={state.center}
@@ -164,6 +186,7 @@ const HomePage = () => {
           onCreate={setMap}
           onDragEnd={() => {
             handleMapDragEnd();
+            //getCurrentName();
           }}
           onClick={() => {
             // setOpenIndex(null);
