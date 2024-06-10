@@ -126,7 +126,8 @@ const HomePage = () => {
   const panTo = (point) => {
     const lat = point.lat ? point.lat : state.center.lat;
     const lng = point.lng ? point.lng : state.center.lng;
-    const newLatLng = new kakao.maps.LatLng(lat, lng);
+    // const newLatLng = new kakao.maps.LatLng(lat, lng);
+    const newLatLng = new kakao.maps.LatLng(37.715133, 126.734086);
     map.panTo(newLatLng);
   };
 
@@ -149,7 +150,7 @@ const HomePage = () => {
           }}
           padding={64}
           level={3}
-          minLevel={4}
+          // minLevel={4}
           onCreate={setMap}
           onDragEnd={() => {
             handleMapDragEnd();

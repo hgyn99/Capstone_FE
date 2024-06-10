@@ -6,6 +6,10 @@ import { ThemeProvider, createGlobalStyle } from "styled-components";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import theme from "./theme";
 import { RecoilRoot } from "recoil";
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
+
+serviceWorkerRegistration.register();
+reportWebVitals();
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
