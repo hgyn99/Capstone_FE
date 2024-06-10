@@ -12,7 +12,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { bottomSheetOpenState } from "../../recoil/bottomSheetOpenState/atom";
 import { navigationState } from "../../recoil/navigationState/atom";
 import { fetchTraffic } from "../../apis/api/traffic";
-import locationIcon from "../..//assets/icon/location.png";
+import locationIcon from "../..//assets/icon/location.webp";
 import { roundCoordinates } from "../../utils/roundCoordinates";
 
 const { kakao } = window;
