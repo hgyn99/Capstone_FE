@@ -196,6 +196,7 @@ const HomePage = () => {
           onClick={panTo}
           $openState={openState}
           $navigationBarState={navigationBarState}
+          aria-label="지도에서 위치로 이동"
         >
           <svg
             width="20"
