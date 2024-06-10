@@ -52,10 +52,6 @@ const AddressText = styled.p`
   font-weight: 700;
 `;
 
-const DetailAddressText = styled.span`
-  font-size: 12px;
-`;
-
 const IsFavoriteButton = styled.button`
   background: none;
   border: none;
@@ -222,9 +218,6 @@ const LightDetailInfo = ({ isLoggein }) => {
             <TopBox>
               <div>
                 <AddressText>{viewName}</AddressText>
-                <DetailAddressText>
-                  {/* 176-48 (전남대공과대학 방면) */}
-                </DetailAddressText>
               </div>
               <IsFavoriteButton
                 onClick={() => {
