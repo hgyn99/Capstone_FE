@@ -125,8 +125,8 @@ const MoveBox = styled.div`
 
 const Move = styled.img``;
 
-const FavoritesRouteItem = ({ route }) => {
-  const { routeId, name, startName, endName } = route;
+const FavoritesRouteItem = ({ path }) => {
+  const { id, name, startName, endName } = path;
   const dragControls = useDragControls();
   const [animateRef, animate] = useAnimate();
   const [currentDraggedItemId, setCurrentDraggedItemId] = useState(null);
@@ -164,7 +164,7 @@ const FavoritesRouteItem = ({ route }) => {
         <DeleteButton onClick={handleEditDeleteModal}>삭제</DeleteButton>
       </EditContainer>
       <SwipeContainer
-        key={routeId}
+        key={id}
         drag="x"
         dragConstraints={{ left: -110, right: 0 }}
         dragElastic={0.1}
@@ -173,10 +173,10 @@ const FavoritesRouteItem = ({ route }) => {
         style={{ x: itemX }}
         //dragSnapToOrigin   // 드래그 끝나면 원래 위치로
         onDragStart={() => {
-          setCurrentDraggedItemId(routeId); // 현재 드래그 요소 추적
+          setCurrentDraggedItemId(id); // 현재 드래그 요소 추적
         }}
         onDragEnd={() => {
-          if (currentDraggedItemId === routeId) {
+          if (currentDraggedItemId === id) {
             const isOverThreshold = itemX.get() < -55 / 2; // editbutton 반쯤 나올 때 버튼 다 보여주기
             animate(animateRef.current, { x: isOverThreshold ? -110 : 0 });
           }
@@ -206,12 +206,12 @@ const FavoritesRouteItem = ({ route }) => {
       <UpdateModal
         isOpen={isUpdateModalOpen}
         onRequestClose={handleEditUpdateModal}
-        //id={id}
+        id={id}
       />
       <DeleteModal
         isOpen={isDeleteModalOpen}
         onRequestClose={handleEditDeleteModal}
-        //id={id}
+        id={id}
       />
     </ListWrapper>
   );
