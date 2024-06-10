@@ -5,8 +5,8 @@ const TrafficLightContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100px;
-  height: 30px;
+  width: 120px;
+  height: 36px;
   border: 1px solid black;
   border-radius: 20px;
   padding: 5px;
@@ -14,8 +14,8 @@ const TrafficLightContainer = styled.div`
 `;
 
 const Light = styled.div`
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   background-color: ${(props) => props.color};
   display: flex;
@@ -27,7 +27,7 @@ const Light = styled.div`
 `;
 
 const Time = styled.span`
-  font-size: 12.5px;
+  font-size: 13.5px;
   text-indent: 0px;
   color: ${(props) =>
     props.state === "red"

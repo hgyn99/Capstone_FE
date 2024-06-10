@@ -162,6 +162,18 @@ const AddtoFavoriteButton = styled.button`
   display: block;
 `;
 
+const AddtoFavoriteFilledButton = styled.button`
+  background-image: url(${favoriteIconFilled});
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  border: none;
+  width: 33px;
+  height: 40px;
+  border-radius: 5px;
+  display: block;
+`;
+
 const SearchingBar = () => {
   const [isDepartureInputClicked, setDepartureInputClicked] = useState(false);
   const [isArrivalInputClicked, setArrivalInputClicked] = useState(false);
