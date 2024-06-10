@@ -137,7 +137,7 @@ const PathSearchPage = () => {
         }}
         padding={64}
         level={3}
-        minLevel={4}
+        minLevel={10}
         onCreate={setMap}
         onDragEnd={(map) => {
           const latlng = map.getCenter();

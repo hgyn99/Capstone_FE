@@ -26,7 +26,7 @@ trafficInstance.interceptors.response.use(
   }
 );
 export const pathInstance = axios.create({
-  baseURL: process.env.REACT_APP_BASE_URL + "/paths",
+  baseURL: process.env.REACT_APP_BASE_PATH_URL + "/paths",
   timeout: 5000,
   headers: {
     "Content-Type": "application/json",
