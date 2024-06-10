@@ -50,3 +50,55 @@ pathInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+export const memberInstance = axios.create({
+  baseURL: process.env.REACT_APP_BASE_URL + "/members",
+  timeout: 2000,
+  headers: {
+    "Content-Type": "application/json",
+  },
+  withCredentials: true,
+});
+
+memberInstance.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers["Authorization"] = token;
+  }
+  return config;
+});
+
+memberInstance.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+export const profileInstance = axios.create({
+  baseURL: process.env.REACT_APP_BASE_URL + "/members/profile",
+  timeout: 2000,
+  headers: {
+    "Content-Type": "multipart/form-data",
+  },
+  withCredentials: true,
+});
+
+profileInstance.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers["Authorization"] = token;
+  }
+  return config;
+});
+
+profileInstance.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
