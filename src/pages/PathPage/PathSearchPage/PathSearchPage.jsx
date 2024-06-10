@@ -101,6 +101,11 @@ const PathSearchPage = () => {
             },
             isLoading: false,
           }));
+          var coord = new kakao.maps.LatLng(
+            position.coords.latitude,
+            position.coords.longitude
+          );
+          geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
         },
         (err) => {
           setState((prev) => ({
