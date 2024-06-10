@@ -129,6 +129,30 @@ const DirectionPage = () => {
   // 지도에 선을 표시합니다
   polyline.setMap(map);
 
+  // 위도와 경도를 추출합니다
+  var lats = linePath.map((point) => point.getLat());
+  var lngs = linePath.map((point) => point.getLng());
+
+  // 위도와 경도의 최소값과 최대값을 찾습니다
+  var minLat = Math.min(...lats);
+  var maxLat = Math.max(...lats);
+  var minLng = Math.min(...lngs);
+  var maxLng = Math.max(...lngs);
+
+  // 위도와 경도의 최소값과 최대값의 평균을 계산합니다
+  var avgLat = (minLat + maxLat) / 2;
+  var avgLng = (minLng + maxLng) / 2;
+
+  // const newCenter = new kakao.maps.LatLng(avgLat - 0.002, avgLng);
+
+  function setCenter() {
+    // 이동할 위도 경도 위치를 생성합니다
+    var moveLatLon = new kakao.maps.LatLng(avgLat - 0.002, avgLng);
+
+    // 지도 중심을 이동 시킵니다
+    map.setCenter(moveLatLon);
+  }
+
   // HTML 문자열 또는 Dom Element 입니다
   var startingImg =
     '<div class ="label">' +
@@ -223,11 +247,12 @@ const DirectionPage = () => {
           }}
           padding={64}
           level={4}
-          minLevel={6}
+          minLevel={8}
           onCreate={setMap}
           // onDragEnd={handleMapBouns}
           onDragEnd={() => {
             //setBounds();
+            setCenter();
           }}
         ></Map>
         <PanToButton
