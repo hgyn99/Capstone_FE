@@ -52,14 +52,15 @@ const PanToButton = styled.button`
 const HomePage = () => {
   const navigationBarState = useRecoilValue(navigationState);
   const [openState, setOpenState] = useRecoilState(bottomSheetOpenState);
+  const isLoggein = !!localStorage.getItem("token");
 
   const [map, setMap] = useState(null);
-  const [mapBounds, setMapBounds] = useState(null);
+  const [mapBounds, setMapBounds] = useState(map?.getBounds());
   const [openIndex, setOpenIndex] = useState(null);
   const [state, setState] = useState({
     center: {
-      lat: 33.450701,
-      lng: 126.570667,
+      lat: 35.17828963,
+      lng: 126.909254315,
     },
     errMsg: null,
     isLoading: true,
@@ -76,9 +77,6 @@ const HomePage = () => {
   } = useQuery({
     queryKey: ["traffic"],
     queryFn: () => fetchTraffic(roundCoordinates(mapBounds)),
-    enabled: !!mapBounds,
-    // keepPreviousData: true,
-    // staleTime: 5000,
     onError: (e) => {
       console.log(e);
     },
@@ -157,7 +155,7 @@ const HomePage = () => {
             handleMapDragEnd();
           }}
           onClick={() => {
-            // setOpenIndex(null);
+            // setOpenIndex(null);x`
           }}
         >
           {surroundingLightInfoData?.data.data.traffics.map((data, index) => {
@@ -172,7 +170,7 @@ const HomePage = () => {
           })}
           {navigationBarState === "Home" ? (
             <>
-              <LightDetailInfo />
+              <LightDetailInfo isLoggein={isLoggein} />
             </>
           ) : null}
           {navigationBarState === "TrafficSignal" ? (
@@ -182,6 +180,7 @@ const HomePage = () => {
                 surroundingLightInfoData={
                   surroundingLightInfoData?.data.data.traffics
                 }
+                isLoggein={isLoggein}
               />
             </>
           ) : null}

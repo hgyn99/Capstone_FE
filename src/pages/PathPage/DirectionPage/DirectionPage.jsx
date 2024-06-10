@@ -8,6 +8,8 @@ import NavigationBarLayout from "../../../components/NavigationBarLayout";
 import SearchingBar from "../SearchingBar";
 import DirectionInfo from "./DirectionInfo";
 import TrafficDirection from "./TrafficDirection";
+import { useQuery } from "@tanstack/react-query";
+import { fetchPathDetail } from "../../../apis/api/paths";
 
 const { kakao } = window;
 
@@ -49,8 +51,8 @@ const DirectionPage = () => {
   const [map, setMap] = useState(null);
   const [state, setState] = useState({
     center: {
-      lat: 33.450701,
-      lng: 126.570667,
+      lat: 35.17828963,
+      lng: 126.909254315,
     },
     errMsg: null,
     isLoading: true,
@@ -60,6 +62,7 @@ const DirectionPage = () => {
   const [showDirectionInfo, setShowDirectionInfo] = useState(true);
   const [showTrafficDirection, setShowTrafficDirection] = useState(false);
   const [panToBottom, setPanToBottom] = useState(290);
+  const { startLat, startLng, endLat, endLng } = address;
 
   const handleNavStartClick = () => {
     setShowDirectionInfo(false);
@@ -72,27 +75,27 @@ const DirectionPage = () => {
     map.panTo(newLatLng);
   };
 
-  // const handleBackwardButtonClick = (event) => {
-  //   event.stopPropagation();
-  // };
-
-  // var geocoder = new kakao.maps.services.Geocoder();
-
-  // var callback = function (result, status) {
-  //   if (status === kakao.maps.services.Status.OK) {
-  //     console.log(result[0].address.address_name);
-  //     setAddress(result[0].address.address_name);
-  //   }
-  // };
+  const {
+    isLoading,
+    data: pathDetailData, // 수정
+    refetch: pathDetailRefetch, // 수정
+  } = useQuery({
+    queryKey: ["pathDetail", startLat, startLng, endLat, endLng],
+    queryFn: () => fetchPathDetail(startLat, startLng, endLat, endLng),
+    enabled: !!address, // 수정
+    // keepPreviousData: true,
+    // staleTime: 5000,
+    onError: (e) => {
+      console.log(e);
+    },
+  });
 
   // 선을 구성하는 좌표 배열입니다. 이 좌표들을 이어서 선을 표시합니다
   // 여기에 서버에서 받아온 좌표들을 차례대로 저장
-  var linePath = [
-    new kakao.maps.LatLng(37.38118888117801, 126.93094365880526),
-    new kakao.maps.LatLng(37.383421737256505, 126.9281187540139),
-    new kakao.maps.LatLng(37.381296029929544, 126.92929505845807),
-    new kakao.maps.LatLng(37.380571879740496, 126.92609890547823),
-  ];
+  //console.log(pathDetailData?.data.data.paths);
+  var linePath = pathDetailData?.data.data.paths.map((path) => {
+    return new kakao.maps.LatLng(path.lat, path.lng);
+  });
 
   // 위도와 경도를 추출합니다
   var lats = linePath.map((point) => point.getLat());
@@ -133,13 +136,17 @@ const DirectionPage = () => {
 
   // 커스텀 오버레이가 표시될 위치입니다(출발지)
   var startPosition = new kakao.maps.LatLng(
-    37.38118888117801,
-    126.93094365880526
+    pathDetailData?.data.data.paths[0].lat,
+    pathDetailData?.data.data.paths[0].lng
   );
   // 커스텀 오버레이가 표시될 위치입니다(도착지)
   var endPosition = new kakao.maps.LatLng(
-    37.380571879740496,
-    126.92609890547823
+    pathDetailData?.data.data.paths[
+      pathDetailData?.data.data.paths.length - 1
+    ].lat,
+    pathDetailData?.data.data.paths[
+      pathDetailData?.data.data.paths.length - 1
+    ].lng
   );
 
   // 커스텀 오버레이를 생성합니다(출발지)
@@ -213,7 +220,7 @@ const DirectionPage = () => {
             setResult(
               `변경된 지도 중심좌표는 ${latlng.getLat()} 이고, 경도는 ${latlng.getLng()} 입니다`
             );
-            console.log(result);
+            //console.log(result);
             //console.log(avgLat, avgLng);
           }}
         >

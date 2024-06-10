@@ -2,6 +2,9 @@ import { styled } from "styled-components";
 import trafficLightImage from "../../../assets/trafficLightImg.png";
 import Text from "./Text";
 import { useCountDown } from "../../../hooks/useCountDown";
+import { useState } from "react";
+import KakaoLoginModal from "./KakaoLoginModal";
+import { useHandleFavoriteTraffic } from "../../../hooks/handleFavoriteTraffic";
 
 const Contianer = styled.div`
   width: 90%;
@@ -79,7 +82,7 @@ const RemainingTimeText = styled.span`
     $lightColor === "green" ? theme.green : theme.red};
 `;
 
-const Card = ({ surroundingLightInfoData }) => {
+const Card = ({ surroundingLightInfoData, isLoggein }) => {
   const {
     color,
     detail,
@@ -91,6 +94,17 @@ const Card = ({ surroundingLightInfoData }) => {
     viewName,
   } = surroundingLightInfoData;
 
+  const [isModalOpened, setIsModalOpened] = useState(false);
+  const handleLoginModal = () => {
+    setIsModalOpened((prev) => !prev);
+  };
+
+  const handleFavorite = useHandleFavoriteTraffic({
+    id: id,
+    viewName: viewName,
+    isFavorite: isFavorite,
+  });
+
   const timeLeftCountDown = useCountDown(timeLeft);
 
   return (
@@ -101,7 +115,7 @@ const Card = ({ surroundingLightInfoData }) => {
       <DetailAddressText>176-48 (전남대공과대학 방면)</DetailAddressText>
       <IsFavoriteButton
         onClick={() => {
-          // 저장
+          isLoggein ? handleFavorite() : handleLoginModal();
         }}
       >
         <svg
@@ -119,7 +133,6 @@ const Card = ({ surroundingLightInfoData }) => {
         </svg>
       </IsFavoriteButton>
       <Lights>
-        {/* map 함수로 나열하기 */}
         <Light>
           <Text>서쪽</Text>
           <RemainingTimeText $lightColor={color}>
@@ -128,6 +141,10 @@ const Card = ({ surroundingLightInfoData }) => {
           <Circle $lightColor={color} />
         </Light>
       </Lights>
+      <KakaoLoginModal
+        isOpen={isModalOpened}
+        onRequestClose={handleLoginModal}
+      />
     </Contianer>
   );
 };
