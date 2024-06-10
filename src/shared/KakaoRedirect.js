@@ -39,7 +39,7 @@ const KakaoRedirect = () => {
   console.log(code);
 
   const { mutate } = useMutation({
-    mutationFn: (code) => addMember({ code: code }),
+    mutationFn: (code) => addMember(code),
     onSuccess: (res) => {
       console.log("성공", res);
       clearTimeout(loginTimeOut);

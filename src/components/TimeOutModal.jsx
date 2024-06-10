@@ -65,7 +65,7 @@ const TimeOutModal = ({ isOpen, onRequestClose }) => {
             fill="#E84034"
             stroke="#231815"
             strokeWidth="3"
-            stroke-miterlimit="10"
+            strokeMiterlimit="10"
           />
           <path
             d="M82.75 67.0302C87.7316 67.0302 91.77 61.6442 91.77 55.0002C91.77 48.3562 87.7316 42.9702 82.75 42.9702C77.7684 42.9702 73.73 48.3562 73.73 55.0002C73.73 61.6442 77.7684 67.0302 82.75 67.0302Z"
@@ -79,7 +79,7 @@ const TimeOutModal = ({ isOpen, onRequestClose }) => {
             d="M52.0099 92.1104C52.0099 83.6204 58.8899 76.7403 67.3799 76.7403C75.8699 76.7403 82.7499 83.6204 82.7499 92.1104"
             stroke="#231815"
             strokeWidth="6"
-            stroke-miterlimit="10"
+            strokeMiterlimit="10"
           />
         </svg>
         <Text>

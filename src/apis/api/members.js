@@ -1,7 +1,7 @@
 import { memberInstance } from "..";
 
-export const fetchMemebers = () => {
-  return memberInstance.get();
+export const fetchMemebers = (payload) => {
+  return memberInstance.get("", payload);
 };
 
 export const addMember = (payload) => {

@@ -6,7 +6,7 @@ import FavoritesRouteList from "./components/FavoritesRouteList";
 import { useQuery } from "@tanstack/react-query";
 import { fetchFavoritePath } from "../../apis/api/paths";
 
-const FavoritesRoutePage = () => {
+const FavoritesRoutePage = ({ mapAddress }) => {
   // const routes = [
   //   {
   //       routeId : 1,
@@ -22,7 +22,7 @@ const FavoritesRoutePage = () => {
   //   },
 
   // ];
-  const { isLoading, data: favoritesPath } = useQuery({
+  const { isLoading: pathIsLoading, data: favoritesPath } = useQuery({
     queryKey: ["favorites"],
     queryFn: fetchFavoritePath,
     onError: (e) => {
@@ -30,7 +30,7 @@ const FavoritesRoutePage = () => {
     },
   });
 
-  if (isLoading) return;
+  if (pathIsLoading) return;
 
   return (
     <Layout>
@@ -38,7 +38,7 @@ const FavoritesRoutePage = () => {
       {favoritesPath.length === 0 ? (
         <RouteEmptyPage />
       ) : (
-        <FavoritesRouteList routes={favoritesPath} />
+        <FavoritesRouteList favoritesPath={favoritesPath} />
       )}
     </Layout>
   );

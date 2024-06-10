@@ -11,7 +11,7 @@ const Container = styled.div`
 const FavoritesRouteList = ({ favoritesPath }) => {
   return (
     <Container>
-      {favoritesPath.data.path?.map((path) => (
+      {favoritesPath.data.data.favoriteRoutes?.map((path) => (
         <FavoritesRouteItem key={path.id} path={path} />
       ))}
     </Container>
