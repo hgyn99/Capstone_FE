@@ -175,6 +175,7 @@ const AddtoFavoriteFilledButton = styled.button`
 `;
 
 const SearchingBar = () => {
+  const token = localStorage.getItem("token");
   const [isDepartureInputClicked, setDepartureInputClicked] = useState(false);
   const [isArrivalInputClicked, setArrivalInputClicked] = useState(false);
   const [isDirectionSearchClicked, setDirectionSearchClicked] = useState(false);
@@ -182,6 +183,7 @@ const SearchingBar = () => {
   // const [departureInput, setDepartureInput] = useRecoilState(addressState);
   // const [arrivalInput, setArrivalInput] = useRecoilState(addressState);
   const [address, setAddress] = useRecoilState(addressState);
+  // console.log(address);?
   const [currentAddress, setCurrentAddress] =
     useRecoilState(currentAddressState);
   //console.log(!!departureAddress.departureAddress);
@@ -303,7 +305,7 @@ const SearchingBar = () => {
 
   const hanleAddtoFavoriteClick = () => {
     console.log("즐겨찾기 클릭");
-    addFavoritePathRefetch();
+    //addFavoritePathRefetch();
   };
 
   const {
@@ -312,14 +314,26 @@ const SearchingBar = () => {
     refetch: pathDetailRefetch, // 수정
   } = useQuery({
     queryKey: ["pathDetail", startLat, startLng, endLat, endLng],
-    queryFn: () => fetchPathDetail(startLat, startLng, endLat, endLng),
-    enabled: !!address, // 수정
+    queryFn: () => fetchPathDetail({ startLat, startLng, endLat, endLng }),
+    enabled:
+      !!address &&
+      address.startLat !== null &&
+      address.startLng !== null &&
+      address.endLat !== null &&
+      address.endLng !== null,
     // keepPreviousData: true,
     // staleTime: 5000,
     onError: (e) => {
       console.log(e);
     },
   });
+  console.log(
+    "모두 만족?: " + !!address &&
+      address.startLat !== null &&
+      address.startLng !== null &&
+      address.endLat !== null &&
+      address.endLng !== null
+  );
 
   const {
     isLoading: isFavoritePathLoading,
@@ -335,6 +349,7 @@ const SearchingBar = () => {
       endLat,
       endLng,
     ],
+    enabled: !!token,
     queryFn: () =>
       addFavoritePath(startName, startLat, startLng, endName, endLat, endLng),
     // enabled: !!address, // 수정

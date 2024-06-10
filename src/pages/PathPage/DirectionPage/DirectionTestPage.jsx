@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import { Map, MapMarker } from "react-kakao-maps-sdk";
+import { Map, MapMarker, useMap } from "react-kakao-maps-sdk";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import locationIcon from "../../../assets/icon/location.png";
@@ -11,6 +11,9 @@ import DirectionInfo from "./DirectionInfo";
 import TrafficDirection from "./TrafficDirection";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPathDetail } from "../../../apis/api/paths";
+import { useMemo } from "react";
+import { useRecoilState } from "recoil";
+import { addressState } from "../../../recoil/addressState/atom";
 
 const { kakao } = window;
 
@@ -59,7 +62,7 @@ const DirectionPage = () => {
     isLoading: true,
   });
   const [result, setResult] = useState("");
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useRecoilState(addressState);
   const [showDirectionInfo, setShowDirectionInfo] = useState(true);
   const [showTrafficDirection, setShowTrafficDirection] = useState(false);
   const [panToBottom, setPanToBottom] = useState(290);
@@ -83,36 +86,36 @@ const DirectionPage = () => {
   } = useQuery({
     queryKey: ["pathDetail", startLat, startLng, endLat, endLng],
     queryFn: () => fetchPathDetail({ startLat, startLng, endLat, endLng }),
-    enabled: !!address, // 수정
+    enabled:
+      !!address &&
+      address.startLat !== null &&
+      address.startLng !== null &&
+      address.endLat !== null &&
+      address.endLng !== null,
     // keepPreviousData: true,
     // staleTime: 5000,
     onError: (e) => {
-      console.log(e);
+      console.log("DTPage: " + e);
     },
   });
 
-  // 선을 구성하는 좌표 배열입니다. 이 좌표들을 이어서 선을 표시합니다
-  // 여기에 서버에서 받아온 좌표들을 차례대로 저장
-  //console.log(pathDetailData?.data.data.paths);
+  console.log("pathDetailData(DTPage): ", pathDetailData);
   var linePath = pathDetailData?.data.data.paths.map((path) => {
     return new kakao.maps.LatLng(path.lat, path.lng);
   });
-  //console.log("lng: " + linePath[0].La);
-  //console.log("lat: " + linePath[0].Ma);
 
-  // 위도와 경도를 추출합니다
-  var lats = linePath.map((point) => point.getLat());
-  var lngs = linePath.map((point) => point.getLng());
+  var bounds = new kakao.maps.LatLngBounds();
 
-  // 위도와 경도의 최소값과 최대값을 찾습니다
-  var minLat = Math.min(...lats);
-  var maxLat = Math.max(...lats);
-  var minLng = Math.min(...lngs);
-  var maxLng = Math.max(...lngs);
-
-  // 위도와 경도의 최소값과 최대값의 평균을 계산합니다
-  var avgLat = (minLat + maxLat) / 2;
-  var avgLng = (minLng + maxLng) / 2;
+  var i;
+  for (i = 0; i < linePath.length; i++) {
+    // LatLngBounds 객체에 좌표를 추가합니다
+    bounds.extend(linePath[i]);
+  }
+  function setBounds() {
+    // LatLngBounds 객체에 추가된 좌표들을 기준으로 지도의 범위를 재설정합니다
+    // 이때 지도의 중심좌표와 레벨이 변경될 수 있습니다
+    map.setBounds(bounds);
+  }
 
   // 지도에 표시할 선을 생성합니다
   var polyline = new kakao.maps.Polyline({
@@ -126,7 +129,6 @@ const DirectionPage = () => {
   // 지도에 선을 표시합니다
   polyline.setMap(map);
 
-  // 커스텀 오버레이에 표시할 내용입니다
   // HTML 문자열 또는 Dom Element 입니다
   var startingImg =
     '<div class ="label">' +
@@ -136,12 +138,12 @@ const DirectionPage = () => {
     '<div class ="label">' +
     `<span class="center"><img src="${endingPoint}" alt="Location Icon" style="width:40px; height:50px; margin-bottom:30px;"/></span>` + // locationIcon 이미지를 추가합니다
     "</div>";
-
   // 커스텀 오버레이가 표시될 위치입니다(출발지)
   var startPosition = new kakao.maps.LatLng(
     pathDetailData?.data.data.paths[0].lat,
     pathDetailData?.data.data.paths[0].lng
   );
+
   // 커스텀 오버레이가 표시될 위치입니다(도착지)
   var endPosition = new kakao.maps.LatLng(
     pathDetailData?.data.data.paths[
@@ -175,10 +177,10 @@ const DirectionPage = () => {
           setState((prev) => ({
             ...prev,
             center: {
-              //lat: position.coords.latitude,
-              //lng: position.coords.longitude,
-              lat: avgLat - 0.002,
-              lng: avgLng,
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+              //lat: avgLat - 0.002,
+              //lng: avgLng,
             },
             isLoading: false,
           }));
@@ -200,26 +202,14 @@ const DirectionPage = () => {
     }
   }, []);
 
-  /*
-  useEffect(() => {
-  // 지도를 재설정할 범위정보를 가지고 있을 LatLngBounds 객체를 생성합니다
-  var bounds = new kakao.maps.LatLngBounds();
+  // const handleMapBouns = (point) => {
+  //   map?.setBound(point);
+  // };
 
-  var i;
-  for (i = 0; i < linePath.length; i++) {
-    // LatLngBounds 객체에 좌표를 추가합니다
-    bounds.extend(linePath[i]);
-  }
-  function setBounds() {
-    // LatLngBounds 객체에 추가된 좌표들을 기준으로 지도의 범위를 재설정합니다
-    // 이때 지도의 중심좌표와 레벨이 변경될 수 있습니다
-    map.setBounds(bounds);
-  }
-  }, []);
-*/
-  //const location = useLocation();
-  //const isDirectionSearchClicked = location.state?.isDirectionSearchClicked;
-  //console.log(isDirectionSearchClicked);
+  // useEffect(() => {
+  //   // map.setBound(points);
+  // }, []);
+
   return (
     <NavigationBarLayout>
       <Container>
@@ -235,26 +225,11 @@ const DirectionPage = () => {
           level={4}
           minLevel={6}
           onCreate={setMap}
-          onDragEnd={(map) => {
+          // onDragEnd={handleMapBouns}
+          onDragEnd={() => {
             //setBounds();
-            //const latlng = map.getCenter();
-            // var coord = new kakao.maps.LatLng(
-            //   map.getCenter().getLat(),
-            //   map.getCenter().getLng()
-            // );
-            //geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
-            //setResult(
-            //</Container>  `변경된 지도 중심좌표는 ${latlng.getLat()} 이고, 경도는 ${latlng.getLng()} 입니다`
-            //);
-            //console.log(result);
-            //console.log(avgLat, avgLng);
           }}
-        >
-          {/* <MapMarker
-            position={state.center}
-            image={{ src: locationIcon, size: { width: 30, height: 30 } }}
-          /> */}
-        </Map>
+        ></Map>
         <PanToButton
           style={{ bottom: `${panToBottom}px` }}
           onClick={() => {

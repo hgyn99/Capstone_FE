@@ -152,8 +152,8 @@ const TrafficDirection = () => {
     refetch: pathDetailRefetch, // 수정
   } = useQuery({
     queryKey: ["pathDetail", startLat, startLng, endLat, endLng],
-    queryFn: () => fetchPathDetail(startLat, startLng, endLat, endLng),
-    enabled: !!address, // 수정
+    queryFn: () => fetchPathDetail({ startLat, startLng, endLat, endLng }),
+    enabled: false, // 수정
     // keepPreviousData: true,
     // staleTime: 5000,
     onError: (e) => {

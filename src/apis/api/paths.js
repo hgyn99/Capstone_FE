@@ -1,8 +1,18 @@
 import { pathInstance } from "..";
 
-export const fetchPathDetail = (address) => {
-  //console.log(address);
-  return pathInstance.get("./detail");
+export const fetchPathDetail = ({ startLat, startLng, endLat, endLng }) => {
+  console.log("전송하는 startLat: " + startLat);
+  console.log("전송하는 startLng: " + startLng);
+  console.log("전송하는 endLat: " + endLat);
+  console.log("전송하는 endLng: " + endLng);
+  return pathInstance.get("/detail", {
+    params: {
+      startLat: startLat,
+      startLng: startLng,
+      endLat: endLat,
+      endLng: endLng,
+    },
+  });
 };
 
 export const fetchFavoritePath = () => {

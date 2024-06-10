@@ -72,7 +72,7 @@ const DeleteIcon = styled.button`
 `;
 
 // FavoriteList 서버에서 받아오기
-
+const token = localStorage.getItem("token");
 const FavoriteList = () => {
   const {
     isLoading,
@@ -81,7 +81,7 @@ const FavoriteList = () => {
   } = useQuery({
     queryKey: ["favoritePath"],
     queryFn: () => fetchFavoritePath(),
-    //enabled: !!address, // 수정
+    enabled: !!token, // 수정
     // keepPreviousData: true,
     // staleTime: 5000,
     onError: (e) => {
@@ -89,20 +89,22 @@ const FavoriteList = () => {
     },
   });
 
-  const {
-    isLoading: isLoadingDeleteFavoritePathById,
-    data: deleteFavoritePathByIdData, // 수정
-    refetch: deleteFavoritePathByIdRefetch, // 수정
-  } = useQuery({
-    queryKey: ["favoritePath"],
-    queryFn: () => deleteFavoritePathById(),
-    //enabled: !!address, // 수정
-    // keepPreviousData: true,
-    // staleTime: 5000,
-    onError: (e) => {
-      console.log(e);
-    },
-  });
+  console.log("token: " + token);
+
+  // const {
+  //   isLoading: isLoadingDeleteFavoritePathById,
+  //   data: deleteFavoritePathByIdData, // 수정
+  //   refetch: deleteFavoritePathByIdRefetch, // 수정
+  // } = useQuery({
+  //   queryKey: ["favoritePath"],
+  //   queryFn: () => deleteFavoritePathById(),
+  //   enabled: !token, // 수정
+  //   // keepPreviousData: true,
+  //   // staleTime: 5000,
+  //   onError: (e) => {
+  //     console.log(e);
+  //   },
+  // });
 
   //console.log(favoritePathData?.data.data);
 
@@ -131,7 +133,7 @@ const FavoriteList = () => {
               {favoriteRoute.name}
               <DeleteIcon
                 onClick={() => {
-                  deleteFavoritePathById(favoriteRoute.id);
+                  //deleteFavoritePathById(favoriteRoute.id);
                 }}
               />
             </FavoriteItem>

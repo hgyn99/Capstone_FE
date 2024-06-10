@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Map, MapMarker } from "react-kakao-maps-sdk";
+import { Map, MapMarker, useMap } from "react-kakao-maps-sdk";
 import { useQuery } from "@tanstack/react-query";
 import { styled } from "styled-components";
 import NavigationBarLayout from "../../components/NavigationBarLayout";
@@ -56,6 +56,8 @@ const HomePage = () => {
   const isLoggein = !!localStorage.getItem("token");
 
   const [map, setMap] = useState(null);
+  //const newMap = useMap();
+  //console.log("newMap"newMap);
   const [mapBounds, setMapBounds] = useState(map?.getBounds());
   const [openIndex, setOpenIndex] = useState(null);
   const [currentName, setCurrentName] = useState("");
