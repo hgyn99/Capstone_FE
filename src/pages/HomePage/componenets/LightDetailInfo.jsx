@@ -52,10 +52,6 @@ const AddressText = styled.p`
   font-weight: 700;
 `;
 
-const DetailAddressText = styled.span`
-  font-size: 12px;
-`;
-
 const IsFavoriteButton = styled.button`
   background: none;
   border: none;
@@ -68,12 +64,12 @@ const DirectionInfoBox = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
-  gap: 220px;
+  gap: 200px;
   border-bottom: 2px solid ${({ theme }) => theme.gray};
 `;
 
 const RemainingTimeBox = styled.div`
-  width: 60px;
+  width: 80px;
   display: flex;
   justify-content: space-between;
 `;
@@ -222,9 +218,6 @@ const LightDetailInfo = ({ isLoggein }) => {
             <TopBox>
               <div>
                 <AddressText>{viewName}</AddressText>
-                <DetailAddressText>
-                  {/* 176-48 (전남대공과대학 방면) */}
-                </DetailAddressText>
               </div>
               <IsFavoriteButton
                 onClick={() => {
@@ -248,11 +241,11 @@ const LightDetailInfo = ({ isLoggein }) => {
             </TopBox>
           </HeaderBox>
           <DirectionInfoBox>
-            <Text $fontWeight={600}>서쪽</Text>
+            <Text $fontWeight={600}>1</Text>
             <RemainingTimeBox>
               <Circle color={color}></Circle>
               <RemainingTimeText color={color}>
-                {timeLeftCountDown}초
+                {timeLeftCountDown ? `${timeLeftCountDown} 초` : "정보없음"}
               </RemainingTimeText>
             </RemainingTimeBox>
           </DirectionInfoBox>

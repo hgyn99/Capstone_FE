@@ -12,11 +12,30 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { bottomSheetOpenState } from "../../recoil/bottomSheetOpenState/atom";
 import { navigationState } from "../../recoil/navigationState/atom";
 import { fetchTraffic } from "../../apis/api/traffic";
-import locationIcon from "../..//assets/icon/location.png";
+import locationIcon from "../..//assets/icon/location.webp";
 import { roundCoordinates } from "../../utils/roundCoordinates";
 import { currentAddressState } from "../../recoil/currentAddressState/atom";
 
 const { kakao } = window;
+
+const ToSeoulButton = styled.button`
+  position: absolute;
+  bottom: 80dvh;
+  left: 16px;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  z-index: 500;
+  font-size: 20px;
+  transition: bottom 0.5s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const Container = styled.div`
   position: relative;
@@ -147,6 +166,11 @@ const HomePage = () => {
     map.panTo(newLatLng);
   };
 
+  const panToSeoul = () => {
+    const newLatLng = new kakao.maps.LatLng(37.501601, 127.025916);
+    map.panTo(newLatLng);
+  };
+
   const handleMapDragEnd = () => {
     const newBounds = map.getBounds(); // 맵 API로부터 새로운 bounds 정보를 가져옴
     setMapBounds(newBounds);
@@ -188,9 +212,6 @@ const HomePage = () => {
             handleMapDragEnd();
             //getCurrentName();
           }}
-          onClick={() => {
-            // setOpenIndex(null);x`
-          }}
         >
           {surroundingLightInfoData?.data.data.traffics.map((data, index) => {
             return (
@@ -226,10 +247,13 @@ const HomePage = () => {
             image={{ src: locationIcon, size: { width: 30, height: 30 } }}
           />
         </Map>
+        <ToSeoulButton onClick={panToSeoul}>S</ToSeoulButton>
+
         <PanToButton
           onClick={panTo}
           $openState={openState}
           $navigationBarState={navigationBarState}
+          aria-label="지도에서 위치로 이동"
         >
           <svg
             width="20"
