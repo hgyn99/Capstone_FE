@@ -5,8 +5,8 @@ const TrafficLightContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100px;
-  height: 30px;
+  width: 120px;
+  height: 36px;
   border: 1px solid black;
   border-radius: 20px;
   padding: 5px;
@@ -14,8 +14,8 @@ const TrafficLightContainer = styled.div`
 `;
 
 const Light = styled.div`
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   background-color: ${(props) => props.color};
   display: flex;
@@ -27,35 +27,42 @@ const Light = styled.div`
 `;
 
 const Time = styled.span`
-  font-size: 12.5px;
+  font-size: 13.5px;
   text-indent: 0px;
   color: ${(props) =>
-    props.state === "red"
+    props.state === "RED"
       ? "red"
-      : props.state === "green"
+      : props.state === "GREEN"
         ? "green"
         : "black"};
 `;
 
-const TrafficLight = ({ id, redCycle, greenCycle, color, timeLeft }) => {
+const TrafficLight = ({
+  id,
+  redCycle,
+  greenCycle,
+  color,
+  timeLeft,
+  direction,
+}) => {
   const [state, setState] = useState(color);
-  const [time, setTime] = useState(timeLeft);
+  const [time, setTime] = useState(Math.round(timeLeft));
 
   useEffect(() => {
     const timer = setInterval(() => {
       setTime((time) => {
         if (time === 1) {
           setState((state) => {
-            if (state === "red") {
-              setTime(greenCycle);
-              return "green";
+            if (state === "RED") {
+              setTime(Math.round(greenCycle));
+              return "GREEN";
             } else {
-              setTime(redCycle);
-              return "red";
+              setTime(Math.round(redCycle));
+              return "RED";
             }
           });
         } else {
-          return time - 1;
+          return Math.round(time - 1);
         }
       });
     }, 1000);
@@ -64,8 +71,8 @@ const TrafficLight = ({ id, redCycle, greenCycle, color, timeLeft }) => {
 
   return (
     <TrafficLightContainer>
-      <Light color={state === "red" ? "red" : "#D9D9D9"} />
-      <Light color={state === "green" ? "green" : "#D9D9D9"} />
+      <Light color={state === "RED" ? "RED" : "#D9D9D9"} />
+      <Light color={state === "GREEN" ? "GREEN" : "#D9D9D9"} />
       <Light color="#D9D9D9">
         <Time state={state}>{time}</Time>
       </Light>

@@ -10,17 +10,21 @@ import {
 import Icon from "../../../assets/icon/favoriteRouteIcon.webp";
 import UpdateModal from "../../../components/UpdateModal";
 import DeleteModal from "../../../components/DeleteModal";
+import { useRecoilValue } from "recoil";
+import { addressState } from "../../../recoil/addressState/atom";
+
+const { kakao } = window;
 
 const ListWrapper = styled.div`
   width: 100%;
-  height: 60px;
+  height: 65px;
   position: relative;
   border-bottom: 1px solid #f0f0f0;
 `;
 
 const EditContainer = styled(motion.div)`
   width: 100%;
-  height: 60px;
+  height: 65px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -54,7 +58,7 @@ const DeleteButton = styled.button`
 
 const SwipeContainer = styled(motion.div)`
   width: 100%;
-  height: 60px;
+  height: 65px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -101,12 +105,7 @@ const RouteAlias = styled.span`
   color: #535ce8;
 `;
 
-const RouteBox = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 5px;
-`;
+const RouteBox = styled.div``;
 const Start = styled.span`
   font-size: 15px;
 `;
@@ -125,15 +124,18 @@ const MoveBox = styled.div`
 
 const Move = styled.img``;
 
-const FavoritesRouteItem = ({ route }) => {
-  const { routeId, name, startName, endName } = route;
+const FavoritesRouteItem = ({ path }) => {
+  const { id, name, startPoint, endPoint } = path;
   const dragControls = useDragControls();
   const [animateRef, animate] = useAnimate();
   const [currentDraggedItemId, setCurrentDraggedItemId] = useState(null);
   const itemX = useMotionValue(0);
-  const [isOpen, setIsOpen] = useState(false);
   const [isButtonShow, setIsButtonShow] = useState(false);
   const buttonAnimateState = isButtonShow ? "visible" : "hidden";
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [startAddress, setStartAddress] = useState("");
+  const [endAddress, setEndAddress] = useState("");
 
   useEffect(() => {
     itemX.on("change", (v) => {
@@ -142,12 +144,43 @@ const FavoritesRouteItem = ({ route }) => {
     });
   });
 
-  const handleEditModal = () => {
-    setIsOpen((prev) => !prev);
+  let geocoder = new kakao.maps.services.Geocoder();
+  // 출발좌표값 주소로 변환
+  const getStartAddress = (lat, lng) => {
+    const startLatLng = new kakao.maps.LatLng(lat, lng);
+    let callback = function (result, status) {
+      if (status === kakao.maps.services.Status.OK) {
+        console.log("startAddress", result[0].address.address_name);
+        setStartAddress(result[0].address.address_name);
+      } else {
+        console.error("Failed to get end address:", status);
+      }
+    };
+    geocoder.coord2Address(
+      startLatLng.getLng(),
+      startLatLng.getLat(),
+      callback
+    );
   };
 
-  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  // 도착좌표값 주소로 변환
+  const getEndAddress = (lat, lng) => {
+    const endLatLng = new kakao.maps.LatLng(lat, lng);
+    let callback = function (result, status) {
+      if (status === kakao.maps.services.Status.OK) {
+        console.log("endAddress", result[0].address.address_name);
+        setEndAddress(result[0].address.address_name);
+      } else {
+        console.error("Failed to get end address:", status);
+      }
+    };
+    geocoder.coord2Address(endLatLng.getLng(), endLatLng.getLat(), callback);
+  };
+
+  useEffect(() => {
+    getStartAddress(startPoint.lat, startPoint.lng);
+    getEndAddress(endPoint.lat, endPoint.lng);
+  }, [startPoint, endPoint]);
 
   const handleEditUpdateModal = () => {
     setIsUpdateModalOpen((prev) => !prev);
@@ -170,7 +203,7 @@ const FavoritesRouteItem = ({ route }) => {
         <DeleteButton onClick={handleEditDeleteModal}>삭제</DeleteButton>
       </EditContainer>
       <SwipeContainer
-        key={routeId}
+        key={id}
         drag="x"
         dragConstraints={{ left: -110, right: 0 }}
         dragElastic={0.1}
@@ -179,10 +212,10 @@ const FavoritesRouteItem = ({ route }) => {
         style={{ x: itemX }}
         //dragSnapToOrigin   // 드래그 끝나면 원래 위치로
         onDragStart={() => {
-          setCurrentDraggedItemId(routeId); // 현재 드래그 요소 추적
+          setCurrentDraggedItemId(id); // 현재 드래그 요소 추적
         }}
         onDragEnd={() => {
-          if (currentDraggedItemId === routeId) {
+          if (currentDraggedItemId === id) {
             const isOverThreshold = itemX.get() < -55 / 2; // editbutton 반쯤 나올 때 버튼 다 보여주기
             animate(animateRef.current, { x: isOverThreshold ? -110 : 0 });
           }
@@ -190,7 +223,7 @@ const FavoritesRouteItem = ({ route }) => {
         }}
         ref={animateRef}
       >
-        <ItemBox onClick={() => console.log("클릭")}>
+        <ItemBox>
           <IconBox>
             <IconImg src={Icon} alt="icon" />
           </IconBox>
@@ -199,30 +232,25 @@ const FavoritesRouteItem = ({ route }) => {
               <RouteAlias>{name}</RouteAlias>
             </Alias>
             <RouteBox>
-              <Start>{startName}</Start>
-              <Arrow> - </Arrow>
-              <End>{endName}</End>
+              <Start>{startAddress}</Start>
+              <Arrow> -{">"} </Arrow>
+              <End>{endAddress}</End>
             </RouteBox>
           </AliasBox>
         </ItemBox>
         <MoveBox>
           <Move src={MoveButton} alt="move" />
         </MoveBox>
-        <UpdateModal
-          isOpen={isOpen}
-          onRequestClose={handleEditModal}
-          id={routeId}
-        />
       </SwipeContainer>
       <UpdateModal
         isOpen={isUpdateModalOpen}
         onRequestClose={handleEditUpdateModal}
-        //id={id}
+        id={id}
       />
       <DeleteModal
         isOpen={isDeleteModalOpen}
         onRequestClose={handleEditDeleteModal}
-        //id={id}
+        id={id}
       />
     </ListWrapper>
   );

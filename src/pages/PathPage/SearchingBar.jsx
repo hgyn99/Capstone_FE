@@ -1,15 +1,18 @@
 import styled from "styled-components";
 import crossIcon from "../../assets/icon/cross.webp";
 import backwardIcon from "../../assets/icon/backwardIcon.webp";
+import favoriteIcon from "../../assets/icon/favoriteIcon.webp";
+import favoriteIconFilled from "../../assets/icon/favoriteIconFilled.webp";
 import pinIcon from "../../assets/icon/pinIcon.webp";
 import pantoIcon from "../../assets/icon/pantoIcon.webp";
-import { Link, useNavigate } from "react-router-dom";
-import React, { useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import { ReactComponent as Arrow } from "../../assets/icon/arrow.svg";
 import { useRecoilState } from "recoil";
 import { addressState } from "../../recoil/addressState/atom";
 import { useQuery } from "@tanstack/react-query";
-import { fetchPathDetail } from "../../apis/api/paths";
+import { fetchPathDetail, addFavoritePath } from "../../apis/api/paths";
+import { currentAddressState } from "../../recoil/currentAddressState/atom";
 
 const MainContainer = styled.div`
   margin-top: 10px;
@@ -134,12 +137,12 @@ const PinButton = styled.img.attrs({
 
 const DirectionSearchButton = styled.button`
   width: 33px;
-  height: 37px;
+  height: 40px;
   border: none;
   border-radius: 5px;
   background-color: ${(props) => props.theme.blue};
   display: block;
-  box-shadow: 0px 4px 8px -1px rgba(0, 0, 0, 0.3);
+  //box-shadow: 0px 4px 8px -1px rgba(0, 0, 0, 0.3);
 `;
 
 const DirectionSearchText = styled.p`
@@ -147,17 +150,49 @@ const DirectionSearchText = styled.p`
   color: white;
 `;
 
+const AddtoFavoriteButton = styled.button`
+  background-image: url(${favoriteIcon});
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  border: none;
+  width: 33px;
+  height: 40px;
+  border-radius: 5px;
+  display: block;
+`;
+
+const AddtoFavoriteFilledButton = styled.button`
+  background-image: url(${favoriteIconFilled});
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  border: none;
+  width: 33px;
+  height: 40px;
+  border-radius: 5px;
+  display: block;
+`;
+
 const SearchingBar = () => {
+  const token = localStorage.getItem("token");
   const [isDepartureInputClicked, setDepartureInputClicked] = useState(false);
   const [isArrivalInputClicked, setArrivalInputClicked] = useState(false);
+  const [isDirectionSearchClicked, setDirectionSearchClicked] = useState(false);
   const navigate = useNavigate();
   // const [departureInput, setDepartureInput] = useRecoilState(addressState);
   // const [arrivalInput, setArrivalInput] = useRecoilState(addressState);
   const [address, setAddress] = useRecoilState(addressState);
+  // console.log(address);?
+  const [currentAddress, setCurrentAddress] =
+    useRecoilState(currentAddressState);
   //console.log(!!departureAddress.departureAddress);
   // const [arrivalAddress, setArrivalAddress] =
   //   useRecoilState(arrivalAddressState);
   const { startLat, startLng, endLat, endLng } = address;
+  const startName = address.departureAddress;
+  const endName = address.arrivalAddress;
+  const name = "test";
 
   const handleDepartureInputClick = () => {
     setDepartureInputClicked(true);
@@ -208,20 +243,70 @@ const SearchingBar = () => {
     }
   };
 
+  const { kakao } = window;
+
+  var geocoder = new kakao.maps.services.Geocoder();
+
+  var callback = function (result, status) {
+    if (status === kakao.maps.services.Status.OK) {
+      console.log(result[0].address.address_name);
+      if (isDepartureInputClicked) {
+        setAddress((prev) => ({
+          ...prev,
+          departureAddress: result[0].address.address_name,
+        }));
+      }
+      if (isArrivalInputClicked) {
+        setAddress((prev) => ({
+          ...prev,
+          arrivalAddress: result[0].address.address_name,
+        }));
+      }
+    }
+  };
+
   const handleCurrentLocationClick = () => {
     console.log("현재 위치 클릭");
+    var coord = new kakao.maps.LatLng(
+      currentAddress.currentLat,
+      currentAddress.currentLng
+    );
+    geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
     if (isDepartureInputClicked) {
       setAddress((prev) => ({
         ...prev,
-        departureAddress: "", // 현재 위치 주소 받아오는 코드로 변경
+        startLat: currentAddress.currentLat,
+        startLng: currentAddress.currentLng,
+        departureAddress: currentAddress.currentAddress, // 현재 위치 주소 받아오기
       }));
     }
     if (isArrivalInputClicked) {
       setAddress((prev) => ({
         ...prev,
-        arrivalAddress: "", // 현재 위치 주소 받아오는 코드로 변경
+        endLat: currentAddress.currentLat,
+        endLng: currentAddress.currentLng,
+        arrivalAddress: currentAddress.currentAddress, // 현재 위치 주소 받아오기
       }));
     }
+  };
+
+  const handleDirectionSearchClick = (event) => {
+    setDirectionSearchClicked(true);
+    event.stopPropagation();
+    // console.log("출발지 위도: " + address.startLat);
+    // console.log("출발지 경도: " + address.startLng);
+    // console.log("도착지 위도: " + address.endLat);
+    // console.log("도착지 경도: " + address.endLng);
+
+    pathDetailRefetch(); // 출발지 및 도착지 위도 경도 전송
+    navigate("/direction", {
+      state: { isDirectionSearchClicked: isDirectionSearchClicked },
+    });
+  };
+
+  const hanleAddtoFavoriteClick = () => {
+    console.log("즐겨찾기 클릭");
+    // addFavoritePathRefetch();
   };
 
   const {
@@ -230,14 +315,96 @@ const SearchingBar = () => {
     refetch: pathDetailRefetch, // 수정
   } = useQuery({
     queryKey: ["pathDetail", startLat, startLng, endLat, endLng],
-    queryFn: () => fetchPathDetail(startLat, startLng, endLat, endLng),
-    enabled: !!address, // 수정
+    queryFn: () => fetchPathDetail({ startLat, startLng, endLat, endLng }),
+    enabled:
+      !!address &&
+      address.startLat !== null &&
+      address.startLng !== null &&
+      address.endLat !== null &&
+      address.endLng !== null,
     // keepPreviousData: true,
     // staleTime: 5000,
     onError: (e) => {
       console.log(e);
     },
   });
+  console.log(
+    "모두 만족?: " + !!address &&
+      address.startLat !== null &&
+      address.startLng !== null &&
+      address.endLat !== null &&
+      address.endLng !== null
+  );
+
+  // const {
+  //   isLoading: isFavoritePathLoading,
+  //   data: addFavoritePathData, // 수정
+  //   refetch: addFavoritePathRefetch, // 수정
+  // } = useQuery({
+  //   queryKey: [
+  //     "addFavoritePath",
+  //     name,
+  //     startName,
+  //     startLat,
+  //     startLng,
+  //     endName,
+  //     endLat,
+  //     endLng,
+  //   ],
+  //   enabled: !!token,
+  //   queryFn: () =>
+  //     addFavoritePath({
+  //       name,
+  //       startName,
+  //       startLat,
+  //       startLng,
+  //       endName,
+  //       endLat,
+  //       endLng,
+  //     }),
+  //   // enabled: !!address, // 수정
+  //   // keepPreviousData: true,
+  //   // staleTime: 5000,
+  //   onError: (e) => {
+  //     console.log(e);
+  //   },
+  // });
+
+  // const {
+  //   isLoading: deleteFavoritePathByIdLoading,
+  //   data: deleteFavoritePathByIdData, // 수정
+  //   refetch: deleteFavoritePathByIdRefetch, // 수정
+  // } = useQuery({
+  //   /*
+  //   queryKey: [
+  //     "deleteFavoritePathById",
+  //     startName,
+  //     startLat,
+  //     startLng,
+  //     endName,
+  //     endLat,
+  //     endLng,
+  //   ],
+  //   queryFn: () =>
+  //     deleteFavoritePathById(
+  //       startName,
+  //       startLat,
+  //       startLng,
+  //       endName,
+  //       endLat,
+  //       endLng
+  //     ),
+  //     */
+  //   // enabled: !!address, // 수정
+  //   // keepPreviousData: true,
+  //   // staleTime: 5000,
+  //   onError: (e) => {
+  //     console.log(e);
+  //   },
+  // });
+  //console.log(!!address.arrivalAddress && !!address.departureAddress);
+
+  // const location = useLocation();
 
   return (
     <MainContainer>
@@ -263,10 +430,11 @@ const SearchingBar = () => {
             <InputButton
               as="input"
               type="text"
-              //placeholder="출발지 입력"
+              placeholder="아래 버튼을 통해 현재 위치를 입력해주세요"
               value={address.departureAddress}
               onChange={handleInputChange}
               onKeyDown={handleKeyPress}
+              readOnly
             />
             <BackwardButton onClick={handleBackwardButtonClick} />
           </>
@@ -276,10 +444,11 @@ const SearchingBar = () => {
             <InputButton
               as="input"
               type="text"
-              //placeholder="도착지 입력"
+              placeholder="아래 버튼을 통해 현재 위치를 입력해주세요"
               value={address.arrivalAddress}
               onChange={handleInputChange}
               onKeyDown={handleKeyPress}
+              readOnly
             />
             <BackwardButton onClick={handleBackwardButtonClick} />
           </>
@@ -296,20 +465,19 @@ const SearchingBar = () => {
                 <span style={{ color: "gray" }}>도착지 입력</span>
               )}
             </InputButton>
+
             <DirectionSearchButton
-              onClick={() => {
-                // console.log("출발지 위도: " + address.startLat);
-                // console.log("출발지 경도: " + address.startLng);
-                // console.log("도착지 위도: " + address.endLat);
-                // console.log("도착지 경도: " + address.endLng);
-                pathDetailRefetch();
-                // api로 출발지 및 도착지 위도 경도 전송
-                navigate("/direction");
-              }}
+              disabled={!address.arrivalAddress || !address.departureAddress}
+              onClick={handleDirectionSearchClick}
+              // style={{ display: isDirectionSearchClicked ? "none" : "block" }}
             >
               <Arrow />
               <DirectionSearchText>길찾기</DirectionSearchText>
             </DirectionSearchButton>
+            {/* <AddtoFavoriteButton
+              onClick={hanleAddtoFavoriteClick}
+              style={{ display: isDirectionSearchClicked ? "block" : "none" }}
+            ></AddtoFavoriteButton> */}
           </>
         ) : null}
         {isDepartureInputClicked ? (

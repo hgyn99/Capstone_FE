@@ -1,5 +1,11 @@
 import styled from "styled-components";
 import favoritePlace from "../../assets/icon/favoritePlaceIcon.webp";
+import crossIcon from "../../assets/icon/cross.webp";
+import { useQuery } from "@tanstack/react-query";
+import {
+  fetchFavoritePath,
+  deleteFavoritePathById,
+} from "../../apis/api/paths";
 
 const MainContainer = styled.div`
   border-top: 5px solid ${(props) => props.theme.gray};
@@ -29,7 +35,7 @@ const FavoriteListBox = styled.div`
   display: flex;
   flex-direction: column;
   //background-color: gray;
-  padding: 0 10px;
+  //padding: 0 10px;
   flex: 7;
   overflow-y: auto;
 `;
@@ -48,33 +54,91 @@ const FavoriteIcon = styled.button`
   background-position: center;
   background-size: contain;
   border: none;
-  margin-left: 10px;
+  margin-left: 20px;
   width: 25px;
   height: 25px;
 `;
 
-// FavoriteList 서버에서 받아오기
+const DeleteIcon = styled.button`
+  background-image: url(${crossIcon});
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  border: none;
+  margin-left: auto;
+  margin-right: 10px;
+  width: 25px;
+  height: 25px;
+`;
 
+const token = localStorage.getItem("token");
 const FavoriteList = () => {
-  const favorites = [
-    "전남대학교 광주캠퍼스 정문",
-    "광주종합터미널",
-    "북구청",
-    "공과대학 7호관",
-    "스타벅스 전남대점",
-    "전남대학교 스포츠센터",
-  ];
+  // // FavoriteList 서버에서 받아오기
+  // const {
+  //   isLoading,
+  //   data: favoritePathData, // 수정
+  //   refetch: favoritePathRefetch, // 수정
+  // } = useQuery({
+  //   queryKey: ["favoritePath"],
+  //   queryFn: () => fetchFavoritePath(),
+  //   enabled: !!token, // 수정
+  //   // keepPreviousData: true,
+  //   // staleTime: 5000,
+  //   onError: (e) => {
+  //     console.log(e);
+  //   },
+  // });
+
+  // console.log("token: " + token);
+
+  // const {
+  //   isLoading: isLoadingDeleteFavoritePathById,
+  //   data: deleteFavoritePathByIdData, // 수정
+  //   refetch: deleteFavoritePathByIdRefetch, // 수정
+  // } = useQuery({
+  //   queryKey: ["favoritePath"],
+  //   queryFn: () => deleteFavoritePathById(),
+  //   enabled: !token, // 수정
+  //   // keepPreviousData: true,
+  //   // staleTime: 5000,
+  //   onError: (e) => {
+  //     console.log(e);
+  //   },
+  // });
+
+  //console.log(favoritePathData?.data.data);
+
+  // const favorites = [
+  //   "전남대학교 광주캠퍼스 정문",
+  //   "광주종합터미널",
+  //   "북구청",
+  //   "공과대학 7호관",
+  //   "스타벅스 전남대점",
+  //   "전남대학교 스포츠센터",
+  // ];
+
+  const hanldeFavoriteRouteDelete = () => {
+    console.log("즐겨찾기 경로 삭제");
+    //deleteFavoritePathByIdRefetch();
+  };
 
   return (
     <MainContainer>
-      <TitleBox>내 즐겨찾기 장소</TitleBox>
+      <TitleBox>내 즐겨찾기 경로</TitleBox>
       <FavoriteListBox>
-        {favorites.map((favorite, index) => (
-          <FavoriteItem key={index}>
-            <FavoriteIcon />
-            {favorite}
-          </FavoriteItem>
-        ))}
+        {/* {favoritePathData?.data.data.favoriteRoutes.map(
+          (favoriteRoute, index) => (
+            <FavoriteItem key={index}>
+              <FavoriteIcon />
+              {favoriteRoute.name}
+              <DeleteIcon
+                onClick={() => {
+                  //deleteFavoritePathById(favoriteRoute.id);
+                }}
+              />
+            </FavoriteItem>
+          )
+        )} */}
       </FavoriteListBox>
     </MainContainer>
   );

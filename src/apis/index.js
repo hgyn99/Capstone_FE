@@ -26,7 +26,7 @@ trafficInstance.interceptors.response.use(
   }
 );
 export const pathInstance = axios.create({
-  baseURL: process.env.REACT_APP_BASE_URL + "/paths",
+  baseURL: process.env.REACT_APP_BASE_PATH_URL + "/paths",
   timeout: 5000,
   headers: {
     "Content-Type": "application/json",
@@ -63,7 +63,7 @@ export const memberInstance = axios.create({
 memberInstance.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
-    config.headers["Authorization"] = token;
+    config.headers["Authorization"] = "Bearer  " + token;
   }
   return config;
 });

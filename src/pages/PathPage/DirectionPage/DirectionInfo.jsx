@@ -57,28 +57,6 @@ const InfoBox = styled.div`
   font-size: 14px;
 `;
 
-const Box2 = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 75%;
-  width: 50%;
-  //background-color: blue;
-`;
-
-const StartTimeList = styled.div`
-  height: 80%;
-  width: 80%;
-  border-radius: 5px;
-  border: 1.5px solid ${(props) => props.theme.blue};
-  //background-color: blue;
-  //color: ${(props) => props.theme.gray};
-  font-weight: 500;
-  font-size: 14px;
-  text-align: center;
-`;
-
 const NavStartButton = styled.button`
   background-color: ${(props) => props.theme.blue};
   border: 1.5px solid ${(props) => props.theme.blue};
@@ -117,24 +95,32 @@ const DirecrtionInfo = ({ onNavStartClick }) => {
     refetch: pathDetailRefetch, // 수정
   } = useQuery({
     queryKey: ["pathDetail", startLat, startLng, endLat, endLng],
-    queryFn: () => fetchPathDetail(startLat, startLng, endLat, endLng),
-    enabled: !!address, // 수정
+    queryFn: () => fetchPathDetail({ startLat, startLng, endLat, endLng }),
+    enabled:
+      !!address &&
+      address.startLat !== null &&
+      address.startLng !== null &&
+      address.endLat !== null &&
+      address.endLng !== null,
     // keepPreviousData: true,
     // staleTime: 5000,
     onError: (e) => {
       console.log(e);
     },
   });
+  console.log("pathDetailData(DirectionInfo): ", pathDetailData);
 
-  //console.log(pathDetailData?.data.data.totalTime);
+  // const {}
+
+  console.log(pathDetailData?.data.data.totalTime);
 
   const getSuggestedTime = () => {
     let currentTime = new Date();
 
-    if (pathDetailData?.data.data.traffics[0].color === "red") {
-      const timeLeftInSeconds = pathDetailData?.data.data.traffics[0].timeLeft; // -30 // -(n초)를 하면, 신호가 바뀌기 n초 전에 도착하도록 추천 출발 시간 설정 가능
-      currentTime = new Date(currentTime.getTime() + timeLeftInSeconds * 1000);
-    }
+    const timeLeftInSeconds = Math.round(
+      pathDetailData?.data.data.timeToFirstTraffic
+    ); // -30 // -(n초)를 하면, 신호가 바뀌기 n초 전에 도착하도록 추천 출발 시간 설정 가능
+    currentTime = new Date(currentTime.getTime() + timeLeftInSeconds * 1000);
 
     let hours = currentTime.getHours();
     const minutes = currentTime.getMinutes();
@@ -149,8 +135,7 @@ const DirecrtionInfo = ({ onNavStartClick }) => {
   const suggestedDepartureTime = getSuggestedTime();
   const timeTakes = Math.ceil(pathDetailData?.data.data.totalTime / 60);
   const trafficCounts = pathDetailData?.data.data.trafficCount;
-  const totalDistance = 1.6;
-  //const totalDistance = pathDetailData?.data.data.totalDistance; // API에서 총 거리 반영되는대로 코드 수정
+  const totalDistance = pathDetailData?.data.data.totalDistance / 1000; // API에서 총 거리 반영되는대로 코드 수정
 
   useEffect(() => {
     setPathInfo(() => ({
@@ -173,10 +158,6 @@ const DirecrtionInfo = ({ onNavStartClick }) => {
           {pathInfo.totalDistance}km | 횡단보도 {pathInfo.trafficCounts}회
         </InfoBox>
       </Box1>
-      {/* <Box2>
-        <StartTimeList>추천 출발시간</StartTimeList>
-      </Box2> */}
-
       <NavStartButton onClick={onNavStartClick}>
         <WalkingIcon />
         안내시작

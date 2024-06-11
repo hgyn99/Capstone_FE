@@ -1,5 +1,5 @@
 import { motion, useDragControls } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import TrafficLight from "./TrafficLight";
 import { useQuery } from "@tanstack/react-query";
@@ -116,13 +116,15 @@ const TrafficLightsListBox = styled.div`
 const TrafficLightsItem = styled.div`
   display: flex;
   align-items: center;
-  //gap: 10px;
+  gap: 10px;
   line-height: 50px;
+  text-indent: 0;
+  color: ${(props) => props.theme.blue};
   //border-bottom: 2px solid ${(props) => props.theme.gray};
 `;
 
 const TrafficLightContainer = styled.div`
-  margin-left: auto;
+  //margin-left: auto;
 `;
 
 const NumberingIcon = styled.div`
@@ -138,47 +140,39 @@ const NumberingIcon = styled.div`
   height: 30px;
 `;
 
-const TrafficDirection = () => {
+const NoTrafficLights = styled.div`
+  height: 125px;
+  //background-color: green;
+  display: flex;
+  color: ${(props) => props.theme.gray};
+  flex-direction: column;
+  justify-content: center;
+  text-indent: 0px;
+  line-height: 125px;
+  align-items: center;
+`;
+
+const Direction = styled.div`
+  //background-color: green;
+  //margin-right: auto;
+  margin-left: auto;
+  color: black;
+  // align-items: center;
+`;
+
+const TrafficDirection = (props) => {
   const dragControls = useDragControls();
   const [openState, setOpenState] = useState("mid");
   const pathInfo = useRecoilValue(pathInfoState);
   const [address, setAddress] = useRecoilState(addressState);
   const { startLat, startLng, endLat, endLng } = address;
+  const [trafficLights, setTrafficLights] = useState(props.trafficLightsDT);
 
-  const {
-    isLoading,
-    data: pathDetailData, // 수정
-    refetch: pathDetailRefetch, // 수정
-  } = useQuery({
-    queryKey: ["pathDetail", startLat, startLng, endLat, endLng],
-    queryFn: () => fetchPathDetail(startLat, startLng, endLat, endLng),
-    enabled: !!address, // 수정
-    // keepPreviousData: true,
-    // staleTime: 5000,
-    onError: (e) => {
-      console.log(e);
-    },
-  });
-
-  // console.log(pathDetailData?.data.data);
-
-  const trafficLights = pathDetailData?.data.data.traffics.map((traffic) => ({
-    id: traffic.viewName,
-    redCycle: traffic.redCycle,
-    greenCycle: traffic.greenCycle,
-    color: traffic.color,
-    timeLeft: traffic.timeLeft,
-    // 여기에 서버에서 받아온 값 중 필요한 값 추가
-  }));
-
-  // const trafficLights = [
-  //   { id: "중흥삼거리", redCycle: 32, greenCycle: 15 },
-  //   { id: "효동초사거리", redCycle: 17, greenCycle: 7 },
-  //   { id: "북구청", redCycle: 8, greenCycle: 16 },
-  //   { id: "신호등 4", redCycle: 15, greenCycle: 15 },
-  //   { id: "신호등 5", redCycle: 22, greenCycle: 7 },
-  //   { id: "신호등 6", redCycle: 6, greenCycle: 16 },
-  // ]; // API 호출로 변경
+  // props.trafficLights가 변경될 때마다 trafficLights 상태를 업데이트
+  useEffect(() => {
+    setTrafficLights(props.trafficLightsDT);
+  }, [props.trafficLightsDT]);
+  //console.log("TrafficDirection 정보: " + trafficLights);
 
   return (
     <Container
@@ -232,23 +226,42 @@ const TrafficDirection = () => {
         <Box2>신호등 정보</Box2>
         <Box3>
           <TrafficLightsListBox>
-            {trafficLights.map((trafficLight, index) => (
-              <TrafficLightsItem key={index}>
-                <NumberingIcon>{index + 1}</NumberingIcon>
-                {trafficLight.id}
-                <TrafficLightContainer>
-                  <TrafficLight
-                    key={index}
-                    id={trafficLight.id}
-                    redCycle={trafficLight.redCycle}
-                    greenCycle={trafficLight.greenCycle}
-                    color={trafficLight.color}
-                    timeLeft={trafficLight.timeLeft}
-                    // 여기에 추가로 넘겨줄 값 넣기
-                  />
-                </TrafficLightContainer>
-              </TrafficLightsItem>
-            ))}
+            {trafficLights.length > 0 ? (
+              trafficLights.map((trafficLight, index) => (
+                <TrafficLightsItem key={index}>
+                  <NumberingIcon>{index + 1}</NumberingIcon>
+                  {trafficLight.id}
+                  <Direction>
+                    {trafficLight.direction === "et"
+                      ? "동쪽"
+                      : trafficLight.direction === "wt"
+                        ? "서쪽"
+                        : trafficLight.direction === "sw"
+                          ? "남쪽"
+                          : trafficLight.direction === "nt"
+                            ? "북쪽"
+                            : trafficLight.direction}{" "}
+                  </Direction>
+                  <TrafficLightContainer>
+                    <TrafficLight
+                      key={index}
+                      id={trafficLight.id}
+                      redCycle={trafficLight.redCycle}
+                      greenCycle={trafficLight.greenCycle}
+                      color={trafficLight.color}
+                      timeLeft={trafficLight.timeLeft}
+                      direction={trafficLight.direction}
+                      // 여기에 추가로 넘겨줄 값 넣기
+                    />
+                  </TrafficLightContainer>
+                </TrafficLightsItem>
+              ))
+            ) : (
+              <NoTrafficLights>
+                {" "}
+                해당 지역은 추후 서비스 예정입니다...
+              </NoTrafficLights>
+            )}
           </TrafficLightsListBox>
         </Box3>
       </HeaderBox>

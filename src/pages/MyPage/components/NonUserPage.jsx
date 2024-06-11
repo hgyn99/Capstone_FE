@@ -24,7 +24,7 @@ const Text = styled.span`
 `;
 
 const Img = styled.img`
-  width: 220px;
+  width: 50%;
   position: absolute;
   bottom: 100px;
   right: 32px;
