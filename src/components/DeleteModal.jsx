@@ -72,9 +72,25 @@ const DeleteModal = ({ isOpen, onRequestClose, id }) => {
     },
   });
 
+  const { mutate: deletePath } = useMutation({
+    mutationFn: deleteFavoriteTraffic,
+    onSuccess: () => {
+      alert("삭제되었습니다.");
+      onRequestClose();
+      //리로드하여 데이터 refetch
+      window.location.reload();
+    },
+    onError: (err) => {
+      alert("삭제에 실패했습니다.");
+    },
+  });
+
   const deleteFunction = () => {
     if (location === "/mypage/favoritestraffic") {
       deleteTraffic(id);
+    }
+    if (location === "/mypage/favoritesroute") {
+      deletePath(id);
     }
     return;
   };

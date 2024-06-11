@@ -4,6 +4,7 @@ import BaseModal from "./BaseModal";
 import { useLocation } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { updateFavoriteTraffic } from "../apis/api/traffic";
+import { updateFavoritePathById } from "../apis/api/paths";
 
 const Title = styled.p`
   font-size: 20px;
@@ -73,9 +74,26 @@ const UpdateModal = ({ isOpen, onRequestClose, id }) => {
     },
   });
 
+  const { mutate: updatePath } = useMutation({
+    mutationFn: updateFavoritePathById,
+    onSuccess: () => {
+      alert("수정되었습니다.");
+      onRequestClose();
+      //리로드하여 데이터 refetch
+      window.location.reload();
+    },
+    onError: (err) => {
+      console.log(err);
+      alert("수정에 실패했습니다.");
+    },
+  });
+
   const updateAlias = () => {
     if (location === "/mypage/favoritestraffic") {
       updateTraffic({ trafficId: id, alias: alias });
+    }
+    if (location === "/mypage/favoritesroute") {
+      updatePath(id);
     }
     return;
   };

@@ -144,10 +144,10 @@ const FavoritesRouteItem = ({ path }) => {
     });
   });
 
+  let geocoder = new kakao.maps.services.Geocoder();
   // 출발좌표값 주소로 변환
   const getStartAddress = (lat, lng) => {
     const startLatLng = new kakao.maps.LatLng(lat, lng);
-    let geocoder = new kakao.maps.services.Geocoder();
     let callback = function (result, status) {
       if (status === kakao.maps.services.Status.OK) {
         console.log("startAddress", result[0].address.address_name);
@@ -166,7 +166,6 @@ const FavoritesRouteItem = ({ path }) => {
   // 도착좌표값 주소로 변환
   const getEndAddress = (lat, lng) => {
     const endLatLng = new kakao.maps.LatLng(lat, lng);
-    let geocoder = new kakao.maps.services.Geocoder();
     let callback = function (result, status) {
       if (status === kakao.maps.services.Status.OK) {
         console.log("endAddress", result[0].address.address_name);
