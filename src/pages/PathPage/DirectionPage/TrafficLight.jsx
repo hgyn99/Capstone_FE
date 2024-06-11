@@ -37,7 +37,14 @@ const Time = styled.span`
         : "black"};
 `;
 
-const TrafficLight = ({ id, redCycle, greenCycle, color, timeLeft }) => {
+const TrafficLight = ({
+  id,
+  redCycle,
+  greenCycle,
+  color,
+  timeLeft,
+  direction,
+}) => {
   const [state, setState] = useState(color);
   const [time, setTime] = useState(Math.round(timeLeft));
 

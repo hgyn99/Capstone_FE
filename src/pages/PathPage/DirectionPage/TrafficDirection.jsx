@@ -119,11 +119,12 @@ const TrafficLightsItem = styled.div`
   gap: 10px;
   line-height: 50px;
   text-indent: 0;
+  color: ${(props) => props.theme.blue};
   //border-bottom: 2px solid ${(props) => props.theme.gray};
 `;
 
 const TrafficLightContainer = styled.div`
-  margin-left: auto;
+  //margin-left: auto;
 `;
 
 const NumberingIcon = styled.div`
@@ -149,6 +150,14 @@ const NoTrafficLights = styled.div`
   text-indent: 0px;
   line-height: 125px;
   align-items: center;
+`;
+
+const Direction = styled.div`
+  //background-color: green;
+  //margin-right: auto;
+  margin-left: auto;
+  color: black;
+  // align-items: center;
 `;
 
 const TrafficDirection = (props) => {
@@ -222,6 +231,17 @@ const TrafficDirection = (props) => {
                 <TrafficLightsItem key={index}>
                   <NumberingIcon>{index + 1}</NumberingIcon>
                   {trafficLight.id}
+                  <Direction>
+                    {trafficLight.direction === "et"
+                      ? "동쪽"
+                      : trafficLight.direction === "wt"
+                        ? "서쪽"
+                        : trafficLight.direction === "sw"
+                          ? "남쪽"
+                          : trafficLight.direction === "nt"
+                            ? "북쪽"
+                            : trafficLight.direction}{" "}
+                  </Direction>
                   <TrafficLightContainer>
                     <TrafficLight
                       key={index}
@@ -230,6 +250,7 @@ const TrafficDirection = (props) => {
                       greenCycle={trafficLight.greenCycle}
                       color={trafficLight.color}
                       timeLeft={trafficLight.timeLeft}
+                      direction={trafficLight.direction}
                       // 여기에 추가로 넘겨줄 값 넣기
                     />
                   </TrafficLightContainer>

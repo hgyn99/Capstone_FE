@@ -200,9 +200,13 @@ const DirectionPage = () => {
     greenCycle: traffic.greenCycle,
     color: traffic.color,
     timeLeft: traffic.timeLeft,
+    direction: traffic.detail.direction,
     // 여기에 서버에서 받아온 값 중 필요한 값 추가
   }));
   //console.log("trafficLightDT: " + trafficLightsDT);
+  // console.log(
+  //   "direction: " + pathDetailData?.data.data.traffics[0].detail.direction
+  // );
 
   useEffect(() => {
     if (navigator.geolocation) {
