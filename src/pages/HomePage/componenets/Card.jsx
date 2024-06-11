@@ -74,13 +74,13 @@ const Circle = styled.div`
   height: 20px;
   border-radius: 50%;
   background-color: ${({ $lightColor, theme }) =>
-    $lightColor === "green" ? theme.green : theme.red};
+    $lightColor === "GREEN" ? theme.green : theme.red};
 `;
 
 const RemainingTimeText = styled.span`
   font-weight: 700;
   color: ${({ $lightColor, theme }) =>
-    $lightColor === "green" ? theme.green : theme.red};
+    $lightColor === "GREEN" ? theme.green : theme.red};
 `;
 
 const Card = ({ surroundingLightInfoData, isLoggein }) => {
