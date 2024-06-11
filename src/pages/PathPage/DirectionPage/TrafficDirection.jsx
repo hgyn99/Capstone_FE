@@ -1,5 +1,5 @@
 import { motion, useDragControls } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import TrafficLight from "./TrafficLight";
 import { useQuery } from "@tanstack/react-query";
@@ -139,38 +139,53 @@ const NumberingIcon = styled.div`
   height: 30px;
 `;
 
-const TrafficDirection = () => {
+const TrafficDirection = (props) => {
   const dragControls = useDragControls();
   const [openState, setOpenState] = useState("mid");
   const pathInfo = useRecoilValue(pathInfoState);
   const [address, setAddress] = useRecoilState(addressState);
   const { startLat, startLng, endLat, endLng } = address;
+  const [trafficLights, setTrafficLights] = useState(props.trafficLightsDT);
 
-  const {
-    isLoading,
-    data: pathDetailData, // 수정
-    refetch: pathDetailRefetch, // 수정
-  } = useQuery({
-    queryKey: ["pathDetail", startLat, startLng, endLat, endLng],
-    queryFn: () => fetchPathDetail({ startLat, startLng, endLat, endLng }),
-    enabled: false, // 수정
-    // keepPreviousData: true,
-    // staleTime: 5000,
-    onError: (e) => {
-      console.log(e);
-    },
-  });
+  // props.trafficLights가 변경될 때마다 trafficLights 상태를 업데이트
+  useEffect(() => {
+    setTrafficLights(props.trafficLightsDT);
+  }, [props.trafficLightsDT]);
+  //console.log("TrafficDirection 정보: " + trafficLights);
+
+  // const {
+  //   isLoading,
+  //   data: pathDetailData, // 수정
+  //   refetch: pathDetailRefetch, // 수정
+  // } = useQuery({
+  //   queryKey: ["pathDetail", startLat, startLng, endLat, endLng],
+  //   queryFn: () => fetchPathDetail({ startLat, startLng, endLat, endLng }),
+  //   enabled: false, // 수정
+  //   // keepPreviousData: true,
+  //   // staleTime: 5000,
+  //   onError: (e) => {
+  //     console.log(e);
+  //   },
+  // });
 
   // console.log(pathDetailData?.data.data);
 
-  const trafficLights = pathDetailData?.data.data.traffics.map((traffic) => ({
-    id: traffic.viewName,
-    redCycle: traffic.redCycle,
-    greenCycle: traffic.greenCycle,
-    color: traffic.color,
-    timeLeft: traffic.timeLeft,
-    // 여기에 서버에서 받아온 값 중 필요한 값 추가
-  }));
+  // const trafficLights = pathDetailData?.data.data.traffics.map((traffic) => ({
+  //   id: traffic.viewName,
+  //   redCycle: traffic.redCycle,
+  //   greenCycle: traffic.greenCycle,
+  //   color: traffic.color,
+  //   timeLeft: traffic.timeLeft,
+  //   // 여기에 서버에서 받아온 값 중 필요한 값 추가
+  // }));
+  // const trafficLights = trafficLightsDT.map((traffic) => ({
+  //   id: traffic.viewName,
+  //   redCycle: traffic.redCycle,
+  //   greenCycle: traffic.greenCycle,
+  //   color: traffic.color,
+  //   timeLeft: traffic.timeLeft,
+  //   // 여기에 서버에서 받아온 값 중 필요한 값 추가
+  // }));
 
   // const trafficLights = [
   //   { id: "중흥삼거리", redCycle: 32, greenCycle: 15 },

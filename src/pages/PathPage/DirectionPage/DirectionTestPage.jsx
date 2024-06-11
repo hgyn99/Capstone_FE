@@ -194,6 +194,16 @@ const DirectionPage = () => {
   startingPointOverlay.setMap(map);
   endingPointOverlay.setMap(map);
 
+  const trafficLightsDT = pathDetailData?.data.data.traffics.map((traffic) => ({
+    id: traffic.viewName,
+    redCycle: traffic.redCycle,
+    greenCycle: traffic.greenCycle,
+    color: traffic.color,
+    timeLeft: traffic.timeLeft,
+    // 여기에 서버에서 받아온 값 중 필요한 값 추가
+  }));
+  //console.log("trafficLightDT: " + trafficLightsDT);
+
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -295,7 +305,9 @@ const DirectionPage = () => {
       {showDirectionInfo && (
         <DirectionInfo onNavStartClick={handleNavStartClick} />
       )}
-      {showTrafficDirection && <TrafficDirection />}
+      {showTrafficDirection && (
+        <TrafficDirection trafficLightsDT={trafficLightsDT} />
+      )}
     </NavigationBarLayout>
   );
 };

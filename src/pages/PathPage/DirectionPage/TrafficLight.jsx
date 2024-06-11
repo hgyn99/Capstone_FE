@@ -39,23 +39,23 @@ const Time = styled.span`
 
 const TrafficLight = ({ id, redCycle, greenCycle, color, timeLeft }) => {
   const [state, setState] = useState(color);
-  const [time, setTime] = useState(timeLeft);
+  const [time, setTime] = useState(Math.round(timeLeft));
 
   useEffect(() => {
     const timer = setInterval(() => {
       setTime((time) => {
         if (time === 1) {
           setState((state) => {
-            if (state === "red") {
-              setTime(greenCycle);
-              return "green";
+            if (state === "RED") {
+              setTime(Math.round(greenCycle));
+              return "GREEN";
             } else {
-              setTime(redCycle);
-              return "red";
+              setTime(Math.round(redCycle));
+              return "RED";
             }
           });
         } else {
-          return time - 1;
+          return Math.round(time - 1);
         }
       });
     }, 1000);
@@ -64,8 +64,8 @@ const TrafficLight = ({ id, redCycle, greenCycle, color, timeLeft }) => {
 
   return (
     <TrafficLightContainer>
-      <Light color={state === "red" ? "red" : "#D9D9D9"} />
-      <Light color={state === "green" ? "green" : "#D9D9D9"} />
+      <Light color={state === "RED" ? "RED" : "#D9D9D9"} />
+      <Light color={state === "GREEN" ? "GREEN" : "#D9D9D9"} />
       <Light color="#D9D9D9">
         <Time state={state}>{time}</Time>
       </Light>
