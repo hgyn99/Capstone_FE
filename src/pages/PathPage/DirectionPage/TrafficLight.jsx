@@ -30,9 +30,9 @@ const Time = styled.span`
   font-size: 13.5px;
   text-indent: 0px;
   color: ${(props) =>
-    props.state === "red"
+    props.state === "RED"
       ? "red"
-      : props.state === "green"
+      : props.state === "GREEN"
         ? "green"
         : "black"};
 `;
