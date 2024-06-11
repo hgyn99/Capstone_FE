@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { ReactComponent as Arrow } from "../../../assets/icon/arrow.svg";
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   z-index: 1000;
@@ -15,27 +15,6 @@ const Container = styled.div`
   gap: 16px;
 `;
 
-// const InputBox = styled.input`
-//   width: 300px;
-//   border: none;
-//   height: 44px;
-//   border-radius: 5px;
-//   background-color: white;
-//   text-align: left;
-//   padding-left: 15px;
-//   box-shadow: 0px 4px 8px -1px rgba(0, 0, 0, 0.3);
-//   &::placeholder {
-//     // 필요시 속성 추가
-//   }
-//   &:focus {
-//     outline: none; // 기본 테두리 스타일 제거
-//     border: 2px solid ${(props) => props.theme.blue}; // 테두리 스타일 설정
-//   }
-//   &:focus::placeholder {
-//     color: transparent;
-//   }
-// `;
-
 const InputBox = styled.div`
   width: 300px;
   border: none;
@@ -43,7 +22,6 @@ const InputBox = styled.div`
   border-radius: 5px;
   background-color: white;
   text-align: left;
-  //padding-left: 15px;
   box-shadow: 0px 4px 8px -1px rgba(0, 0, 0, 0.3);
   font-weight: 700;
   font-size: 17px;
@@ -53,7 +31,6 @@ const InputBox = styled.div`
 
 const DirectionSearchButton = styled.button`
   width: 44px;
-  //width: 300px;
   height: 44px;
   border: none;
   border-radius: 5px;
@@ -70,9 +47,6 @@ const DirectionSearchText = styled.p`
 const TopBar = (currentName) => {
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState("");
-  const handleInputChange = (event) => {
-    setInputValue(event.target.value);
-  };
 
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
@@ -80,42 +54,19 @@ const TopBar = (currentName) => {
     }
   };
 
-  // const handleKeyPress = async (event) => {
-  //   if (event.key === "Enter") {
-  //     const places = await searchPlaces(inputValue);
-  //     console.log(places); // 검색 결과를 콘솔에 로그
-  //   }
-  // };
-
   return (
     <Container>
-      {/* <InputBox
-        type="text"
-        placeholder="목적지를 입력해주세요"
-        value={inputValue}
-        onChange={handleInputChange}
-        onKeyDown={handleKeyPress}
-        //onClick={() => {
-        // console.log("목적지 입력창 클릭");
-        //}}
-      ></InputBox> */}
-      <InputBox
-      //onClick={() => {
-      // console.log("목적지 입력창 클릭");
-      //}}
-      >
+      <InputBox>
         현재 위치:{" "}
         <span style={{ fontWeight: 500 }}>{currentName.currentName}</span>
       </InputBox>
       <DirectionSearchButton
         onClick={() => {
-          console.log("길찾기 페이지 이동");
+          navigate("/path");
         }}
       >
-        <Link to="/path">
-          <Arrow />
-          <DirectionSearchText>길찾기</DirectionSearchText>
-        </Link>
+        <Arrow />
+        <DirectionSearchText>길찾기</DirectionSearchText>
       </DirectionSearchButton>
     </Container>
   );

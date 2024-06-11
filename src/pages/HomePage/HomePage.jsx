@@ -8,7 +8,7 @@ import LightDetailInfo from "./componenets/LightDetailInfo";
 import FavoriteInfo from "./componenets/FavoriteInfo";
 import CustomOverLay from "./componenets/CustomOverLay";
 import TopBar from "./componenets/TopBar";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { bottomSheetOpenState } from "../../recoil/bottomSheetOpenState/atom";
 import { navigationState } from "../../recoil/navigationState/atom";
 import { fetchTraffic } from "../../apis/api/traffic";
@@ -75,13 +75,10 @@ const HomePage = () => {
   const isLoggein = !!localStorage.getItem("token");
 
   const [map, setMap] = useState(null);
-  //const newMap = useMap();
-  //console.log("newMap"newMap);
   const [mapBounds, setMapBounds] = useState(map?.getBounds());
   const [openIndex, setOpenIndex] = useState(null);
   const [currentName, setCurrentName] = useState("");
-  const [currentAddress, setCurrentAddress] =
-    useRecoilState(currentAddressState);
+  const setCurrentAddress = useSetRecoilState(currentAddressState);
   const [state, setState] = useState({
     center: {
       lat: 35.17828963,
@@ -109,7 +106,7 @@ const HomePage = () => {
 
   useEffect(() => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
+      navigator.geolocation.watchPosition(
         (position) => {
           setState((prev) => ({
             ...prev,
@@ -123,9 +120,8 @@ const HomePage = () => {
             ...prev,
             currentLat: position.coords.latitude,
             currentLng: position.coords.longitude,
-            // currentAddress: "광주 북구 용봉동 300",
           }));
-          var coord = new kakao.maps.LatLng(
+          const coord = new kakao.maps.LatLng(
             position.coords.latitude,
             position.coords.longitude
           );
@@ -176,22 +172,13 @@ const HomePage = () => {
     setMapBounds(newBounds);
     surroundingDataRefetch(); // 새로운 bounds로 데이터 페칭 실행
   };
-  var geocoder = new kakao.maps.services.Geocoder();
+  const geocoder = new kakao.maps.services.Geocoder();
 
-  var callback = function (result, status) {
+  const callback = function (result, status) {
     if (status === kakao.maps.services.Status.OK) {
-      console.log(result[0].address.address_name);
       setCurrentName(result[0].address.address_name);
     }
   };
-
-  // const getCurrentName = () => {
-  //   var coord = new kakao.maps.LatLng(
-  //     map.getCenter().getLat(),
-  //     map.getCenter().getLng()
-  //   );
-  //   geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
-  // };
 
   return (
     <NavigationBarLayout>
@@ -206,11 +193,10 @@ const HomePage = () => {
           }}
           padding={64}
           level={3}
-          minLevel={10}
+          minLevel={4}
           onCreate={setMap}
           onDragEnd={() => {
             handleMapDragEnd();
-            //getCurrentName();
           }}
         >
           {surroundingLightInfoData?.data.data.traffics.map((data, index) => {
@@ -224,20 +210,16 @@ const HomePage = () => {
             );
           })}
           {navigationBarState === "Home" ? (
-            <>
-              <LightDetailInfo isLoggein={isLoggein} />
-            </>
+            <LightDetailInfo isLoggein={isLoggein} />
           ) : null}
           {navigationBarState === "TrafficSignal" ? (
-            <>
-              <SurroundingLightInfo
-                isLoading={isLoading}
-                surroundingLightInfoData={
-                  surroundingLightInfoData?.data.data.traffics
-                }
-                isLoggein={isLoggein}
-              />
-            </>
+            <SurroundingLightInfo
+              isLoading={isLoading}
+              surroundingLightInfoData={
+                surroundingLightInfoData?.data.data.traffics
+              }
+              isLoggein={isLoggein}
+            />
           ) : null}
           {navigationBarState === "Favorites" ? (
             <FavoriteInfo panToPoint={panTo} />
@@ -248,7 +230,6 @@ const HomePage = () => {
           />
         </Map>
         <ToSeoulButton onClick={panToSeoul}>S</ToSeoulButton>
-
         <PanToButton
           onClick={panTo}
           $openState={openState}

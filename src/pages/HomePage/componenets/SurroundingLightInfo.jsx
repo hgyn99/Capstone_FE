@@ -129,9 +129,7 @@ const SurroundingLightInfo = ({
       }}
     >
       {isLoading ? (
-        <>
-          <Loader />
-        </>
+        <Loader />
       ) : (
         <>
           <HeaderBox onPointerDown={(e) => dragControls.start(e)}>
