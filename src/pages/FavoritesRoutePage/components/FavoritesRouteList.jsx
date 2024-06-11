@@ -8,11 +8,11 @@ const Container = styled.div`
   height: calc(100% - 56px);
 `;
 
-const FavoritesRouteList = ({ routes }) => {
+const FavoritesRouteList = ({ favoritesPath }) => {
   return (
     <Container>
-      {routes.map((route, index) => (
-        <FavoritesRouteItem route={route} />
+      {favoritesPath.data.data.favoriteRoutes?.map((path) => (
+        <FavoritesRouteItem key={path.id} path={path} />
       ))}
     </Container>
   );
