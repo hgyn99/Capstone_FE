@@ -8,7 +8,7 @@ import FavoritesTrafficPage from "./pages/FavoritesTrafficPage/FavoritesTrafficP
 import FavoritesRoutePage from "./pages/FavoritesRoutePage/FavoritesRoutePage";
 import UserProfileUpdate from "./pages/UpdatePage/UserProfileUpdate";
 import KakaoRedirect from "./shared/KakaoRedirect";
-import DirectionPage from "./pages/PathPage/DirectionPage/DirectionPage"
+import DirectionTestPage from "./pages/PathPage/DirectionPage/DirectionTestPage";
 
 function App() {
   return (
@@ -18,14 +18,26 @@ function App() {
         <Route path="/trafficlights" element={<HomePage />}></Route>{" "}
         <Route path="/favorites" element={<HomePage />}></Route>{" "}
         <Route path="/mypage" element={<MyPage />}></Route>
-        <Route path="/mypage/favoriteslocation" element={<FavoritesLocationPage />}></Route>
-        <Route path="/mypage/favoritestraffic" element={<FavoritesTrafficPage />}></Route>
-        <Route path="/mypage/favoritesroute" element={<FavoritesRoutePage />}></Route>
-        <Route path="/mypage/updateprofile" element={<UserProfileUpdate />}></Route>
+        <Route
+          path="/mypage/favoriteslocation"
+          element={<FavoritesLocationPage />}
+        ></Route>
+        <Route
+          path="/mypage/favoritestraffic"
+          element={<FavoritesTrafficPage />}
+        ></Route>
+        <Route
+          path="/mypage/favoritesroute"
+          element={<FavoritesRoutePage />}
+        ></Route>
+        <Route
+          path="/mypage/updateprofile"
+          element={<UserProfileUpdate />}
+        ></Route>
         <Route path="/path" element={<PathPage />}></Route>
         <Route path="/oauth/kakao/callback" element={<KakaoRedirect />}></Route>
         <Route path="/pathsearch" element={<PathSearchPage />}></Route>
-        <Route path="/direction" element={<DirectionPage />}></Route>
+        <Route path="/direction" element={<DirectionTestPage />}></Route>
       </Routes>
     </BrowserRouter>
   );

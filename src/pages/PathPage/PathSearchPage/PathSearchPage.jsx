@@ -42,6 +42,25 @@ const PanToButton = styled.button`
   align-items: center;
 `;
 
+const PanToButton2 = styled.button`
+  position: absolute;
+  bottom: 25dvh;
+  right: 10px;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  background-color: ${(props) => props.theme.blue};
+  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  z-index: 500;
+  font-size: 20px;
+  transition: bottom 0.5s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const CenterLocationIcon = styled.img.attrs({
   src: centerLocationIcon,
   alt: "centerLocationIcon",
@@ -101,6 +120,11 @@ const PathSearchPage = () => {
             },
             isLoading: false,
           }));
+          var coord = new kakao.maps.LatLng(
+            position.coords.latitude,
+            position.coords.longitude
+          );
+          geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
         },
         (err) => {
           setState((prev) => ({
@@ -119,6 +143,17 @@ const PathSearchPage = () => {
     }
   }, []);
 
+  function setCenter() {
+    // 이동할 위도 경도 위치를 생성합니다
+    var moveLatLon = new kakao.maps.LatLng(
+      37.59480567869312,
+      127.08107477695722
+    );
+
+    // 지도 중심을 이동 시킵니다
+    map.setCenter(moveLatLon);
+  }
+
   return (
     <Container>
       <PathTitle />
@@ -132,7 +167,7 @@ const PathSearchPage = () => {
         }}
         padding={64}
         level={3}
-        minLevel={4}
+        minLevel={10}
         onCreate={setMap}
         onDragEnd={(map) => {
           const latlng = map.getCenter();
@@ -146,7 +181,7 @@ const PathSearchPage = () => {
           );
           setLat(coord.getLat());
           setLng(coord.getLng());
-          //console.log(result);
+          console.log(result);
         }}
       >
         {/* <MapMarker
@@ -190,6 +225,41 @@ const PathSearchPage = () => {
           <circle cx="9" cy="9" r="1" fill="black" />
         </svg>
       </PanToButton>
+      <PanToButton2
+        onClick={() => {
+          setCenter();
+          // console.log(map.getBounds());
+        }}
+        //$openState={openState}
+        //$navigationBarState={navigationBarState}
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 18 18"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <circle cx="9" cy="9" r="8.5" stroke="white" />
+          <path
+            d="M9.5 1V0.5H8.5V1H9.5ZM8.5 3C8.5 3.27614 8.72386 3.5 9 3.5C9.27614 3.5 9.5 3.27614 9.5 3H8.5ZM8.5 1V3H9.5V1H8.5Z"
+            fill="white"
+          />
+          <path
+            d="M1 8.5H0.5V9.5H1V8.5ZM3 9.5C3.27614 9.5 3.5 9.27614 3.5 9C3.5 8.72386 3.27614 8.5 3 8.5V9.5ZM1 9.5H3V8.5H1V9.5Z"
+            fill="white"
+          />
+          <path
+            d="M9.5 15C9.5 14.7239 9.27614 14.5 9 14.5C8.72386 14.5 8.5 14.7239 8.5 15H9.5ZM8.5 17V17.5H9.5V17H8.5ZM8.5 15V17H9.5V15H8.5Z"
+            fill="white"
+          />
+          <path
+            d="M15 8.5C14.7239 8.5 14.5 8.72386 14.5 9C14.5 9.27614 14.7239 9.5 15 9.5V8.5ZM17 9.5H17.5V8.5H17V9.5ZM15 9.5H17V8.5H15V9.5Z"
+            fill="white"
+          />
+          <circle cx="9" cy="9" r="1" fill="white" />
+        </svg>
+      </PanToButton2>
       <Address mapAddress={address} mapLat={lat} mapLng={lng} />
     </Container>
   );
