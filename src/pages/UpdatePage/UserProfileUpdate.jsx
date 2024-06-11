@@ -2,7 +2,6 @@ import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import NavigationBarLayout from "../../components/NavigationBarLayout";
 import Header from "../../components/Header";
-import BasicUserImg from "../../assets/icon/basicProfileW.webp";
 import UpdateProfile from "../../assets/icon/updateProfile.webp";
 import { useRecoilValue } from "recoil";
 import { userInformationState } from "../../recoil/userInformationState/atom";
@@ -82,7 +81,7 @@ const DeleteUser = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 18px 5px;
+  margin: 18px 20px;
 `;
 const Text = styled.span`
   font-size: 12px;
@@ -96,8 +95,15 @@ const DeleteButton = styled.button`
   background-color: transparent;
 `;
 
-const CommitButton = styled.button`
+const CommitBox = styled.div`
   width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const CommitButton = styled.button`
+  width: 90%;
   height: 50px;
   font-size: 15px;
   font-weight: bold;
@@ -171,16 +177,18 @@ const UserProfileUpdate = () => {
             <Text>회원정보를 삭제하시겠습니까?</Text>
             <DeleteButton>회원탈퇴</DeleteButton>
           </DeleteUser>
-          <CommitButton
-            onClick={() => {
-              const formData = new FormData();
-              formData.append("files", uploadImg);
-              handleImgUpload(formData);
-              console.log("완료");
-            }}
-          >
-            완료
-          </CommitButton>
+          <CommitBox>
+            <CommitButton
+              onClick={() => {
+                const formData = new FormData();
+                formData.append("files", uploadImg);
+                handleImgUpload(formData);
+                console.log("완료");
+              }}
+            >
+              완료
+            </CommitButton>
+          </CommitBox>
         </Bottom>
       </Container>
     </NavigationBarLayout>

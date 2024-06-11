@@ -6,15 +6,22 @@ import styled from "styled-components";
 
 const TextBox = styled.div`
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 8px;
-  width: 100%;
-  height: 80%;
+  gap: 12px;
+  width: 280px;
+  height: 75%;
+`;
+
+const Title = styled.p`
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.5;
 `;
 
 const Text = styled.p`
-  font-size: 23px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 400;
 `;
 
 const ButtonBox = styled.div`
@@ -24,17 +31,28 @@ const ButtonBox = styled.div`
   gap: 15px;
 `;
 
-const DeleteButton = styled.button``;
+const DeleteButton = styled.button`
+  width: 80px;
+  height: 40px;
+  background-color: #f44336;
+  border-radius: 5px;
+`;
 
 const DeleteText = styled.p`
-  color: red;
+  color: #fff;
   font-size: 15px;
   font-weight: 600;
 `;
 
-const CancelDeleteButton = styled.button``;
+const CancelDeleteButton = styled.button`
+  width: 80px;
+  height: 40px;
+  background-color: #ddd;
+  border-radius: 5px;
+`;
 
 const CancelDeleteText = styled.p`
+  color: #666;
   font-size: 15px;
 `;
 
@@ -54,9 +72,25 @@ const DeleteModal = ({ isOpen, onRequestClose, id }) => {
     },
   });
 
+  const { mutate: deletePath } = useMutation({
+    mutationFn: deleteFavoriteTraffic,
+    onSuccess: () => {
+      alert("삭제되었습니다.");
+      onRequestClose();
+      //리로드하여 데이터 refetch
+      window.location.reload();
+    },
+    onError: (err) => {
+      alert("삭제에 실패했습니다.");
+    },
+  });
+
   const deleteFunction = () => {
     if (location === "/mypage/favoritestraffic") {
       deleteTraffic(id);
+    }
+    if (location === "/mypage/favoritesroute") {
+      deletePath(id);
     }
     return;
   };
@@ -65,21 +99,31 @@ const DeleteModal = ({ isOpen, onRequestClose, id }) => {
     <BaseModal isOpen={isOpen} onRequestClose={onRequestClose}>
       <TextBox>
         <svg
-          width="40"
-          height="40"
-          viewBox="0 0 24 24"
+          width="46"
+          height="46"
+          viewBox="0 0 46 46"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
+          <circle cx="23" cy="23" r="23" fill="#F7E2E1" />
+          <rect
+            width="24"
+            height="24"
+            transform="translate(11 11)"
+            fill="#F7E2E1"
+          />
           <path
-            d="M16 6V5.2C16 4.0799 16 3.51984 15.782 3.09202C15.5903 2.71569 15.2843 2.40973 14.908 2.21799C14.4802 2 13.9201 2 12.8 2H11.2C10.0799 2 9.51984 2 9.09202 2.21799C8.71569 2.40973 8.40973 2.71569 8.21799 3.09202C8 3.51984 8 4.0799 8 5.2V6M10 11.5V16.5M14 11.5V16.5M3 6H21M19 6V17.2C19 18.8802 19 19.7202 18.673 20.362C18.3854 20.9265 17.9265 21.3854 17.362 21.673C16.7202 22 15.8802 22 14.2 22H9.8C8.11984 22 7.27976 22 6.63803 21.673C6.07354 21.3854 5.6146 20.9265 5.32698 20.362C5 19.7202 5 18.8802 5 17.2V6"
-            stroke="black"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            d="M27 17V16.2C27 15.0799 27 14.5198 26.782 14.092C26.5903 13.7157 26.2843 13.4097 25.908 13.218C25.4802 13 24.9201 13 23.8 13H22.2C21.0799 13 20.5198 13 20.092 13.218C19.7157 13.4097 19.4097 13.7157 19.218 14.092C19 14.5198 19 15.0799 19 16.2V17M21 22.5V27.5M25 22.5V27.5M14 17H32M30 17V28.2C30 29.8802 30 30.7202 29.673 31.362C29.3854 31.9265 28.9265 32.3854 28.362 32.673C27.7202 33 26.8802 33 25.2 33H20.8C19.1198 33 18.2798 33 17.638 32.673C17.0735 32.3854 16.6146 31.9265 16.327 31.362C16 30.7202 16 29.8802 16 28.2V17"
+            stroke="#C03A32"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
         </svg>
-        <Text>삭제하시겠습니까?</Text>
+        <Title>
+          즐겨찾기 삭제
+          <Text>삭제하시면 다시 복구할 수 없습니다. </Text>
+        </Title>
       </TextBox>
       <ButtonBox>
         <DeleteButton onClick={deleteFunction}>

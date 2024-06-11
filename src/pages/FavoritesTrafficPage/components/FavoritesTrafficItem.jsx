@@ -18,9 +18,6 @@ const ListWrapper = styled.div`
   position: relative;
   background-color: #fff;
   border-bottom: 1px solid #f0f0f0;
-  display: flex;
-  align-items: center;
-  background-color: #fff;
 `;
 
 const EditContainer = styled(motion.div)`
@@ -66,6 +63,7 @@ const SwipeContainer = styled(motion.div)`
   position: relative;
   border-bottom: 1px solid #f0f0f0;
   background-color: #fff;
+  padding: 0px 12px;
 `;
 
 // const ListItemInner = styled(Reorder.Item)`
@@ -127,21 +125,20 @@ const Move = styled.img``;
 const FavoritesTrafficItem = ({ traffic }) => {
   const { detail, id, name } = traffic;
   const swipeDragControls = useDragControls();
-  const reorderDragControls = useDragControls();
   const [animateRef, animate] = useAnimate();
   const [currentDraggedItemId, setCurrentDraggedItemId] = useState(null);
   const itemX = useMotionValue(0);
+  const [isButtonShow, setIsButtonShow] = useState(false);
+  const buttonAnimateState = isButtonShow ? "visible" : "hidden";
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
   useEffect(() => {
     itemX.on("change", (v) => {
       const isOverThreshold = v < -55 / 2;
       setIsButtonShow(isOverThreshold);
     });
   });
-  const [isButtonShow, setIsButtonShow] = useState(false);
-  const buttonAnimateState = isButtonShow ? "visible" : "hidden";
-
-  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const handleEditUpdateModal = () => {
     setIsUpdateModalOpen((prev) => !prev);
@@ -151,61 +148,55 @@ const FavoritesTrafficItem = ({ traffic }) => {
   };
 
   return (
-    <>
-      <ListWrapper>
-        <EditContainer
-          initial="hidden"
-          animate={buttonAnimateState}
-          variants={{
-            visible: { opacity: 1 },
-            hidden: { opacity: 0 },
-          }}
-        >
-          <UpdateButton onClick={handleEditUpdateModal}>수정</UpdateButton>
-          <DeleteButton onClick={handleEditDeleteModal}>삭제</DeleteButton>
-        </EditContainer>
-        <SwipeContainer
-          key={id}
-          drag="x"
-          dragConstraints={{ left: -110, right: 0 }}
-          dragElastic={0.1}
-          dragListener={false}
-          dragControls={swipeDragControls}
-          style={{ x: itemX }}
-          //dragSnapToOrigin   // 드래그 끝나면 원래 위치로
-          onDragStart={() => {
-            setCurrentDraggedItemId(id); // 현재 드래그 요소 추적
-          }}
-          onDragEnd={() => {
-            if (currentDraggedItemId === id) {
-              const isOverThreshold = itemX.get() < -55 / 2; // editbutton 반쯤 나올 때 버튼 다 보여주기
-              animate(animateRef.current, { x: isOverThreshold ? -110 : 0 });
-            }
-            setCurrentDraggedItemId(null);
-          }}
-          ref={animateRef}
-        >
-          {/* <ListItemInner 
+    <ListWrapper>
+      <EditContainer
+        initial="hidden"
+        animate={buttonAnimateState}
+        variants={{
+          visible: { opacity: 1 },
+          hidden: { opacity: 0 },
+        }}
+      >
+        <UpdateButton onClick={handleEditUpdateModal}>수정</UpdateButton>
+        <DeleteButton onClick={handleEditDeleteModal}>삭제</DeleteButton>
+      </EditContainer>
+      <SwipeContainer
+        key={id}
+        drag="x"
+        dragConstraints={{ left: -110, right: 0 }}
+        dragElastic={0.1}
+        dragControls={swipeDragControls}
+        style={{ x: itemX }}
+        //dragSnapToOrigin   // 드래그 끝나면 원래 위치로
+        onDragStart={() => {
+          setCurrentDraggedItemId(id); // 현재 드래그 요소 추적
+        }}
+        onDragEnd={() => {
+          if (currentDraggedItemId === id) {
+            const isOverThreshold = itemX.get() < -55 / 2; // editbutton 반쯤 나올 때 버튼 다 보여주기
+            animate(animateRef.current, { x: isOverThreshold ? -110 : 0 });
+          }
+          setCurrentDraggedItemId(null);
+        }}
+        ref={animateRef}
+      >
+        {/* <ListItemInner 
           id={id} value={traffic}
           dragControls={reorderDragControls}
           dragListener={false}> */}
-          <ItemBox
-            onClick={() => console.log("클릭")}
-            onPointerDown={(e) => swipeDragControls.start(e)}
-          >
-            <IconBox>
-              <IconImg src={Icon} alt="icon" />
-            </IconBox>
-            <AliasBox>
-              <TrafficAlias>{name}</TrafficAlias>
-            </AliasBox>
-          </ItemBox>
-          <MoveBox onPointerDown={(e) => reorderDragControls.start(e)}>
-            <Move src={MoveButton} alt="move" />
-          </MoveBox>
-          {/* </ListItemInner> */}
-        </SwipeContainer>
-      </ListWrapper>
+        <ItemBox>
+          <IconBox>
+            <IconImg src={Icon} alt="icon" />
+          </IconBox>
+          <AliasBox>
+            <TrafficAlias>{name}</TrafficAlias>
+          </AliasBox>
+        </ItemBox>
+        <MoveBox>
+          <Move src={MoveButton} alt="move" />
+        </MoveBox>
+        {/* </ListItemInner> */}
+      </SwipeContainer>
       <UpdateModal
         isOpen={isUpdateModalOpen}
         onRequestClose={handleEditUpdateModal}
@@ -216,7 +207,7 @@ const FavoritesTrafficItem = ({ traffic }) => {
         onRequestClose={handleEditDeleteModal}
         id={id}
       />
-    </>
+    </ListWrapper>
   );
 };
 

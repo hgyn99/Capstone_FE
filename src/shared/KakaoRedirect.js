@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Layout from "../components/Layout";
 import SpinnerImg from "../assets/icon/Spinner.gif";
@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
 import { addMember } from "../apis/api/members";
+import TimeOutModal from "../components/TimeOutModal";
 
 const Container = styled.div`
   width: 100%;
@@ -32,14 +33,16 @@ const Text = styled.p`
 
 const KakaoRedirect = () => {
   const navigate = useNavigate();
+  const [ishandleTimeOut, setIshandleTimeOut] = useState(false);
 
   const code = new URL(window.location.href).searchParams.get("code");
   console.log(code);
 
   const { mutate } = useMutation({
-    mutationFn: (code) => addMember({ code: code }),
+    mutationFn: (code) => addMember(code),
     onSuccess: (res) => {
       console.log("성공", res);
+      clearTimeout(loginTimeOut);
       localStorage.setItem("token", res.data.data.accessToken);
       navigate("/mypage");
       window.location.reload();
@@ -48,6 +51,15 @@ const KakaoRedirect = () => {
       console.log(err);
     },
   });
+
+  const loginTimeOut = setTimeout(() => {
+    setIshandleTimeOut(true);
+  }, 6000);
+
+  const handleTimeOutModal = () => {
+    setIshandleTimeOut((prev) => !prev);
+    navigate("/");
+  };
 
   useEffect(() => {
     mutate({ code });
@@ -65,6 +77,10 @@ const KakaoRedirect = () => {
           </Text>
         </Inner>
       </Container>
+      <TimeOutModal
+        isOpen={ishandleTimeOut}
+        onRequestClose={handleTimeOutModal}
+      />
     </Layout>
   );
 };

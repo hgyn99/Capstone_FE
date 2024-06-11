@@ -15,7 +15,7 @@ const BookMarkHeader = styled.div`
 const PreClick = styled.button`
   position: absolute;
   top: 15px;
-  left: 15px;
+  left: 20px;
   border: none;
   background-color: transparent;
 `;
