@@ -47,9 +47,6 @@ const DirectionSearchText = styled.p`
 const TopBar = (currentName) => {
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState("");
-  const handleInputChange = (event) => {
-    setInputValue(event.target.value);
-  };
 
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
