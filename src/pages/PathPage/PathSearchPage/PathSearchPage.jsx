@@ -42,6 +42,25 @@ const PanToButton = styled.button`
   align-items: center;
 `;
 
+const PanToButton2 = styled.button`
+  position: absolute;
+  bottom: 27dvh;
+  right: 10px;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  background-color: ${(props) => props.theme.blue};
+  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  z-index: 500;
+  font-size: 20px;
+  transition: bottom 0.5s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const CenterLocationIcon = styled.img.attrs({
   src: centerLocationIcon,
   alt: "centerLocationIcon",
@@ -124,6 +143,17 @@ const PathSearchPage = () => {
     }
   }, []);
 
+  function setCenter() {
+    // 이동할 위도 경도 위치를 생성합니다
+    var moveLatLon = new kakao.maps.LatLng(
+      37.59480567869312,
+      127.08107477695722
+    );
+
+    // 지도 중심을 이동 시킵니다
+    map.setCenter(moveLatLon);
+  }
+
   return (
     <Container>
       <PathTitle />
@@ -151,7 +181,7 @@ const PathSearchPage = () => {
           );
           setLat(coord.getLat());
           setLng(coord.getLng());
-          //console.log(result);
+          console.log(result);
         }}
       >
         {/* <MapMarker
@@ -195,6 +225,16 @@ const PathSearchPage = () => {
           <circle cx="9" cy="9" r="1" fill="black" />
         </svg>
       </PanToButton>
+      <PanToButton2
+        onClick={() => {
+          setCenter();
+          // console.log(map.getBounds());
+        }}
+        //$openState={openState}
+        //$navigationBarState={navigationBarState}
+      >
+        임시 버튼
+      </PanToButton2>
       <Address mapAddress={address} mapLat={lat} mapLng={lng} />
     </Container>
   );

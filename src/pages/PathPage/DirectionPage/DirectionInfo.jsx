@@ -112,15 +112,15 @@ const DirecrtionInfo = ({ onNavStartClick }) => {
 
   // const {}
 
-  //console.log(pathDetailData?.data.data.totalTime);
+  console.log(pathDetailData?.data.data.totalTime);
 
   const getSuggestedTime = () => {
     let currentTime = new Date();
 
-    // if (pathDetailData?.data.data?.traffics[0].color === "red") {
-    //   const timeLeftInSeconds = pathDetailData?.data.data.traffics[0].timeLeft; // -30 // -(n초)를 하면, 신호가 바뀌기 n초 전에 도착하도록 추천 출발 시간 설정 가능
-    //   currentTime = new Date(currentTime.getTime() + timeLeftInSeconds * 1000);
-    // }
+    const timeLeftInSeconds = Math.round(
+      pathDetailData?.data.data.timeToFirstTraffic
+    ); // -30 // -(n초)를 하면, 신호가 바뀌기 n초 전에 도착하도록 추천 출발 시간 설정 가능
+    currentTime = new Date(currentTime.getTime() + timeLeftInSeconds * 1000);
 
     let hours = currentTime.getHours();
     const minutes = currentTime.getMinutes();
