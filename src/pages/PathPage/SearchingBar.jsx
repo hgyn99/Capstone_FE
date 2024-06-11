@@ -192,6 +192,7 @@ const SearchingBar = () => {
   const { startLat, startLng, endLat, endLng } = address;
   const startName = address.departureAddress;
   const endName = address.arrivalAddress;
+  const name = "test";
 
   const handleDepartureInputClick = () => {
     setDepartureInputClicked(true);
@@ -305,7 +306,7 @@ const SearchingBar = () => {
 
   const hanleAddtoFavoriteClick = () => {
     console.log("즐겨찾기 클릭");
-    //addFavoritePathRefetch();
+    // addFavoritePathRefetch();
   };
 
   const {
@@ -335,63 +336,72 @@ const SearchingBar = () => {
       address.endLng !== null
   );
 
-  const {
-    isLoading: isFavoritePathLoading,
-    data: addFavoritePathData, // 수정
-    refetch: addFavoritePathRefetch, // 수정
-  } = useQuery({
-    queryKey: [
-      "addFavoritePath",
-      startName,
-      startLat,
-      startLng,
-      endName,
-      endLat,
-      endLng,
-    ],
-    enabled: !!token,
-    queryFn: () =>
-      addFavoritePath(startName, startLat, startLng, endName, endLat, endLng),
-    // enabled: !!address, // 수정
-    // keepPreviousData: true,
-    // staleTime: 5000,
-    onError: (e) => {
-      console.log(e);
-    },
-  });
+  // const {
+  //   isLoading: isFavoritePathLoading,
+  //   data: addFavoritePathData, // 수정
+  //   refetch: addFavoritePathRefetch, // 수정
+  // } = useQuery({
+  //   queryKey: [
+  //     "addFavoritePath",
+  //     name,
+  //     startName,
+  //     startLat,
+  //     startLng,
+  //     endName,
+  //     endLat,
+  //     endLng,
+  //   ],
+  //   enabled: !!token,
+  //   queryFn: () =>
+  //     addFavoritePath({
+  //       name,
+  //       startName,
+  //       startLat,
+  //       startLng,
+  //       endName,
+  //       endLat,
+  //       endLng,
+  //     }),
+  //   // enabled: !!address, // 수정
+  //   // keepPreviousData: true,
+  //   // staleTime: 5000,
+  //   onError: (e) => {
+  //     console.log(e);
+  //   },
+  // });
 
-  const {
-    isLoading: deleteFavoritePathByIdLoading,
-    data: deleteFavoritePathByIdData, // 수정
-    refetch: deleteFavoritePathByIdRefetch, // 수정
-  } = useQuery({
-    /*
-    queryKey: [
-      "deleteFavoritePathById",
-      startName,
-      startLat,
-      startLng,
-      endName,
-      endLat,
-      endLng,
-    ],
-    queryFn: () =>
-      deleteFavoritePathById(
-        startName,
-        startLat,
-        startLng,
-        endName,
-        endLat,
-        endLng
-      ),
-      */
-    // enabled: !!address, // 수정
-    // keepPreviousData: true,
-    // staleTime: 5000,
-    onError: (e) => {
-      console.log(e);
-    },
-  });
+  // const {
+  //   isLoading: deleteFavoritePathByIdLoading,
+  //   data: deleteFavoritePathByIdData, // 수정
+  //   refetch: deleteFavoritePathByIdRefetch, // 수정
+  // } = useQuery({
+  //   /*
+  //   queryKey: [
+  //     "deleteFavoritePathById",
+  //     startName,
+  //     startLat,
+  //     startLng,
+  //     endName,
+  //     endLat,
+  //     endLng,
+  //   ],
+  //   queryFn: () =>
+  //     deleteFavoritePathById(
+  //       startName,
+  //       startLat,
+  //       startLng,
+  //       endName,
+  //       endLat,
+  //       endLng
+  //     ),
+  //     */
+  //   // enabled: !!address, // 수정
+  //   // keepPreviousData: true,
+  //   // staleTime: 5000,
+  //   onError: (e) => {
+  //     console.log(e);
+  //   },
+  // });
   //console.log(!!address.arrivalAddress && !!address.departureAddress);
 
   // const location = useLocation();
@@ -459,15 +469,15 @@ const SearchingBar = () => {
             <DirectionSearchButton
               disabled={!address.arrivalAddress || !address.departureAddress}
               onClick={handleDirectionSearchClick}
-              style={{ display: isDirectionSearchClicked ? "none" : "block" }}
+              // style={{ display: isDirectionSearchClicked ? "none" : "block" }}
             >
               <Arrow />
               <DirectionSearchText>길찾기</DirectionSearchText>
             </DirectionSearchButton>
-            <AddtoFavoriteButton
+            {/* <AddtoFavoriteButton
               onClick={hanleAddtoFavoriteClick}
               style={{ display: isDirectionSearchClicked ? "block" : "none" }}
-            ></AddtoFavoriteButton>
+            ></AddtoFavoriteButton> */}
           </>
         ) : null}
         {isDepartureInputClicked ? (

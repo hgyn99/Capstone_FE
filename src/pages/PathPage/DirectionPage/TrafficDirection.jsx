@@ -139,6 +139,18 @@ const NumberingIcon = styled.div`
   height: 30px;
 `;
 
+const NoTrafficLights = styled.div`
+  height: 125px;
+  //background-color: green;
+  display: flex;
+  color: ${(props) => props.theme.gray};
+  flex-direction: column;
+  justify-content: center;
+  text-indent: 0px;
+  line-height: 125px;
+  align-items: center;
+`;
+
 const TrafficDirection = (props) => {
   const dragControls = useDragControls();
   const [openState, setOpenState] = useState("mid");
@@ -152,49 +164,6 @@ const TrafficDirection = (props) => {
     setTrafficLights(props.trafficLightsDT);
   }, [props.trafficLightsDT]);
   //console.log("TrafficDirection 정보: " + trafficLights);
-
-  // const {
-  //   isLoading,
-  //   data: pathDetailData, // 수정
-  //   refetch: pathDetailRefetch, // 수정
-  // } = useQuery({
-  //   queryKey: ["pathDetail", startLat, startLng, endLat, endLng],
-  //   queryFn: () => fetchPathDetail({ startLat, startLng, endLat, endLng }),
-  //   enabled: false, // 수정
-  //   // keepPreviousData: true,
-  //   // staleTime: 5000,
-  //   onError: (e) => {
-  //     console.log(e);
-  //   },
-  // });
-
-  // console.log(pathDetailData?.data.data);
-
-  // const trafficLights = pathDetailData?.data.data.traffics.map((traffic) => ({
-  //   id: traffic.viewName,
-  //   redCycle: traffic.redCycle,
-  //   greenCycle: traffic.greenCycle,
-  //   color: traffic.color,
-  //   timeLeft: traffic.timeLeft,
-  //   // 여기에 서버에서 받아온 값 중 필요한 값 추가
-  // }));
-  // const trafficLights = trafficLightsDT.map((traffic) => ({
-  //   id: traffic.viewName,
-  //   redCycle: traffic.redCycle,
-  //   greenCycle: traffic.greenCycle,
-  //   color: traffic.color,
-  //   timeLeft: traffic.timeLeft,
-  //   // 여기에 서버에서 받아온 값 중 필요한 값 추가
-  // }));
-
-  // const trafficLights = [
-  //   { id: "중흥삼거리", redCycle: 32, greenCycle: 15 },
-  //   { id: "효동초사거리", redCycle: 17, greenCycle: 7 },
-  //   { id: "북구청", redCycle: 8, greenCycle: 16 },
-  //   { id: "신호등 4", redCycle: 15, greenCycle: 15 },
-  //   { id: "신호등 5", redCycle: 22, greenCycle: 7 },
-  //   { id: "신호등 6", redCycle: 6, greenCycle: 16 },
-  // ]; // API 호출로 변경
 
   return (
     <Container
@@ -248,23 +217,30 @@ const TrafficDirection = (props) => {
         <Box2>신호등 정보</Box2>
         <Box3>
           <TrafficLightsListBox>
-            {trafficLights.map((trafficLight, index) => (
-              <TrafficLightsItem key={index}>
-                <NumberingIcon>{index + 1}</NumberingIcon>
-                {trafficLight.id}
-                <TrafficLightContainer>
-                  <TrafficLight
-                    key={index}
-                    id={trafficLight.id}
-                    redCycle={trafficLight.redCycle}
-                    greenCycle={trafficLight.greenCycle}
-                    color={trafficLight.color}
-                    timeLeft={trafficLight.timeLeft}
-                    // 여기에 추가로 넘겨줄 값 넣기
-                  />
-                </TrafficLightContainer>
-              </TrafficLightsItem>
-            ))}
+            {trafficLights.length > 0 ? (
+              trafficLights.map((trafficLight, index) => (
+                <TrafficLightsItem key={index}>
+                  <NumberingIcon>{index + 1}</NumberingIcon>
+                  {trafficLight.id}
+                  <TrafficLightContainer>
+                    <TrafficLight
+                      key={index}
+                      id={trafficLight.id}
+                      redCycle={trafficLight.redCycle}
+                      greenCycle={trafficLight.greenCycle}
+                      color={trafficLight.color}
+                      timeLeft={trafficLight.timeLeft}
+                      // 여기에 추가로 넘겨줄 값 넣기
+                    />
+                  </TrafficLightContainer>
+                </TrafficLightsItem>
+              ))
+            ) : (
+              <NoTrafficLights>
+                {" "}
+                해당 지역은 추후 서비스 예정입니다...
+              </NoTrafficLights>
+            )}
           </TrafficLightsListBox>
         </Box3>
       </HeaderBox>

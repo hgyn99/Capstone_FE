@@ -211,10 +211,10 @@ const DirectionPage = () => {
           setState((prev) => ({
             ...prev,
             center: {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude,
-              //lat: avgLat - 0.002,
-              //lng: avgLng,
+              //lat: position.coords.latitude,
+              //lng: position.coords.longitude,
+              lat: avgLat - 0.002,
+              lng: avgLng,
             },
             isLoading: false,
           }));
@@ -241,7 +241,7 @@ const DirectionPage = () => {
   // };
 
   // useEffect(() => {
-  //   // map.setBound(points);
+  //   setCenter();
   // }, []);
 
   return (
@@ -262,7 +262,7 @@ const DirectionPage = () => {
           // onDragEnd={handleMapBouns}
           onDragEnd={() => {
             //setBounds();
-            setCenter();
+            //setCenter();
           }}
         ></Map>
         <PanToButton

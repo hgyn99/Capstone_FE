@@ -71,25 +71,25 @@ const DeleteIcon = styled.button`
   height: 25px;
 `;
 
-// FavoriteList 서버에서 받아오기
 const token = localStorage.getItem("token");
 const FavoriteList = () => {
-  const {
-    isLoading,
-    data: favoritePathData, // 수정
-    refetch: favoritePathRefetch, // 수정
-  } = useQuery({
-    queryKey: ["favoritePath"],
-    queryFn: () => fetchFavoritePath(),
-    enabled: !!token, // 수정
-    // keepPreviousData: true,
-    // staleTime: 5000,
-    onError: (e) => {
-      console.log(e);
-    },
-  });
+  // // FavoriteList 서버에서 받아오기
+  // const {
+  //   isLoading,
+  //   data: favoritePathData, // 수정
+  //   refetch: favoritePathRefetch, // 수정
+  // } = useQuery({
+  //   queryKey: ["favoritePath"],
+  //   queryFn: () => fetchFavoritePath(),
+  //   enabled: !!token, // 수정
+  //   // keepPreviousData: true,
+  //   // staleTime: 5000,
+  //   onError: (e) => {
+  //     console.log(e);
+  //   },
+  // });
 
-  console.log("token: " + token);
+  // console.log("token: " + token);
 
   // const {
   //   isLoading: isLoadingDeleteFavoritePathById,
@@ -124,9 +124,9 @@ const FavoriteList = () => {
 
   return (
     <MainContainer>
-      <TitleBox>내 즐겨찾기 장소</TitleBox>
+      <TitleBox>내 즐겨찾기 경로</TitleBox>
       <FavoriteListBox>
-        {favoritePathData?.data.data.favoriteRoutes.map(
+        {/* {favoritePathData?.data.data.favoriteRoutes.map(
           (favoriteRoute, index) => (
             <FavoriteItem key={index}>
               <FavoriteIcon />
@@ -138,7 +138,7 @@ const FavoriteList = () => {
               />
             </FavoriteItem>
           )
-        )}
+        )} */}
       </FavoriteListBox>
     </MainContainer>
   );
